@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  title: VibeCRM Metadata Platform API
+  version: 1.0.0
+  description: API for managing metadata definitions and dynamic business data.
+
+paths:
+  # --- Metadata APIs ---
+  /api/v1/meta/objects:
+    get:
+      summary: List all custom objects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetaObject'
+    post:
+      summary: Create a new custom object (and physical table)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetaObjectInput'
+      responses:
+        '201':
+          description: Created
+
+  /api/v1/meta/objects/{objectId}:
+    get:
+      summary: Get object details (including fields)
+    delete:
+      summary: Delete object (and drop physical table)
+
+  /api/v1/meta/objects/{objectId}/fields:
+    post:
+      summary: Add a field to an object (and alter physical table)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetaFieldInput'
+      responses:
+        '201':
+          description: Created
+          
+  /api/v1/meta/roles:
+    get:
+      summary: List all roles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetaRole'
+
+  # --- Dynamic Data APIs ---
+  /api/v1/data/{objectName}:
+    get:
+      summary: List records for a custom object
+      parameters:
+        - name: objectName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create a record
+      parameters:
+        - name: objectName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Created
+
+  /api/v1/data/{objectName}/{recordUid}:
+    get:
+      summary: Get a single record
+      parameters:
+        - name: objectName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordUid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+    put:
+      summary: Update a record
+    delete:
+      summary: Delete a record
+
+components:
+  schemas:
+    MetaObject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        source:
+          type: string
+          enum: [system, custom]
+    MetaObjectInput:
+      type: object
+      required:
+        - name
+        - label
+      properties:
+        name:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+          enum: [system, custom]
+    MetaFieldInput:
+      type: object
+      required:
+        - name
+        - label
+        - data_type
+      properties:
+        name:
+          type: string
+        label:
+          type: string
+        data_type:
+          type: string
+          enum: [Text, Number, Date, Boolean, Picklist, Lookup, Metadata]
+        is_required:
+          type: boolean
+        options:
+          type: object
+          description: Configuration for Picklist (values), Lookup (target_object), or Metadata (target_meta_type)
+        source:
+          type: string
+          enum: [system, custom]
+    MetaRole:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        permissions:
+          type: object
+        source:
+          type: string
+          enum: [system, custom]
