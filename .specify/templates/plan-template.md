@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+*   **I. Code Quality**: Does the technical design promote clear, maintainable code? Are conventions defined?
+*   **II. Testing Standards**: Is a comprehensive testing strategy defined, including unit and integration tests?
+*   **III. UX Consistency**: If the feature includes a user interface, does the plan account for consistency with the existing application design and patterns?
+*   **IV. Performance Requirements**: Are performance goals clearly defined and measurable? (See "Performance Goals" section).
+*   **V. Documentation Language**: Does the plan specify that all user-facing documentation (e.g., `quickstart.md`) will be in Chinese?
 
 ## Project Structure
 
