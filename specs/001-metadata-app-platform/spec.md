@@ -11,7 +11,7 @@
 
 ## Clarifications
 
-### Session 2026-01-06
+### Session 2026-01-07
 - Q: Data storage strategy for custom objects? → A: Table Per Object (Physical table per CustomObject).
 - Q: Object relationship support for MVP? → A: Simple Lookup (1:N reference).
 - Q: Primary API protocol for metadata and records? → A: REST API (JSON).
@@ -19,6 +19,7 @@
 - Q: Security & Permissions model? → A: Dynamic Roles (Object-level CRUD).
 - Q: Conflict resolution for concurrent record edits? → A: Last Writer Wins (Simple overwrite).
 - Q: Metadata schema update execution? → A: Synchronous (Atomic DDL).
+- Q: Implementation strategy for System Objects (User, Role)? → A: Pre-seeded Metadata (Defined as CustomObjects, seeded at startup).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -104,6 +105,7 @@
 - **FR-010**: 系统必须采用 **Table-Per-Object** 策略，为每个自定义对象在数据库中创建独立的物理表，用于存储该对象的业务记录。
 - **FR-011**: 系统必须提供 RESTful API，支持对元数据（对象、字段、布局）和业务记录进行标准的 CRUD 操作。
 - **FR-012**: 系统必须支持动态权限配置（Roles），允许管理员为不同角色配置针对每个自定义对象的 CRUD 权限（创建、读取、编辑、删除）。
+- **FR-013**: 系统初始化时必须自动“预播种”（Pre-seed）核心系统对象（如 User, Role, Position）的元数据定义和物理表，使其在管理控制台中表现为可扩展的 Standard Objects。
 
 ### Non-Functional Requirements
 
@@ -113,7 +115,7 @@
 
 ### Key Entities
 
-- **CustomObject**: 定义对象的元数据（ID, Label, API Name, Description）。
+- **CustomObject**: 定义对象的元数据（ID, Label, API Name, Description）。包含 System Objects（如 User）和 Custom Objects。
 - **CustomField**: 定义字段的元数据（ID, Object ID, Label, API Name, Type, Options, Required, TargetObjectID）。
 - **PageLayout**: 定义对象页面的布局结构（ID, Object ID, Sections, Field Positioning）。
 - **ListView**: 定义列表视图配置（ID, Object ID, Columns, Filters）。
