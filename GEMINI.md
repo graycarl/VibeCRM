@@ -8,6 +8,8 @@
 - React 18 / TypeScript 5.0+ (Frontend)
 - SQLite (本地文件数据库，支持 Table-Per-Object 动态建表)
 - uv (Python dependency management)
+- Python 3.11+, TypeScript 5.0+ + FastAPI, SQLAlchemy (Sync), React 18, MUI, React Hook Form (001-metadata-app-platform)
+- SQLite (Local file DB) (001-metadata-app-platform)
 
 ## Recent Changes
 - 001-metadata-app-platform: Defined technical plan with Sync Python/FastAPI backend and React frontend.
