@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Paper, Grid, Button } from '@mui/material';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
+import axios from 'axios';
 
 const ObjectRecordDetail = () => {
   const { objectName, uid } = useParams<{ objectName: string; uid: string }>();

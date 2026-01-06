@@ -4,6 +4,9 @@ import { Container, Typography, Box, Button } from '@mui/material';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
 import DataTable from '../../components/dynamic/DataTable';
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8000/api/v1';
 
 const ObjectRecordList = () => {
   const { objectName } = useParams<{ objectName: string }>();
