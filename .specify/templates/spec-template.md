@@ -1,3 +1,7 @@
+<!--
+  LANGUAGE REMINDER: As per the constitution (Principle V), the content of this
+  specification document MUST be written in Chinese.
+-->
 # Feature Specification: [FEATURE NAME]
 
 **Feature Branch**: `[###-feature-name]`  

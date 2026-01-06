@@ -1,20 +1,11 @@
 <!--
 Sync Impact Report:
 
-- **Version Change**: None → 1.0.0
-- **Added Principles**:
-  - I. Code Quality
-  - II. Testing Standards
-  - III. User Experience (UX) Consistency
-  - IV. Performance Requirements
-  - V. Documentation Language
-- **Removed Sections**:
-  - [SECTION_2_NAME]
-  - [SECTION_3_NAME]
+- **Version Change**: 1.0.0 → 1.0.1
+- **Modified Principles**:
+  - V. Documentation Language (clarified to include `specs` directory)
 - **Templates Requiring Updates**:
-  - ✅ .specify/templates/plan-template.md
-  - ✅ .specify/templates/spec-template.md
-  - ✅ .specify/templates/tasks-template.md
+  - ✅ .specify/templates/spec-template.md (added language reminder)
 - **Follow-up TODOs**: None
 -->
 # VibeCRM Constitution
@@ -34,9 +25,9 @@ The user interface and experience shall be consistent across the entire applicat
 The application must meet defined performance benchmarks. API responses should be timely, and frontend interactions must be smooth and responsive. Performance testing should be part of the development cycle for performance-sensitive features.
 
 ### V. Documentation Language
-To ensure clarity and accessibility for the target audience, all project documentation outside of the `.specify` directory must be written in Chinese. This includes README files, user guides, and API documentation.
+To ensure clarity and accessibility, all project documentation, especially feature specifications within the `specs` directory, must be written in Chinese.
 
 ## Governance
 All pull requests and code reviews must verify compliance with this constitution. Any deviation from these principles requires explicit justification and approval. This constitution is a living document and can be amended through a formal proposal and review process.
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-06 | **Last Amended**: 2026-01-06
+**Version**: 1.0.1 | **Ratified**: 2026-01-06 | **Last Amended**: 2026-01-06
