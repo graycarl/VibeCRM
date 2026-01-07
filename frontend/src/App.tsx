@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, Link, Outlet } from 'react-router-dom';
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -14,45 +14,66 @@ import ObjectRecordList from './pages/runtime/ObjectRecordList';
 import ObjectRecordEdit from './pages/runtime/ObjectRecordEdit';
 import ObjectRecordDetail from './pages/runtime/ObjectRecordDetail';
 
+import { metaApi, MetaObject } from './services/metaApi';
+
 const drawerWidth = 240;
 
-const Layout = () => (
-  <Box sx={{ display: 'flex' }}>
-    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          VibeCRM
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          <ListItem button component={Link} to="/admin/objects">
-            <ListItemIcon><SettingsIcon /></ListItemIcon>
-            <ListItemText primary="Setup (Admin)" />
-          </ListItem>
-          <ListItem button component={Link} to="/app/user">
-            <ListItemIcon><DashboardIcon /></ListItemIcon>
-            <ListItemText primary="Users" />
-          </ListItem>
-        </List>
+const Layout = () => {
+  const [objects, setObjects] = useState<MetaObject[]>([]);
+
+  useEffect(() => {
+    const fetchObjects = async () => {
+      try {
+        const data = await metaApi.getObjects();
+        setObjects(data);
+      } catch (error) {
+        console.error('Failed to fetch objects', error);
+      }
+    };
+    fetchObjects();
+  }, []);
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+            VibeCRM
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            <ListItem button component={Link} to="/admin/objects">
+              <ListItemIcon><SettingsIcon /></ListItemIcon>
+              <ListItemText primary="Setup (Admin)" />
+            </ListItem>
+            
+            {objects.map((obj) => (
+              <ListItem button key={obj.id} component={Link} to={`/app/${obj.name}`}>
+                <ListItemIcon><DashboardIcon /></ListItemIcon>
+                <ListItemText primary={obj.label} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        <Outlet />
       </Box>
-    </Drawer>
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
-      <Outlet />
     </Box>
-  </Box>
-);
+  );
+};
 
 function App() {
   return (
