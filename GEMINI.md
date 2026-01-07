@@ -4,6 +4,8 @@
 - 项目中的 `chat-histories` 文件夹用于存储对话记录，请忽略它的内容，但需要在每次提交代码时包含它。
 
 ## Active Technologies
+- Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest` (002-setup-dev-makefile)
+- SQLite (via `backend/app/db/init_db.py`) (002-setup-dev-makefile)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -19,6 +21,6 @@
 
 
 ## Recent Changes
+- 002-setup-dev-makefile: Added Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest`
 
 - 001-metadata-app-platform: Defined technical plan with Sync Python/FastAPI backend and React frontend.
-- 001-metadata-app-platform: Established data model with UUID/Integer dual-PK strategy and "source" attribute for metadata.
