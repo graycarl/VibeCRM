@@ -7,49 +7,49 @@
 ### Phase 1: Setup & Infrastructure
 **Goal**: Initialize the Makefile structure.
 
-- [ ] T001 Create Makefile in project root with PHONY targets definition `Makefile`
+- [x] T001 Create Makefile in project root with PHONY targets definition `Makefile`
 
 ### Phase 2: Foundational Tasks
 **Goal**: Define shared variables and basic structure.
 
-- [ ] T002 Define shell and project root variables in Makefile `Makefile`
+- [x] T002 Define shell and project root variables in Makefile `Makefile`
 
 ### Phase 3: User Story 1 - 环境初始化 (Priority: P1)
 **Goal**: Enable one-command environment setup.
 **Test**: Run `make init` in a clean env (no .venv/node_modules) and verify dependencies install.
 
-- [ ] T003 [P] [US1] Define `backend-init` target using `uv sync` in `Makefile`
-- [ ] T004 [P] [US1] Define `frontend-init` target using `npm ci` in `Makefile`
-- [ ] T005 [US1] Define `init` target combining backend and frontend init in `Makefile`
+- [x] T003 [P] [US1] Define `backend-init` target using `uv sync` in `Makefile`
+- [x] T004 [P] [US1] Define `frontend-init` target using `npm ci` in `Makefile`
+- [x] T005 [US1] Define `init` target combining backend and frontend init in `Makefile`
 
 ### Phase 4: User Story 2 - 启动开发服务 (Priority: P1)
 **Goal**: Start both services simultaneously.
 **Test**: Run `make dev`, check localhost:8000 (API) and localhost:5173 (Frontend).
 
-- [ ] T006 [P] [US2] Define `backend-dev` target to run FastAPI app in `Makefile`
-- [ ] T007 [P] [US2] Define `frontend-dev` target to run Vite dev server in `Makefile`
-- [ ] T008 [US2] Define `dev` target using `make -j 2` to run both services in `Makefile`
+- [x] T006 [P] [US2] Define `backend-dev` target to run FastAPI app in `Makefile`
+- [x] T007 [P] [US2] Define `frontend-dev` target to run Vite dev server in `Makefile`
+- [x] T008 [US2] Define `dev` target using `make -j 2` to run both services in `Makefile`
 
 ### Phase 5: User Story 3 - 重置数据库 (Priority: P2)
 **Goal**: Reset database to clean state.
 **Test**: Run `make reset`, verify old data gone and seed data present.
 
-- [ ] T009 [US3] Define `clean-db` target to remove SQLite file in `Makefile`
-- [ ] T010 [US3] Define `seed-db` target to run `init_db.py` and `seeds.py` in `Makefile`
-- [ ] T011 [US3] Define `reset` target combining clean and seed tasks in `Makefile`
+- [x] T009 [US3] Define `clean-db` target to remove SQLite file in `Makefile`
+- [x] T010 [US3] Define `seed-db` target to run `init_db.py` and `seeds.py` in `Makefile`
+- [x] T011 [US3] Define `reset` target combining clean and seed tasks in `Makefile`
 
 ### Phase 6: User Story 4 - 运行测试 (Priority: P2)
 **Goal**: Run all tests with fail-fast strategy.
 **Test**: Run `make test`, ensure backend failure stops execution.
 
-- [ ] T012 [P] [US4] Define `backend-test` target using `pytest` in `Makefile`
-- [ ] T013 [P] [US4] Define `frontend-test` target using `npm run test` in `Makefile`
-- [ ] T014 [US4] Define `test` target executing backend then frontend tests in `Makefile`
+- [x] T012 [P] [US4] Define `backend-test` target using `pytest` in `Makefile`
+- [x] T013 [P] [US4] Define `frontend-test` target using `npm run test` in `Makefile`
+- [x] T014 [US4] Define `test` target executing backend then frontend tests in `Makefile`
 
 ### Final Phase: Polish
 **Goal**: Cleanup and documentation.
 
-- [ ] T015 Add comments and help descriptions for all targets in `Makefile`
+- [x] T015 Add comments and help descriptions for all targets in `Makefile`
 
 ## Dependencies
 
