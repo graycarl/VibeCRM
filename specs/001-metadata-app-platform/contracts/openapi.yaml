@@ -27,18 +27,53 @@ paths:
             schema:
               $ref: '#/components/schemas/MetaObjectInput'
       responses:
-        '201':
+        '200':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaObject'
 
   /api/v1/meta/objects/{objectId}:
     get:
       summary: Get object details (including fields)
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaObject'
     delete:
       summary: Delete object (and drop physical table)
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
 
   /api/v1/meta/objects/{objectId}/fields:
     post:
       summary: Add a field to an object (and alter physical table)
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -46,12 +81,24 @@ paths:
             schema:
               $ref: '#/components/schemas/MetaFieldInput'
       responses:
-        '201':
+        '200':
           description: Created
-          
-  /api/v1/meta/roles:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaField'
+
+  # --- Layout & ListView APIs ---
+  /api/v1/meta/objects/{objectId}/layouts:
     get:
-      summary: List all roles
+      summary: Get page layouts for an object
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: OK
@@ -60,7 +107,71 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MetaRole'
+                  $ref: '#/components/schemas/MetaPageLayout'
+    post:
+      summary: Create a page layout
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetaPageLayoutInput'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaPageLayout'
+
+  /api/v1/meta/objects/{objectId}/list-views:
+    get:
+      summary: Get list views for an object
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetaListView'
+    post:
+      summary: Create a list view
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetaListViewInput'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaListView'
 
   # --- Dynamic Data APIs ---
   /api/v1/data/{objectName}:
@@ -72,14 +183,16 @@ paths:
           required: true
           schema:
             type: string
-        - name: page
+        - name: skip
           in: query
           schema:
             type: integer
-        - name: search
+            default: 0
+        - name: limit
           in: query
           schema:
-            type: string
+            type: integer
+            default: 50
       responses:
         '200':
           description: OK
@@ -98,7 +211,7 @@ paths:
               type: object
               additionalProperties: true
       responses:
-        '201':
+        '200':
           description: Created
 
   /api/v1/data/{objectName}/{recordUid}:
@@ -116,10 +229,49 @@ paths:
           schema:
             type: string
             format: uuid
+      responses:
+        '200':
+          description: OK
     put:
       summary: Update a record
+      parameters:
+        - name: objectName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordUid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
     delete:
       summary: Delete a record
+      parameters:
+        - name: objectName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordUid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
 
 components:
   schemas:
@@ -133,9 +285,19 @@ components:
           type: string
         label:
           type: string
+        description:
+          type: string
         source:
           type: string
           enum: [system, custom]
+        created_at:
+          type: string
+          format: date-time
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaField'
+
     MetaObjectInput:
       type: object
       required:
@@ -151,6 +313,31 @@ components:
         source:
           type: string
           enum: [system, custom]
+
+    MetaField:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        object_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        data_type:
+          type: string
+          enum: [Text, Number, Date, Boolean, Picklist, Lookup, Metadata]
+        options:
+          type: object
+        is_required:
+          type: boolean
+        source:
+          type: string
+          enum: [system, custom]
+
     MetaFieldInput:
       type: object
       required:
@@ -173,6 +360,7 @@ components:
         source:
           type: string
           enum: [system, custom]
+
     MetaRole:
       type: object
       properties:
@@ -188,3 +376,73 @@ components:
         source:
           type: string
           enum: [system, custom]
+
+    MetaPageLayout:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        object_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        layout_config:
+          type: object
+        source:
+          type: string
+          enum: [system, custom]
+
+    MetaPageLayoutInput:
+      type: object
+      required:
+        - name
+        - config
+      properties:
+        name:
+          type: string
+        config:
+          type: object
+        source:
+          type: string
+          default: custom
+
+    MetaListView:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        object_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        columns:
+          type: array
+          items:
+            type: string
+        filter_criteria:
+          type: object
+        source:
+          type: string
+          enum: [system, custom]
+
+    MetaListViewInput:
+      type: object
+      required:
+        - name
+        - columns
+      properties:
+        name:
+          type: string
+        columns:
+          type: array
+          items:
+            type: string
+        filter_criteria:
+          type: object
+        source:
+          type: string
+          default: custom

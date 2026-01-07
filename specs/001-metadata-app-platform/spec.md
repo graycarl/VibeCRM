@@ -15,7 +15,7 @@
 - Q: Data storage strategy for custom objects? → A: Table Per Object (Physical table per CustomObject).
 - Q: Object relationship support for MVP? → A: Simple Lookup (1:N reference).
 - Q: Primary API protocol for metadata and records? → A: REST API (JSON).
-- Q: Search and filtering capabilities for records? → A: Keyword & Filters (Exact/Prefix match).
+- Q: Search and filtering capabilities for records? → A: Basic list retrieval with Pagination (Skip/Limit). Search/Filtering deferred to post-MVP.
 - Q: Security & Permissions model? → A: Dynamic Roles (Object-level CRUD).
 - Q: Conflict resolution for concurrent record edits? → A: Last Writer Wins (Simple overwrite).
 - Q: Metadata schema update execution? → A: Synchronous (Atomic DDL).
@@ -98,7 +98,7 @@
 - **FR-005**: 系统必须支持配置列表视图（List View），允许管理员定义在数据列表页显示的字段列及其顺序，并支持配置基础的筛选条件。
 
 #### 数据运行时 (Runtime App)
-- **FR-006**: 系统必须根据 FR-005 定义的列表视图配置，动态渲染对象的数据列表页面，支持分页、关键字搜索（前缀匹配）和字段过滤。
+- **FR-006**: 系统必须根据 FR-005 定义的列表视图配置，动态渲染对象的数据列表页面，支持分页（Skip/Limit）功能。
 - **FR-007**: 系统必须根据 FR-004 定义的页面布局，动态渲染对象的创建和编辑表单。
 - **FR-008**: 系统必须根据 FR-004 定义的页面布局，动态渲染对象的详情展示页面。
 - FR-009: 系统必须根据字段元数据（类型、必填属性等）在前端进行基础的数据校验。
