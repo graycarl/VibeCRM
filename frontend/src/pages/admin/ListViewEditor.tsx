@@ -4,7 +4,9 @@ import {
   Container, Typography, Box, Paper, TextField, Button, 
   List, ListItem, ListItemText, Checkbox, ListItemSecondaryAction 
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
+import { LoadingOverlay } from '../../components/common/Feedback';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api/v1';
@@ -14,7 +16,7 @@ const ListViewEditor = () => {
   const [object, setObject] = useState<MetaObject | null>(null);
   const [fields, setFields] = useState<MetaField[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [viewName, setViewName] = useState('Default List View');
+  const [viewName, setViewName] = useState('默认列表视图');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,29 +52,35 @@ const ListViewEditor = () => {
       navigate(`/admin/objects/${id}`);
     } catch (error) {
       console.error("Failed to save list view", error);
-      alert("Failed to save list view");
+      alert("保存失败");
     }
   };
 
-  if (!object) return <Typography>Loading...</Typography>;
+  if (!object) return <LoadingOverlay />;
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>Configure List View for {object.label}</Typography>
+      <Box display="flex" alignItems="center" gap={1} mb={3}>
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(`/admin/objects/${id}`)}>
+            返回
+        </Button>
+        <Typography variant="h4">配置 {object.label} 的列表视图</Typography>
+      </Box>
       
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper sx={{ p: 4, mb: 3, borderRadius: 2 }}>
         <TextField
-          label="View Name"
+          label="视图名称"
           fullWidth
+          variant="outlined"
           value={viewName}
           onChange={(e) => setViewName(e.target.value)}
-          sx={{ mb: 3 }}
+          sx={{ mb: 4 }}
         />
         
-        <Typography variant="h6">Select Columns to Display</Typography>
-        <List>
+        <Typography variant="h6" gutterBottom color="primary">选择显示的列</Typography>
+        <List sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
           {fields.map((field) => (
-            <ListItem key={field.id} dense button onClick={() => handleToggle(field.name)}>
+            <ListItem key={field.id} dense divider onClick={() => handleToggle(field.name)} sx={{ cursor: 'pointer' }}>
               <Checkbox
                 edge="start"
                 checked={selectedFields.indexOf(field.name) !== -1}
@@ -85,10 +93,9 @@ const ListViewEditor = () => {
         </List>
       </Paper>
       
-      <Box display="flex" justifyContent="flex-end" gap={2}>
-        <Button onClick={() => navigate(`/admin/objects/${id}`)}>Cancel</Button>
-        <Button variant="contained" onClick={handleSave} disabled={selectedFields.length === 0}>
-          Save List View
+      <Box display="flex" justifyContent="flex-end" gap={2} mb={4}>
+        <Button variant="contained" onClick={handleSave} disabled={selectedFields.length === 0} size="large">
+          保存视图
         </Button>
       </Box>
     </Container>

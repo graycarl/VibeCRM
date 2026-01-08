@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Box, Button } from '@mui/material';
+import { Container, Typography, Box, Button, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
-import DataTable from '../../components/dynamic/DataTable';
+import DataTable from '../../components/data/DataTable';
+import { LoadingOverlay } from '../../components/common/Feedback';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api/v1';
@@ -23,12 +26,10 @@ const ObjectRecordList = () => {
           const fullObj = await metaApi.getObject(obj.id);
           const allFields: MetaField[] = (fullObj as any).fields || [];
           
-          // Get List Views
           try {
               const viewsRes = await axios.get(`${API_URL}/meta/objects/${obj.id}/list-views`);
               const views = viewsRes.data;
               if (views.length > 0) {
-                  // Use the first view's columns
                   const columns = views[0].columns;
                   setFields(allFields.filter(f => columns.includes(f.name)));
               } else {
@@ -48,28 +49,37 @@ const ObjectRecordList = () => {
   }, [objectName]);
 
   const handleDelete = async (uid: string) => {
-      if (window.confirm("Delete record?")) {
+      if (window.confirm("确定删除该记录吗？")) {
           await dataApi.deleteRecord(objectName!, uid);
           loadData();
       }
   };
 
-  if (!object) return <Typography>Loading...</Typography>;
+  if (!object) return <LoadingOverlay />;
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
             <Typography variant="h4">{object.label}</Typography>
             <Button variant="contained" onClick={() => navigate(`/app/${objectName}/new`)}>
-                New {object.label}
+                新建 {object.label}
             </Button>
         </Box>
         
         <DataTable 
             fields={fields} 
-            data={records} 
-            onEdit={(uid) => navigate(`/app/${objectName}/${uid}/edit`)} 
-            onDelete={handleDelete}
+            rows={records} 
+            onRowClick={(row) => navigate(`/app/${objectName}/${row.uid}`)}
+            actions={(row) => (
+              <>
+                <IconButton onClick={() => navigate(`/app/${objectName}/${row.uid}/edit`)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton color="error" onClick={() => handleDelete(row.uid)}>
+                  <DeleteIcon />
+                </IconButton>
+              </>
+            )}
         />
     </Container>
   );

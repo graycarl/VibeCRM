@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { TextField, Button, Box, Checkbox, FormControlLabel, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper } from '@mui/material';
 import { MetaObject, MetaField } from '../../services/metaApi';
 
 interface Props {
@@ -35,11 +35,11 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
               <TextField
                 label={field.label}
                 fullWidth
-                margin="normal"
+                variant="outlined"
                 value={value || ''}
                 onChange={onChange}
                 error={!!errors[field.name]}
-                helperText={errors[field.name] ? 'Required' : ''}
+                helperText={errors[field.name] ? '该字段必填' : ''}
               />
             )}
           />
@@ -55,10 +55,11 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 label={field.label}
                 type="number"
                 fullWidth
-                margin="normal"
+                variant="outlined"
                 value={value || ''}
-                onChange={(e) => onChange(Number(e.target.value))}
+                onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
                 error={!!errors[field.name]}
+                helperText={errors[field.name] ? '该字段必填' : ''}
               />
             )}
           />
@@ -70,7 +71,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
             control={control}
             render={({ field: { onChange, value } }) => (
               <FormControlLabel
-                control={<Checkbox checked={!!value} onChange={onChange} />}
+                control={<Checkbox checked={!!value} onChange={onChange} color="primary" />}
                 label={field.label}
               />
             )}
@@ -87,11 +88,12 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 label={field.label}
                 type="date"
                 fullWidth
-                margin="normal"
+                variant="outlined"
                 InputLabelProps={{ shrink: true }}
                 value={value || ''}
                 onChange={onChange}
                 error={!!errors[field.name]}
+                helperText={errors[field.name] ? '该字段必填' : ''}
               />
             )}
           />
@@ -106,10 +108,11 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
               <TextField
                 label={field.label}
                 fullWidth
-                margin="normal"
+                variant="outlined"
                 value={value || ''}
                 onChange={onChange}
                 error={!!errors[field.name]}
+                helperText={errors[field.name] ? '该字段必填' : ''}
               />
             )}
           />
@@ -118,16 +121,22 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
-      {fields.map(field => (
-        <Box key={field.id} mb={2}>
-          {renderField(field)}
+    <Paper sx={{ p: 4, mt: 3, borderRadius: 2 }}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+            {fields.map(field => (
+                <Grid item xs={12} sm={field.data_type === 'Boolean' ? 12 : 6} key={field.id}>
+                    {renderField(field)}
+                </Grid>
+            ))}
+        </Grid>
+        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+            <Button type="submit" variant="contained" size="large">
+                保存记录
+            </Button>
         </Box>
-      ))}
-      <Button type="submit" variant="contained" color="primary">
-        Save
-      </Button>
-    </Box>
+        </Box>
+    </Paper>
   );
 };
 

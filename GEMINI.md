@@ -37,6 +37,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 ## Active Technologies
 - Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest` (002-setup-dev-makefile)
 - SQLite (via `backend/app/db/init_db.py`) (002-setup-dev-makefile)
+- TypeScript 5.0+, React 18.2+ + `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto` (003-integrate-material-ui)
+- N/A (Frontend only) (003-integrate-material-ui)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -56,6 +58,6 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 
 ## Recent Changes
+- 003-integrate-material-ui: Added TypeScript 5.0+, React 18.2+ + `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto`
 - 002-setup-dev-makefile: Added Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest`
 
-- 001-metadata-app-platform: Defined technical plan with Sync Python/FastAPI backend and React frontend.
