@@ -15,6 +15,11 @@
 - Q: Is "Dark Mode" support required for this initial integration? → A: Support theme structure (architecture) but implement only Light mode initially.
 - Q: Does the integration include the standard icon set? → A: Install `@mui/icons-material` as a standard dependency.
 - Q: Should the standard Roboto font be installed? → A: Install `@fontsource/roboto` (npm) for consistent cross-platform rendering.
+- Q: 迁移范围是哪些页面？ → A: 必须将所有现有的业务页面（登录、管理端、运行时所有页面）完全重构为使用 MUI 组件。
+- Q: 样式清理策略是什么？ → A: 逐个页面迁移并即刻清理关联的旧 CSS 文件。
+- Q: 组件封装和复用策略？ → A: 统一使用基础组件并封装常用业务组件（如 DataTable）。
+- Q: 加载和错误状态如何处理？ → A: 统一使用 MUI 骨架屏（Skeleton）和反馈组件（Alert/Progress）。
+- Q: 是否需要配置语言本地化？ → A: 必须配置 MUI 的中文本地化（zhCN）。
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -39,18 +44,18 @@
 
 ---
 
-### User Story 2 - 核心组件样式统一 (Priority: P2)
+### User Story 2 - 全量页面重构与样式统一 (Priority: P2)
 
-开发人员使用 Material UI 的组件（如 Button, TextField, Typography）替换原有的原生 HTML 标签或自定义样式组件，确保应用具有一致的 Material Design 视觉风格。
+开发人员使用 Material UI 的组件替换**所有**现有页面（包括登录页、列表页、详情页、编辑器等）的原有标签或自定义样式，并在此过程中彻底移除旧的 CSS 文件。
 
-**Why this priority**: 统一的视觉风格是引入 UI 库的主要目的，直接影响最终用户的体验。
+**Why this priority**: 确保应用整体视觉风格的高度统一，并完成代码库的清理工作。
 
-**Independent Test**: 页面上的按钮、输入框和文字排版符合 Material Design 规范，且交互反馈（如点击波纹效果）正常。
+**Independent Test**: 所有页面均能在不加载旧 CSS 的情况下正常显示，且风格符合 Material Design 规范。
 
 **Acceptance Scenarios**:
 
-1. **Given** 页面包含按钮和输入框, **When** 用户查看页面, **Then** 按钮和输入框显示为 Material UI 的样式。
-2. **Given** 用户与组件交互, **When** 用户点击按钮, **Then** 按钮显示波纹动画效果。
+1. **Given** 页面迁移完成, **When** 开发者删除旧的 `.css` 文件, **Then** 页面样式不受损且完全由 MUI 驱动。
+2. **Given** 正在加载数据, **When** 用户查看页面, **Then** 页面显示一致的 MUI 骨架屏或进度条。
 
 ---
 
@@ -77,13 +82,22 @@
 
 ## Requirements *(mandatory)*
 
+- @mui/icons-material
+- @fontsource/roboto
+- @mui/material (zhCN 语言包配置)
+
 ### Functional Requirements
 
 - **FR-001**: 前端工程 MUST 包含 Material UI (MUI Core)、`@mui/icons-material` 及其相关依赖（Emotion 等）。
 - **FR-002**: 系统 MUST 在应用根节点配置 `ThemeProvider` 和 `CssBaseline` 以标准化浏览器默认样式。
 - **FR-003**: 系统 MUST 提供一个集中的主题配置文件，允许自定义主色调（Primary Color）和辅助色（Secondary Color），并预留动态切换（如 Dark Mode）的架构支持，但本阶段仅需配置 Light 模式。
-- **FR-004**: 所有新建的页面和组件 MUST 优先使用 MUI 提供的组件而非原生 HTML 标签。
+- **FR-004**: 所有新建的页面 and 组件 MUST 优先使用 MUI 提供的组件而非原生 HTML 标签。
 - **FR-005**: 页面布局 MUST 使用 MUI 的 `Grid` 或 `Stack` 组件进行构建。
+- **FR-006**: 必须将所有现有的业务页面（登录、管理端、运行时所有页面）完全重构为使用 MUI 组件。
+- **FR-007**: 在每个页面迁移完成后，必须立即移除该页面关联的旧 CSS 文件（如 `.css` 或 `.module.css`），防止样式冲突。
+- **FR-008**: 必须统一使用 MUI 基础组件进行重构，并针对常用场景（如数据表格 `DataTable`）建立统一的业务组件封装。
+- **FR-009**: 所有页面迁移时必须统一使用 MUI 的反馈组件（如 `Skeleton`, `CircularProgress`, `Alert`）来处理加载中和错误状态。
+- **FR-010**: 必须配置 MUI 的中文本地化（zhCN），确保内置组件（如分页、对话框）显示中文。
 
 ### Non-Functional Requirements
 

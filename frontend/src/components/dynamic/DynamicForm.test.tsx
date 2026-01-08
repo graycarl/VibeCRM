@@ -43,10 +43,10 @@ describe('DynamicForm', () => {
     const handleSubmit = vi.fn();
     render(<DynamicForm object={mockObject} fields={mockFields} onSubmit={handleSubmit} />);
     
-    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+    fireEvent.click(screen.getByRole('button', { name: /保存记录/i }));
     
     await waitFor(() => {
-      expect(screen.getByText(/Required/i)).toBeInTheDocument();
+      expect(screen.getByText(/该字段必填/i)).toBeInTheDocument();
     });
     expect(handleSubmit).not.toHaveBeenCalled();
   });
@@ -57,7 +57,7 @@ describe('DynamicForm', () => {
     
     fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'Test User' } });
     fireEvent.change(screen.getByLabelText(/Age/i), { target: { value: '25' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save/i }));
+    fireEvent.click(screen.getByRole('button', { name: /保存记录/i }));
     
     await waitFor(() => {
       expect(handleSubmit).toHaveBeenCalledWith({ name: 'Test User', age: 25 }, expect.anything());

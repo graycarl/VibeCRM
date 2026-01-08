@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
-  Container, Typography, Paper, Table, TableBody, TableCell, 
-  TableContainer, TableHead, TableRow, Box, Button, Chip 
+  Container, Typography, Box, Button, Chip 
 } from '@mui/material';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import FieldCreateDialog from '../../components/admin/FieldCreateDialog';
+import DataTable from '../../components/data/DataTable';
+import { LoadingOverlay } from '../../components/common/Feedback';
 
 const ObjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,9 +27,25 @@ const ObjectDetail = () => {
     loadObject();
   }, [id]);
 
-  if (!object) return <Typography>Loading...</Typography>;
+  if (!object) return <LoadingOverlay />;
 
   const fields = (object as any).fields as MetaField[] || [];
+
+  const columns = [
+    { id: 'label', label: 'Label' },
+    { id: 'name', label: 'API Name' },
+    { 
+      id: 'data_type', 
+      label: 'Type',
+      format: (value: string) => <Chip label={value} size="small" variant="outlined" />
+    },
+    { 
+      id: 'is_required', 
+      label: 'Required',
+      format: (value: boolean) => value ? "Yes" : "No"
+    },
+    { id: 'source', label: 'Source' },
+  ];
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -47,30 +64,10 @@ const ObjectDetail = () => {
         </Button>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Label</TableCell>
-              <TableCell>API Name</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Required</TableCell>
-              <TableCell>Source</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {fields.map((field) => (
-              <TableRow key={field.id}>
-                <TableCell>{field.label}</TableCell>
-                <TableCell>{field.name}</TableCell>
-                <TableCell><Chip label={field.data_type} size="small" /></TableCell>
-                <TableCell>{field.is_required ? "Yes" : "No"}</TableCell>
-                <TableCell>{field.source}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <DataTable 
+        columns={columns as any} 
+        rows={fields} 
+      />
 
       <FieldCreateDialog 
         open={openFieldDialog} 

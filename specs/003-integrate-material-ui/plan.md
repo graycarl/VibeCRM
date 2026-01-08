@@ -1,65 +1,53 @@
-# Implementation Plan: Integrate Material UI
+# Implementation Plan: Integrate Material UI (Extended)
 
 **Branch**: `003-integrate-material-ui` | **Date**: 2026-01-09 | **Spec**: [specs/003-integrate-material-ui/spec.md](../specs/003-integrate-material-ui/spec.md)
-**Input**: Feature specification from `specs/003-integrate-material-ui/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-Integrate Material UI (@mui/material) as the foundational component library for the frontend. This includes setting up the ThemeProvider, configuring a basic theme (light mode only initially but architected for switching), installing standard icons (@mui/icons-material) and typography (@fontsource/roboto), and ensuring the build pipeline supports these dependencies.
+In addition to the basic setup, this plan covers the complete migration of all existing frontend pages to Material UI, implementation of zhCN localization, and establishment of a shared component library (e.g., `DataTable`) to ensure UX consistency and clean code architecture.
 
 ## Technical Context
 
 **Language/Version**: TypeScript 5.0+, React 18.2+
 **Primary Dependencies**: `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto`
-**Storage**: N/A (Frontend only)
-**Testing**: `vitest`
-**Target Platform**: Web (Modern Browsers: Chrome, Firefox, Safari)
-**Project Type**: Web application
-**Performance Goals**: FCP impact < 200ms
-**Constraints**: Must adhere to Material Design guidelines.
-**Scale/Scope**: Frontend foundation for entire app.
-
-## Constitution Check
-
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-*   **I. Code Quality**: Yes, using standard library patterns and strict TypeScript.
-*   **II. Testing Standards**: Yes, Vitest is configured. UI components will be tested.
-*   **III. UX Consistency**: Yes, strictly enforcing Material Design via MUI.
-*   **IV. Performance Requirements**: Yes, <200ms FCP constraint defined.
-*   **V. Documentation Language**: Yes, `quickstart.md` and specs are in Chinese.
+**Localization**: MUI `zhCN` locale.
+**Key Architectural Decisions**:
+- **Shared Components**: Encapsulate common patterns into reusable components (e.g., `DataTable`, `LoadingState`).
+- **Incremental Cleanup**: Delete associated `.css` files immediately after each page refactor.
+- **Feedback Standards**: Use `Skeleton` for initial loads and `CircularProgress` for action feedback.
 
 ## Project Structure
 
-### Documentation (this feature)
+### Documentation
+(Unchanged from initial plan)
 
-```text
-specs/003-integrate-material-ui/
-├── plan.md              # This file
-├── research.md          # Phase 0 output
-├── data-model.md        # Phase 1 output
-├── quickstart.md        # Phase 1 output
-├── contracts/           # Phase 1 output
-└── tasks.md             # Phase 2 output
-```
-
-### Source Code (repository root)
-
+### Source Code
 ```text
 frontend/
 ├── src/
-│   ├── theme/           # Theme configuration
+│   ├── theme/           # Theme & Localization
 │   │   └── index.ts
-│   ├── components/      # Shared components
-│   ├── pages/           # Application pages
+│   ├── components/      # Shared business components (Encapsulated)
+│   │   ├── common/      # Feedback, Error handling
+│   │   └── data/        # DataTable
+│   ├── layouts/         # App layouts (MainLayout)
+│   ├── pages/           # Refactored pages (MUI only)
 │   ├── App.tsx
 │   └── main.tsx
 └── tests/
 ```
 
-**Structure Decision**: Standard React/Vite structure, leveraging existing folders.
+## Migration Strategy
+
+1. **Foundational Components**: Build `DataTable` and feedback components first.
+2. **Sequential Refactor**:
+   - **Phase 1**: Login & Auth pages.
+   - **Phase 2**: Admin console (Object lists, details, editors).
+   - **Phase 3**: Runtime App (Record lists, detail views, forms).
+3. **Atomic Commit**: Each page refactor should include:
+   - Conversion to MUI components.
+   - Removal of old CSS files.
+   - Verification of responsive behavior.
 
 ## Complexity Tracking
 
