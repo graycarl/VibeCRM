@@ -1,7 +1,6 @@
 # GEMINI
 
-- 尽量使用中文进行对话和交流。
-- 项目中的 `chat-histories` 文件夹用于存储对话记录，请忽略它的内容，但需要在每次提交代码时包含它。
+- **尽量使用中文进行对话和交流**
 
 ## Active Technologies
 - Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest` (002-setup-dev-makefile)
