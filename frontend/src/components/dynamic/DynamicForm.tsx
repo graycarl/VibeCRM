@@ -10,7 +10,9 @@ interface Props {
   initialValues?: any;
 }
 
-const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues = {} }) => {
+const DEFAULT_INITIAL_VALUES = {};
+
+const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues = DEFAULT_INITIAL_VALUES }) => {
   const { control, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: initialValues
   });
