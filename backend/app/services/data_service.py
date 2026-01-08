@@ -4,7 +4,7 @@ from app.db.session import engine
 from app.services.meta_service import meta_service
 from typing import Dict, Any, List, Optional
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 class DataService:
     def create_record(self, db: Session, object_name: str, data: Dict[str, Any], user_id: int = None) -> Dict[str, Any]:
@@ -15,7 +15,7 @@ class DataService:
         table_name = f"data_{object_name}"
         
         record_uid = str(uuid.uuid4())
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         
         insert_data = {
             "uid": record_uid,
@@ -66,7 +66,7 @@ class DataService:
         if not data:
             return self.get_record(db, object_name, record_uid)
 
-        data["updated_at"] = datetime.utcnow().isoformat()
+        data["updated_at"] = datetime.now(timezone.utc).isoformat()
         
         set_clauses = ", ".join([f"{k} = :{k}" for k in data.keys()])
         stmt = text(f"UPDATE {table_name} SET {set_clauses} WHERE uid = :uid")

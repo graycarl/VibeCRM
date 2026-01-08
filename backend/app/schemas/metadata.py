@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Any
 from datetime import datetime
 
@@ -17,8 +17,7 @@ class MetaField(MetaFieldBase):
     id: str 
     object_id: str
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class MetaObjectBase(BaseModel):
     name: str
@@ -34,5 +33,4 @@ class MetaObject(MetaObjectBase):
     created_at: datetime
     fields: List[MetaField] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
