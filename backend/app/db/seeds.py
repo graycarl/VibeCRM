@@ -34,6 +34,8 @@ def process_objects(db: Session, objects_data):
                 meta_service.create_field(db, obj.id, MetaFieldCreate(**field_data))
 
 def process_records(db: Session, records_data):
+    initial_counts = {}
+    
     for record_entry in records_data:
         obj_name = record_entry["object"]
         data = record_entry["data"].copy()
@@ -45,10 +47,13 @@ def process_records(db: Session, records_data):
         try:
             with engine.connect() as conn:
                 table_name = f"data_{obj_name}"
-                # Check if table exists and is empty
-                # Note: meta_service.create_object creates the table
-                count = conn.execute(text(f"SELECT count(*) FROM {table_name}")).scalar()
-                if count == 0:
+                
+                # Check if table exists and is empty (only once per table per batch)
+                if table_name not in initial_counts:
+                    count = conn.execute(text(f"SELECT count(*) FROM {table_name}")).scalar()
+                    initial_counts[table_name] = count
+                
+                if initial_counts[table_name] == 0:
                     data_service.create_record(db, obj_name, data)
         except Exception as e:
             print(f"Skipping record seed for {obj_name}: {e}")
