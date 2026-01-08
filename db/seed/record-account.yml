@@ -1,0 +1,7 @@
+records:
+  - object: account
+    data:
+      name: John Doe
+      age: 30
+      is_happly: true
+      birth: 1993-01-15

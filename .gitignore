@@ -32,8 +32,6 @@ pnpm-debug.log*
 # Database
 *.sqlite
 *.db
-backend/*.sqlite
-backend/*.db
 
 # IDEs
 .idea/

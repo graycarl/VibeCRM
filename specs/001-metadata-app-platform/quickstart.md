@@ -61,7 +61,7 @@ npm run dev
 
 ## 初始化数据库 (Database Setup)
 
-系统首次启动时会自动检查 SQLite 数据库文件 (`backend/vibecrm.sqlite`)。
+系统首次启动时会自动检查 SQLite 数据库文件 (`db/vibecrm.sqlite`)。
 FastAPI 应用启动时 (`lifespan` event) 将自动执行同步初始化任务：
 1.  创建 `meta_objects`, `meta_fields` 等元数据表。
 2.  预播种 (Seed) `User`, `Role` 等系统对象。

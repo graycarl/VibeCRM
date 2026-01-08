@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     
     # Database
     # Using SQLite for MVP as per plan
-    DATABASE_URL: str = "sqlite:///./vibecrm.sqlite"
+    DATABASE_URL: str = "sqlite:///../db/vibecrm.sqlite"
+    SEED_DIR_PATH: str = "../db/seed"
     
     # Security
     SECRET_KEY: str = "CHANGE_THIS_IN_PRODUCTION" # TODO: Load from env

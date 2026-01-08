@@ -47,7 +47,7 @@ reset: clean-db seed-db
 
 clean-db:
 	@echo "Removing database..."
-	rm -f $(BACKEND_DIR)/vibecrm.sqlite
+	rm -f db/vibecrm.sqlite
 
 seed-db:
 	@echo "Seeding database..."

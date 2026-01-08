@@ -1,0 +1,52 @@
+roles:
+  - name: admin
+    label: Administrator
+    source: system
+  - name: standard
+    label: Standard User
+    source: system
+
+objects:
+  - name: user
+    label: User
+    description: System User
+    source: system
+    fields:
+      - name: name
+        label: Full Name
+        data_type: Text
+        source: system
+      - name: email
+        label: Email
+        data_type: Text
+        is_required: true
+        source: system
+      - name: password
+        label: Password Hash
+        data_type: Text
+        source: system
+      - name: role
+        label: Role
+        data_type: Text
+        source: system
+  - name: account
+    label: Account
+    description: Account Information
+    source: system
+    fields:
+      - name: name
+        label: Full Name
+        data_type: Text
+        source: system
+      - name: age
+        label: Age
+        data_type: Number
+        source: system
+      - name: is_happly
+        label: Is Happy
+        data_type: Boolean
+        source: system
+      - name: birth
+        label: Birth Date
+        data_type: Date
+        source: system

@@ -1,0 +1,7 @@
+records:
+- object: user
+  data:
+    name: Admin User
+    email: admin@vibecrm.com
+    password: admin123
+    role: admin
