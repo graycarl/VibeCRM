@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Box, Checkbox, FormControlLabel, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { MetaObject, MetaField } from '../../services/metaApi';
@@ -11,9 +11,15 @@ interface Props {
 }
 
 const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues = {} }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: initialValues
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      reset(initialValues);
+    }
+  }, [initialValues, reset]);
 
   const renderField = (field: MetaField) => {
     switch (field.data_type) {
