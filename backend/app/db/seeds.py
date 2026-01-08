@@ -35,32 +35,32 @@ def process_objects(db: Session, objects_data):
 
 def process_records(db: Session, records_data):
     initial_counts = {}
-    
+
     for record_entry in records_data:
         obj_name = record_entry["object"]
         data = record_entry["data"].copy()
-        
-        # Special handling for password hashing in user object
-        if obj_name == "user" and "password" in data:
-            data["password"] = security.get_password_hash(data["password"])
-            
+
         try:
             with engine.connect() as conn:
                 table_name = f"data_{obj_name}"
-                
+
                 # Check if table exists and is empty (only once per table per batch)
                 if table_name not in initial_counts:
                     count = conn.execute(text(f"SELECT count(*) FROM {table_name}")).scalar()
                     initial_counts[table_name] = count
-                
+
                 if initial_counts[table_name] == 0:
+                    # Special handling for password hashing in user object
+                    if obj_name == "user" and "password" in data:
+                        data["password"] = security.get_password_hash(data["password"])
+
                     data_service.create_record(db, obj_name, data)
         except Exception as e:
             print(f"Skipping record seed for {obj_name}: {e}")
 
 def seed_db(db: Session):
     seed_dir = Path(settings.SEED_DIR_PATH)
-    
+
     # Resolve path logic
     if not seed_dir.exists():
         if (Path("..") / seed_dir).exists():

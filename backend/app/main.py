@@ -3,16 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.endpoints import meta, auth, data, layout
 from app.db.init_db import init_db
-from app.db.seeds import seed_db
-from app.db.session import SessionLocal
 
-# Initialize DB on startup
+# Initialize DB on startup (ensure tables exist)
 init_db()
-db = SessionLocal()
-try:
-    seed_db(db)
-finally:
-    db.close()
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

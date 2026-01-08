@@ -51,7 +51,7 @@ clean-db:
 
 seed-db:
 	@echo "Seeding database..."
-	cd $(BACKEND_DIR) && uv run python -c "from app.db.init_db import init_db; from app.db.seeds import seed_db; from app.db.session import SessionLocal; init_db(); db = SessionLocal(); seed_db(db); db.close()"
+	cd $(BACKEND_DIR) && uv run python -m app.cli seed
 
 # Testing
 test: backend-test frontend-test
