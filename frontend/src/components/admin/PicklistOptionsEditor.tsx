@@ -10,7 +10,16 @@ import {
   ListItemText, 
   ListItemSecondaryAction,
   Paper,
-  Divider
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { 
   Add as AddIcon, 
@@ -35,6 +44,11 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<PicklistOption>({ name: '', label: '' });
   const [error, setError] = useState<string | null>(null);
+  
+  // Deletion & Migration state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [optionToDelete, setOptionToDelete] = useState<{name: string, label: string, index: number} | null>(null);
+  const [migrateTo, setMigrateTo] = useState<string>('_none');
 
   const handleAdd = async () => {
     if (!newOption.name || !newOption.label) return;
@@ -48,16 +62,27 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
     }
   };
 
-  const handleDelete = async (name: string, index: number) => {
+  const handleDeleteClick = (name: string, label: string, index: number) => {
+    setOptionToDelete({ name, label, index });
+    setMigrateTo('_none');
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!optionToDelete) return;
     try {
       setError(null);
-      // For now, no migration support in UI, just delete
-      await metaApi.deleteOption(fieldId, name);
+      const migrateToValue = migrateTo === '_none' ? undefined : migrateTo;
+      await metaApi.deleteOption(fieldId, optionToDelete.name, migrateToValue);
+      
       const newOptions = [...options];
-      newOptions.splice(index, 1);
+      newOptions.splice(optionToDelete.index, 1);
       setOptions(newOptions);
+      setDeleteDialogOpen(false);
+      setOptionToDelete(null);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to delete option');
+      setDeleteDialogOpen(false);
     }
   };
 
@@ -89,13 +114,6 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
     newOptions[index] = newOptions[newIndex];
     newOptions[newIndex] = temp;
 
-    // TODO: The backend currently doesn't have a reorder endpoint.
-    // Based on FR-013, we might need a full-list update for ordering, 
-    // or the backend needs to handle ordering in a specific way.
-    // Since we only have add/patch/delete, ordering might be tricky if real-time.
-    // If we want real-time ordering, we might need a PATCH for the whole field options.
-    
-    // For now, we update the state and maybe we'll need a way to save order.
     setOptions(newOptions);
   };
 
@@ -169,7 +187,12 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
                     <IconButton size="small" onClick={() => handleStartEdit(index)} color="info">
                       <EditIcon />
                     </IconButton>
-                    <IconButton size="small" onClick={() => handleDelete(opt.name, index)} color="error">
+                    <IconButton 
+                      size="small" 
+                      onClick={() => handleDeleteClick(opt.name, opt.label, index)} 
+                      color="error"
+                      data-testid={`delete-option-${opt.name}`}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
@@ -180,6 +203,43 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
           </React.Fragment>
         ))}
       </List>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>删除选项</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            确定要删除选项 <strong>{optionToDelete?.label}</strong> ({optionToDelete?.name}) 吗？
+            此操作不可撤销。
+          </DialogContentText>
+          <FormControl fullWidth size="small" sx={{ mt: 1 }}>
+            <InputLabel id="migrate-to-label">将现有数据迁移至</InputLabel>
+            <Select
+              labelId="migrate-to-label"
+              value={migrateTo}
+              label="将现有数据迁移至"
+              onChange={(e) => setMigrateTo(e.target.value)}
+              inputProps={{ 'data-testid': 'migrate-to-select' }}
+            >
+              <MenuItem value="_none"><em>无（清除现有数据）</em></MenuItem>
+              {options
+                .filter(opt => opt.name !== optionToDelete?.name)
+                .map(opt => (
+                  <MenuItem key={opt.name} value={opt.name}>
+                    {opt.label} ({opt.name})
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>取消</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            删除
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
