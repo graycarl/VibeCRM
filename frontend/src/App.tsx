@@ -6,6 +6,7 @@ import ObjectList from './pages/admin/ObjectList';
 import ObjectDetail from './pages/admin/ObjectDetail';
 import ListViewEditor from './pages/admin/ListViewEditor';
 import PageLayoutEditor from './pages/admin/PageLayoutEditor';
+import RoleList from './pages/admin/RoleList';
 
 import ObjectRecordList from './pages/runtime/ObjectRecordList';
 import ObjectRecordEdit from './pages/runtime/ObjectRecordEdit';
@@ -27,6 +28,7 @@ function App() {
         <Route path="admin/objects/:id" element={<ObjectDetail />} />
         <Route path="admin/objects/:id/list-views/new" element={<ListViewEditor />} />
         <Route path="admin/objects/:id/layouts/new" element={<PageLayoutEditor />} />
+        <Route path="admin/roles" element={<RoleList />} />
 
         {/* Runtime Routes */}
         <Route path="app/:objectName" element={<ObjectRecordList />} />

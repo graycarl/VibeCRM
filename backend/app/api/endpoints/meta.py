@@ -2,7 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.schemas.metadata import MetaObject, MetaObjectCreate, MetaField, MetaFieldCreate
+from app.schemas.metadata import (
+    MetaObject, MetaObjectCreate, 
+    MetaField, MetaFieldCreate,
+    MetaRole, MetaRoleCreate, MetaRoleUpdate
+)
 from app.services.meta_service import meta_service
 from app.api.deps import get_db
 
@@ -43,3 +47,42 @@ def create_field(object_id: str, field_in: MetaFieldCreate, db: Session = Depend
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Role Endpoints
+
+@router.post("/roles", response_model=MetaRole)
+def create_role(role_in: MetaRoleCreate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.create_role(db, role_in)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/roles", response_model=List[MetaRole])
+def list_roles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return meta_service.get_roles(db, skip, limit)
+
+@router.get("/roles/{role_id}", response_model=MetaRole)
+def get_role(role_id: str, db: Session = Depends(get_db)):
+    role = meta_service.get_role(db, role_id)
+    if not role:
+        raise HTTPException(status_code=404, detail="Role not found")
+    return role
+
+@router.put("/roles/{role_id}", response_model=MetaRole)
+def update_role(role_id: str, role_in: MetaRoleUpdate, db: Session = Depends(get_db)):
+    role = meta_service.update_role(db, role_id, role_in)
+    if not role:
+        raise HTTPException(status_code=404, detail="Role not found")
+    return role
+
+@router.delete("/roles/{role_id}")
+def delete_role(role_id: str, db: Session = Depends(get_db)):
+    try:
+        success = meta_service.delete_role(db, role_id)
+        if not success:
+            raise HTTPException(status_code=404, detail="Role not found")
+        return {"message": "Role deleted"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

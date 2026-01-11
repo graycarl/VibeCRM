@@ -22,6 +22,15 @@ export interface MetaField {
   source: 'system' | 'custom';
 }
 
+export interface MetaRole {
+  id: string;
+  name: string;
+  label: string;
+  description?: string;
+  permissions?: any;
+  source: 'system' | 'custom';
+}
+
 const getAuthHeader = () => {
     const token = localStorage.getItem('token');
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -50,6 +59,31 @@ export const metaApi = {
 
   createField: async (objectId: string, data: Partial<MetaField>) => {
     const response = await axios.post<MetaField>(`${API_URL}/meta/objects/${objectId}/fields`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  getRoles: async () => {
+    const response = await axios.get<MetaRole[]>(`${API_URL}/meta/roles`, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  getRole: async (id: string) => {
+    const response = await axios.get<MetaRole>(`${API_URL}/meta/roles/${id}`, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  createRole: async (data: Partial<MetaRole>) => {
+    const response = await axios.post<MetaRole>(`${API_URL}/meta/roles`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  updateRole: async (id: string, data: Partial<MetaRole>) => {
+    const response = await axios.put<MetaRole>(`${API_URL}/meta/roles/${id}`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  deleteRole: async (id: string) => {
+    const response = await axios.delete(`${API_URL}/meta/roles/${id}`, { headers: getAuthHeader() });
     return response.data;
   }
 };

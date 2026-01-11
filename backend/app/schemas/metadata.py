@@ -34,3 +34,23 @@ class MetaObject(MetaObjectBase):
     fields: List[MetaField] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+class MetaRoleBase(BaseModel):
+    name: str
+    label: str
+    description: Optional[str] = None
+    permissions: Optional[Any] = None
+    source: str = "custom"
+
+class MetaRoleCreate(MetaRoleBase):
+    pass
+
+class MetaRoleUpdate(BaseModel):
+    label: Optional[str] = None
+    description: Optional[str] = None
+    permissions: Optional[Any] = None
+
+class MetaRole(MetaRoleBase):
+    id: str
+    
+    model_config = ConfigDict(from_attributes=True)
