@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models.metadata import MetaObject, MetaField
-from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate
+from app.models.metadata import MetaObject, MetaField, MetaRole
+from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
 from app.services.schema_service import schema_service
 import uuid
 
@@ -80,5 +80,55 @@ class MetaService:
             db.commit()
             return True
         return False
+
+    # Role Methods
+    def create_role(self, db: Session, role_in: MetaRoleCreate) -> MetaRole:
+        existing = db.query(MetaRole).filter(MetaRole.name == role_in.name).first()
+        if existing:
+            raise ValueError(f"Role with name '{role_in.name}' already exists.")
+            
+        db_role = MetaRole(
+            name=role_in.name,
+            label=role_in.label,
+            description=role_in.description,
+            permissions=role_in.permissions,
+            source=role_in.source
+        )
+        db.add(db_role)
+        db.commit()
+        db.refresh(db_role)
+        return db_role
+
+    def get_roles(self, db: Session, skip: int = 0, limit: int = 100):
+        return db.query(MetaRole).offset(skip).limit(limit).all()
+
+    def get_role(self, db: Session, role_id: str):
+        return db.query(MetaRole).filter(MetaRole.id == role_id).first()
+
+    def update_role(self, db: Session, role_id: str, role_in: MetaRoleUpdate) -> MetaRole:
+        db_role = self.get_role(db, role_id)
+        if not db_role:
+            return None
+        
+        update_data = role_in.model_dump(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(db_role, field, value)
+            
+        db.add(db_role)
+        db.commit()
+        db.refresh(db_role)
+        return db_role
+
+    def delete_role(self, db: Session, role_id: str) -> bool:
+        db_role = self.get_role(db, role_id)
+        if not db_role:
+            return False
+            
+        if db_role.source == "system":
+            raise ValueError("Cannot delete system role")
+            
+        db.delete(db_role)
+        db.commit()
+        return True
 
 meta_service = MetaService()

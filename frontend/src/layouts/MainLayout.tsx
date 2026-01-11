@@ -13,11 +13,15 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
-  ListItemButton
+  ListItemButton,
+  Collapse
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import SecurityIcon from '@mui/icons-material/Security';
 import { metaApi, MetaObject } from '../services/metaApi';
 
 const drawerWidth = 240;
@@ -26,6 +30,7 @@ const MainLayout: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [setupOpen, setSetupOpen] = useState(true);
   const [objects, setObjects] = useState<MetaObject[]>([]);
 
   useEffect(() => {
@@ -44,18 +49,41 @@ const MainLayout: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleSetupClick = () => {
+    setSetupOpen(!setupOpen);
+  };
+
   const drawer = (
     <div>
       <Toolbar />
       <Box sx={{ overflow: 'auto' }}>
         <List>
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/admin/objects">
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
-              <ListItemText primary="Setup (Admin)" />
-            </ListItemButton>
-          </ListItem>
+          {/* Setup Group */}
+          <ListItemButton onClick={handleSetupClick}>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Setup" />
+            {setupOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={setupOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="/admin/objects">
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Objects" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="/admin/roles">
+                <ListItemIcon>
+                  <SecurityIcon />
+                </ListItemIcon>
+                <ListItemText primary="Roles" />
+              </ListItemButton>
+            </List>
+          </Collapse>
           
+          {/* App Objects */}
           {objects.map((obj) => (
             <ListItem key={obj.id} disablePadding>
               <ListItemButton component={Link} to={`/app/${obj.name}`}>
