@@ -50,6 +50,16 @@ make dev
 - `make seed-db`: Seed the database with metadata and sample records.
 - `cd backend && uv run python -m app.cli --help`: Access backend CLI tools.
 
-## Documentation
+## TODO
 
-For more detailed technical specifications and design goals, refer to `GEMINI.md`.
+- [ ] 完整的分页功能（当前为客户端分页）
+- [ ] 对 number 类型字段支持页面上指定排序
+- [ ] Custom Field 的 Name 必须以 cs_ 开头
+- [ ] System Picklist Field 的选项不允许修改
+- [ ] Custom Field 只有 Name, Type 等关键属性不允许修改，其他属性允许修改
+- [ ] 支持 Record Type 和 State 概念
+- [ ] 实现完整的 Lookup Field
+- [ ] 实现完整的 Metadata Field
+- [ ] 实现 Data Layout
+- [ ] 支持用户自定义 List View，包含字段排序和隐藏
+- [ ] 支持为用户配置 Page Layout，按 Record Type、State、Role 等维度区分
