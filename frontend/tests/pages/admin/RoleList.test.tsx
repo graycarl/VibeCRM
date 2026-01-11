@@ -19,7 +19,7 @@ describe('RoleList', () => {
 
   it('renders role list', async () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <RoleList />
       </MemoryRouter>
     );
@@ -32,10 +32,12 @@ describe('RoleList', () => {
 
   it('renders new role button', async () => {
     render(
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <RoleList />
         </MemoryRouter>
     );
-    expect(screen.getByText(/New Role/i)).toBeInTheDocument();
+    await waitFor(() => {
+        expect(screen.getByText(/New Role/i)).toBeInTheDocument();
+    });
   });
 });

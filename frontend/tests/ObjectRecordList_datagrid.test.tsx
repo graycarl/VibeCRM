@@ -32,7 +32,7 @@ describe('ObjectRecordList with DataGrid', () => {
 
   it('renders the list using DataGrid', async () => {
     render(
-      <MemoryRouter initialEntries={['/app/account']}>
+      <MemoryRouter initialEntries={['/app/account']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/app/:objectName" element={<ObjectRecordList />} />
         </Routes>
@@ -57,7 +57,7 @@ describe('ObjectRecordList with DataGrid', () => {
 
   it('renders action buttons', async () => {
     render(
-      <MemoryRouter initialEntries={['/app/account']}>
+      <MemoryRouter initialEntries={['/app/account']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/app/:objectName" element={<ObjectRecordList />} />
         </Routes>
