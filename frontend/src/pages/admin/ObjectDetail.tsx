@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
-  Container, Typography, Box, Button, Chip 
+  Container, Typography, Box, Button 
 } from '@mui/material';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import FieldCreateDialog from '../../components/admin/FieldCreateDialog';
-import DataTable from '../../components/data/DataTable';
+import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 import { LoadingOverlay } from '../../components/common/Feedback';
 
 const ObjectDetail = () => {
@@ -29,22 +29,14 @@ const ObjectDetail = () => {
 
   if (!object) return <LoadingOverlay />;
 
-  const fields = (object as any).fields as MetaField[] || [];
+  const objectFields = (object as any).fields as MetaField[] || [];
 
-  const columns = [
-    { id: 'label', label: 'Label' },
-    { id: 'name', label: 'API Name' },
-    { 
-      id: 'data_type', 
-      label: 'Type',
-      format: (value: string) => <Chip label={value} size="small" variant="outlined" />
-    },
-    { 
-      id: 'is_required', 
-      label: 'Required',
-      format: (value: boolean) => value ? "Yes" : "No"
-    },
-    { id: 'source', label: 'Source' },
+  const gridFields: MetaField[] = [
+    { name: 'label', label: 'Label', type: 'Text' },
+    { name: 'name', label: 'API Name', type: 'Text' },
+    { name: 'data_type', label: 'Type', type: 'Text' },
+    { name: 'is_required', label: 'Required', type: 'Boolean' },
+    { name: 'source', label: 'Source', type: 'Text' },
   ];
 
   return (
@@ -64,9 +56,9 @@ const ObjectDetail = () => {
         </Button>
       </Box>
 
-      <DataTable 
-        columns={columns as any} 
-        rows={fields} 
+      <DynamicDataGrid 
+        fields={gridFields} 
+        rows={objectFields} 
       />
 
       <FieldCreateDialog 
