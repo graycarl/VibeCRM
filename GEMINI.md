@@ -43,8 +43,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - N/A (Frontend display only) (004-migrate-to-datagrid)
 - Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend) (005-admin-roles-mgmt)
 - SQLite (via SQLAlchemy) (005-admin-roles-mgmt)
-- Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend) (006-add-datetime-field)
-- SQLite (Mapped via `SchemaService`) (006-add-datetime-field)
+- Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend) (007-picklist-field)
+- SQLite (Mapped via `SchemaService`, Picklist options in `MetaField.options` JSON) (007-picklist-field)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -58,12 +58,14 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - 使用 `uv run` 来运行 python 程序或脚本；
 - 当需要查阅第三方类库文档时，请使用 context7 相关工具；
 - **React Hook 陷阱**: 避免在组件 Props 解构时使用对象字面量作为默认值 (例如 `props = {}`)，因为这会在每次渲染时创建新的引用。如果该 Prop 被用作 `useEffect` 的依赖项，会导致无限循环。请在组件外部定义常量作为默认值。
+- **前端测试**: 注意运行测试的时候需要添加 `--run` 参数，否则测试程序无法停止；
 - **前端测试组织**: 
     - **单元/组件测试**: 遵循“就近原则”(Co-location)，将 `.test.tsx` 文件放在对应的源码目录下，便于维护和查阅。
     - **集成/E2E 测试**: 放在 `frontend/tests/` 目录下，用于存放跨模块的流程测试。
 
 
 ## Recent Changes
+- 007-picklist-field: Added Picklist field support with Admin Console options management, backend validation, and Runtime App Autocomplete search.
 - 006-add-datetime-field: Added Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend)
 - 005-admin-roles-mgmt: Added Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend)
 

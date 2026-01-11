@@ -58,6 +58,15 @@ objects:
         label: Birth Date
         data_type: Date
         source: system
+      - name: sex
+        label: 性别
+        data_type: Picklist
+        source: system
+        options:
+          - name: male
+            label: 男
+          - name: female
+            label: 女
       - name: created_at
         label: Created At
         data_type: Datetime

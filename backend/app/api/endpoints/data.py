@@ -28,6 +28,8 @@ def create_record(
     
     try:
         return data_service.create_record(db, object_name, validated_data.model_dump(), user_id=None)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -72,6 +74,8 @@ def update_record(
         if not updated:
              raise HTTPException(status_code=404, detail="Record not found")
         return updated
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

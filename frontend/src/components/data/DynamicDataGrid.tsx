@@ -2,12 +2,13 @@ import React, { useMemo } from 'react';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { MetaField } from '../../services/metaApi';
+import { getOptionLabel } from '../../utils/metadata';
 
 export interface DynamicDataGridProps {
   /**
    * List of metadata fields to generate columns from.
    */
-  fields: MetaField[];
+  fields: (Partial<MetaField> & { name: string, label: string })[];
 
   /**
    * Data rows to display.
@@ -74,6 +75,10 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
           break;
         case 'Boolean':
           colDef.type = 'boolean';
+          break;
+        case 'Picklist':
+          colDef.type = 'string';
+          colDef.valueFormatter = (value: any) => getOptionLabel(field, value);
           break;
         default:
           colDef.type = 'string';

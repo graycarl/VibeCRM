@@ -12,6 +12,7 @@ const ObjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [object, setObject] = useState<MetaObject | null>(null);
   const [openFieldDialog, setOpenFieldDialog] = useState(false);
+  const [selectedField, setSelectedField] = useState<MetaField | null>(null);
 
   const loadObject = async () => {
     if (!id) return;
@@ -31,12 +32,27 @@ const ObjectDetail = () => {
 
   const objectFields = (object as any).fields as MetaField[] || [];
 
-  const gridFields: MetaField[] = [
-    { name: 'label', label: 'Label', type: 'Text' },
-    { name: 'name', label: 'API Name', type: 'Text' },
-    { name: 'data_type', label: 'Type', type: 'Text' },
-    { name: 'is_required', label: 'Required', type: 'Boolean' },
-    { name: 'source', label: 'Source', type: 'Text' },
+  const handleAddField = () => {
+    setSelectedField(null);
+    setOpenFieldDialog(true);
+  };
+
+  const handleEditField = (field: MetaField) => {
+    setSelectedField(field);
+    setOpenFieldDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenFieldDialog(false);
+    setSelectedField(null);
+  };
+
+  const gridFields: (Partial<MetaField> & { name: string, label: string })[] = [
+    { name: 'label', label: 'Label', data_type: 'Text' },
+    { name: 'name', label: 'API Name', data_type: 'Text' },
+    { name: 'data_type', label: 'Type', data_type: 'Text' },
+    { name: 'is_required', label: 'Required', data_type: 'Boolean' },
+    { name: 'source', label: 'Source', data_type: 'Text' },
   ];
 
   return (
@@ -51,7 +67,7 @@ const ObjectDetail = () => {
 
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h5">Fields</Typography>
-        <Button variant="contained" onClick={() => setOpenFieldDialog(true)}>
+        <Button variant="contained" onClick={handleAddField}>
           Add Field
         </Button>
       </Box>
@@ -59,13 +75,15 @@ const ObjectDetail = () => {
       <DynamicDataGrid 
         fields={gridFields} 
         rows={objectFields} 
+        onRowClick={(row) => handleEditField(row as MetaField)}
       />
 
       <FieldCreateDialog 
         open={openFieldDialog} 
-        onClose={() => setOpenFieldDialog(false)} 
+        onClose={handleCloseDialog} 
         objectId={object.id}
         onSuccess={loadObject} 
+        fieldToEdit={selectedField}
       />
     </Container>
   );

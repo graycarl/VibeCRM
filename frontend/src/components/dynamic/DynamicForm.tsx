@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper } from '@mui/material';
 import { MetaObject, MetaField } from '../../services/metaApi';
+import { PicklistField } from './PicklistField';
 
 interface Props {
   object: MetaObject;
@@ -142,6 +143,26 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 disabled={isSystemTimestamp}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
+              />
+            )}
+          />
+        );
+      case 'Picklist':
+        return (
+          <Controller
+            name={field.name}
+            control={control}
+            rules={{ required: field.is_required }}
+            render={({ field: { onChange, value } }) => (
+              <PicklistField
+                label={field.label}
+                options={field.options || []}
+                value={value || null}
+                onChange={onChange}
+                disabled={isSystemTimestamp}
+                error={!!errors[field.name]}
+                helperText={errors[field.name] ? '该字段必填' : ''}
+                required={field.is_required}
               />
             )}
           />
