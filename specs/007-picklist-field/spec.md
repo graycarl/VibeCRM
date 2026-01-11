@@ -73,7 +73,7 @@
 
 ### Functional Requirements
 - **FR-001**: Admin Console 必须支持为 Picklist 类型字段配置选项列表，每个选项必填 `name` 和 `label`。
-- **FR-002**: Runtime App 的动态表单必须将 Picklist 字段渲染为 Material UI 的 Select 或 Autocomplete 组件。
+- **FR-002**: Runtime App 的动态表单必须将 Picklist 字段渲染为 Material UI 的 Autocomplete 组件。
 - **FR-003**: UI 组件必须显示选项的 `label`，并将选中的 `name` 作为表单值提交。
 - **FR-004**: 数据展示组件（DataGrid/Detail）必须根据元数据将 Picklist 的 `name` 映射回 `label` 进行显示。
 - **FR-005**: 后端在处理记录创建和更新请求时，必须校验 Picklist 字段的值是否存在于该字段定义的 `options` 列表中。
