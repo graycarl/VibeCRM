@@ -4,10 +4,10 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { metaApi, MetaObject } from '../../services/metaApi';
+import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import ObjectCreateDialog from '../../components/admin/ObjectCreateDialog';
 import { useNavigate } from 'react-router-dom';
-import DataTable from '../../components/data/DataTable';
+import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 
 const ObjectList = () => {
   const [objects, setObjects] = useState<MetaObject[]>([]);
@@ -34,27 +34,10 @@ const ObjectList = () => {
     }
   };
 
-  const columns = [
-    { id: 'label', label: 'Label' },
-    { id: 'name', label: 'API Name' },
-    { id: 'source', label: 'Source' },
-    { 
-      id: 'actions', 
-      label: 'Actions', 
-      align: 'right' as const,
-      format: (_: any, row: MetaObject) => (
-        <>
-          <IconButton onClick={(e) => { e.stopPropagation(); navigate(`/admin/objects/${row.id}`); }}>
-            <VisibilityIcon />
-          </IconButton>
-          {row.source === 'custom' && (
-            <IconButton color="error" onClick={(e) => { e.stopPropagation(); handleDelete(row.id); }}>
-              <DeleteIcon />
-            </IconButton>
-          )}
-        </>
-      )
-    },
+  const fields: MetaField[] = [
+    { name: 'label', label: 'Label', type: 'Text' },
+    { name: 'name', label: 'API Name', type: 'Text' },
+    { name: 'source', label: 'Source', type: 'Text' },
   ];
 
   return (
@@ -68,10 +51,22 @@ const ObjectList = () => {
         </Button>
       </Box>
       
-      <DataTable 
-        columns={columns as any} 
+      <DynamicDataGrid 
+        fields={fields} 
         rows={objects} 
         onRowClick={(row) => navigate(`/admin/objects/${row.id}`)}
+        actions={(row) => (
+          <>
+            <IconButton onClick={(e) => { e.stopPropagation(); navigate(`/admin/objects/${row.id}`); }}>
+              <VisibilityIcon />
+            </IconButton>
+            {row.source === 'custom' && (
+              <IconButton color="error" onClick={(e) => { e.stopPropagation(); handleDelete(row.id); }}>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </>
+        )}
       />
 
       <ObjectCreateDialog 

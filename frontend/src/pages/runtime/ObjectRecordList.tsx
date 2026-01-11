@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
-import DataTable from '../../components/data/DataTable';
+import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 import { LoadingOverlay } from '../../components/common/Feedback';
 import axios from 'axios';
 
@@ -66,16 +66,16 @@ const ObjectRecordList = () => {
             </Button>
         </Box>
         
-        <DataTable 
+        <DynamicDataGrid 
             fields={fields} 
             rows={records} 
             onRowClick={(row) => navigate(`/app/${objectName}/${row.uid}`)}
             actions={(row) => (
               <>
-                <IconButton onClick={() => navigate(`/app/${objectName}/${row.uid}/edit`)}>
+                <IconButton onClick={(e) => { e.stopPropagation(); navigate(`/app/${objectName}/${row.uid}/edit`); }}>
                   <EditIcon />
                 </IconButton>
-                <IconButton color="error" onClick={() => handleDelete(row.uid)}>
+                <IconButton color="error" onClick={(e) => { e.stopPropagation(); handleDelete(row.uid); }}>
                   <DeleteIcon />
                 </IconButton>
               </>
