@@ -47,8 +47,8 @@ export const PicklistField: React.FC<PicklistFieldProps> = ({
           fullWidth
         />
       )}
-      // FR-009: Clearable behavior
-      disableClearable={required && !!value} 
+      // FR-009: Clearable behavior – required fields are non-clearable, non-required fields are clearable
+      disableClearable={!!required} 
     />
   );
 };

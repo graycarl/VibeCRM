@@ -42,14 +42,22 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   }, [fieldToEdit, open]);
 
   const handleSubmit = async () => {
-    if (fieldToEdit) {
-      // For now, let's just handle creation or closing
-      onClose();
-      return;
-    }
-
     setLoading(true);
     try {
+      if (fieldToEdit) {
+        const updatedField = await metaApi.updateField(fieldToEdit.id, { 
+          label, 
+          is_required: required 
+        });
+        setCreatedField(updatedField);
+        onSuccess();
+        
+        if (updatedField.data_type !== 'Picklist') {
+          onClose();
+        }
+        return;
+      }
+
       const field = await metaApi.createField(objectId, { 
         name, 
         label, 

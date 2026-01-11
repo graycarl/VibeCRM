@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
@@ -49,6 +49,11 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [optionToDelete, setOptionToDelete] = useState<{name: string, label: string, index: number} | null>(null);
   const [migrateTo, setMigrateTo] = useState<string>('_none');
+
+  // Sync state with props when they change
+  useEffect(() => {
+    setOptions(initialOptions);
+  }, [initialOptions]);
 
   const handleAdd = async () => {
     if (!newOption.name || !newOption.label) return;
@@ -114,7 +119,18 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
     newOptions[index] = newOptions[newIndex];
     newOptions[newIndex] = temp;
 
+    const previousOptions = options;
     setOptions(newOptions);
+
+    try {
+      setError(null);
+      // Persist the new order of options to the backend
+      await metaApi.reorderOptions(fieldId, newOptions.map((opt) => opt.name));
+    } catch (err: any) {
+      // Revert to previous order on failure and surface error
+      setOptions(previousOptions);
+      setError(err.response?.data?.detail || 'Failed to reorder options');
+    }
   };
 
   return (

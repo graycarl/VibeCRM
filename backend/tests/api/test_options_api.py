@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 from app.services.meta_service import meta_service
 from app.schemas.metadata import MetaFieldCreate

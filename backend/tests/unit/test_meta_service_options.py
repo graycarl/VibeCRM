@@ -1,7 +1,7 @@
 import pytest
 from app.services.meta_service import meta_service
+from app.models.metadata import MetaObject
 from app.schemas.metadata import MetaFieldCreate
-from app.models.metadata import MetaField
 
 def test_add_option(db):
     # 1. Create a picklist field

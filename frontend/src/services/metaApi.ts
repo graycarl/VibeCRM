@@ -68,6 +68,11 @@ export const metaApi = {
     return response.data;
   },
 
+  updateField: async (fieldId: string, data: { label?: string, is_required?: boolean }) => {
+    const response = await axios.patch<MetaField>(`${API_URL}/meta/fields/${fieldId}`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+
   getRoles: async () => {
     const response = await axios.get<MetaRole[]>(`${API_URL}/meta/roles`, { headers: getAuthHeader() });
     return response.data;
@@ -101,6 +106,11 @@ export const metaApi = {
 
   updateOption: async (fieldId: string, name: string, label: string) => {
     const response = await axios.patch<MetaField>(`${API_URL}/meta/fields/${fieldId}/options/${name}`, { label }, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  reorderOptions: async (fieldId: string, names: string[]) => {
+    const response = await axios.put<MetaField>(`${API_URL}/meta/fields/${fieldId}/options/reorder`, { names }, { headers: getAuthHeader() });
     return response.data;
   },
 

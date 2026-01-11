@@ -147,6 +147,47 @@ class MetaService:
         db.commit()
         db.refresh(field)
         return field
+
+    def reorder_options(self, db: Session, field_id: str, names: List[str]) -> MetaField:
+        field = self.get_field(db, field_id)
+        if not field:
+            raise ValueError("Field not found")
+        if field.data_type != "Picklist":
+            raise ValueError("Field is not a Picklist")
+        
+        current_options = field.options or []
+        if len(names) != len(current_options):
+            raise ValueError("Provided names list must have the same length as current options.")
+            
+        # Create a map for quick lookup
+        options_map = {opt['name']: opt for opt in current_options}
+        
+        new_options = []
+        for name in names:
+            if name not in options_map:
+                raise ValueError(f"Option with name '{name}' not found in current options.")
+            new_options.append(options_map[name])
+            
+        field.options = new_options
+        db.add(field)
+        db.commit()
+        db.refresh(field)
+        return field
+
+    def update_field(self, db: Session, field_id: str, label: Optional[str] = None, is_required: Optional[bool] = None) -> MetaField:
+        field = self.get_field(db, field_id)
+        if not field:
+            raise ValueError("Field not found")
+        
+        if label is not None:
+            field.label = label
+        if is_required is not None:
+            field.is_required = is_required
+            
+        db.add(field)
+        db.commit()
+        db.refresh(field)
+        return field
         
     def delete_object(self, db: Session, object_id: str):
         obj = self.get_object(db, object_id)

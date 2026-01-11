@@ -1,6 +1,6 @@
 import { getOptionLabel } from './metadata';
 import { describe, it, expect } from 'vitest';
-import { MetaField } from '../../services/metaApi';
+import { MetaField } from '../services/metaApi';
 
 describe('getOptionLabel', () => {
   const field: Partial<MetaField> = {

@@ -9,6 +9,9 @@ class PicklistOption(BaseModel):
 class PicklistOptionUpdate(BaseModel):
     label: str
 
+class PicklistReorder(BaseModel):
+    names: List[str]
+
 class MetaFieldBase(BaseModel):
     name: str
     label: str
@@ -19,6 +22,10 @@ class MetaFieldBase(BaseModel):
 
 class MetaFieldCreate(MetaFieldBase):
     pass 
+
+class MetaFieldUpdate(BaseModel):
+    label: Optional[str] = None
+    is_required: Optional[bool] = None
 
 class MetaField(MetaFieldBase):
     id: str 

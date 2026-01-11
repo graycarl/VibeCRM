@@ -4,9 +4,9 @@ from typing import List, Optional
 
 from app.schemas.metadata import (
     MetaObject, MetaObjectCreate, 
-    MetaField, MetaFieldCreate,
+    MetaField, MetaFieldCreate, MetaFieldUpdate,
     MetaRole, MetaRoleCreate, MetaRoleUpdate,
-    PicklistOption, PicklistOptionUpdate
+    PicklistOption, PicklistOptionUpdate, PicklistReorder
 )
 from app.services.meta_service import meta_service
 from app.services.data_service import data_service
@@ -49,6 +49,13 @@ def create_field(object_id: str, field_in: MetaFieldCreate, db: Session = Depend
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.patch("/fields/{field_id}", response_model=MetaField)
+def update_field(field_id: str, field_in: MetaFieldUpdate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.update_field(db, field_id, field_in.label, field_in.is_required)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 # Role Endpoints
 
@@ -102,6 +109,13 @@ def add_option(field_id: str, option: PicklistOption, db: Session = Depends(get_
 def update_option(field_id: str, name: str, option_update: PicklistOptionUpdate, db: Session = Depends(get_db)):
     try:
         return meta_service.update_option(db, field_id, name, option_update.label)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/fields/{field_id}/options/reorder", response_model=MetaField)
+def reorder_options(field_id: str, reorder: PicklistReorder, db: Session = Depends(get_db)):
+    try:
+        return meta_service.reorder_options(db, field_id, reorder.names)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

@@ -124,7 +124,12 @@ class DataService:
         table_name = f"data_{obj.name}"
         column_name = field.name
         
-        stmt = text(f"UPDATE {table_name} SET {column_name} = :new_value WHERE {column_name} = :old_value")
+        # Safely quote identifiers to prevent SQL injection
+        preparer = engine.dialect.identifier_preparer
+        safe_table_name = preparer.quote(table_name)
+        safe_column_name = preparer.quote(column_name)
+
+        stmt = text(f"UPDATE {safe_table_name} SET {safe_column_name} = :new_value WHERE {safe_column_name} = :old_value")
         with engine.begin() as conn:
             conn.execute(stmt, {"new_value": new_value, "old_value": old_value})
 
