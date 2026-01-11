@@ -51,6 +51,8 @@ class SchemaService:
             sql_type = "INTEGER"
         elif data_type == "Lookup":
             sql_type = "INTEGER" # FK ID
+        elif data_type in ["Date", "Datetime"]:
+            sql_type = "TEXT"
         
         with engine.begin() as conn:
             # Check if column already exists
