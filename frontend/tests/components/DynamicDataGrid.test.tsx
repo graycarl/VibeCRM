@@ -13,6 +13,7 @@ describe('DynamicDataGrid', () => {
   const mockRows = [
     { uid: '1', name: 'John Doe', age: 30, created_at: '2026-01-11T12:00:00Z' },
     { uid: '2', name: 'Jane Smith', age: 25, created_at: '2026-01-11T13:00:00Z' },
+    { uid: '3', name: 'Null Date', age: 40, created_at: null },
   ];
 
   it('renders without crashing', () => {

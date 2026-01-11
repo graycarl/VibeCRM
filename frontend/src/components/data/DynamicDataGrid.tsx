@@ -57,18 +57,18 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         case 'Date':
         case 'Datetime':
           colDef.type = 'string';
-          colDef.valueFormatter = (params) => {
-            if (!params.value) return '';
+          colDef.valueFormatter = (value: any) => {
+            if (value == null || value === '') return '';
             try {
-              const date = new Date(params.value);
-              if (isNaN(date.getTime())) return params.value;
+              const date = new Date(value);
+              if (isNaN(date.getTime())) return String(value);
               
               if (type === 'Date') {
                 return date.toLocaleDateString();
               }
               return date.toLocaleString();
             } catch (e) {
-              return params.value;
+              return String(value);
             }
           };
           break;
