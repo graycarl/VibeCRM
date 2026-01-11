@@ -7,7 +7,7 @@
 **Feature Branch**: `006-add-datetime-field`  
 **Created**: 2026-01-11  
 **Status**: Draft  
-**Input**: User description: "添加 Datetime 类型字段实现，并为 User 和 Account 这两个 system object 添加 created_at 字段。created_at 字段需要在 PageList 中暂时，并在 PageLayout 中只读展示。"
+**Input**: User description: "添加 Datetime 类型字段实现，并为 User 和 Account 这两个 system object 添加 created_at 字段。created_at 字段需要在 PageList 中展示，并在 PageLayout 中只读展示。"
 
 ## Clarifications
 

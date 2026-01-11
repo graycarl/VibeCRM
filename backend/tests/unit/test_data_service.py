@@ -1,4 +1,3 @@
-import pytest
 from sqlalchemy.orm import Session
 from app.services.data_service import data_service
 from datetime import datetime, timezone
@@ -15,7 +14,6 @@ def test_create_record_timestamps(db: Session):
     
     # Verify they are ISO strings
     created_at = datetime.fromisoformat(record["created_at"])
-    updated_at = datetime.fromisoformat(record["updated_at"])
     
     # Should be close to now
     now = datetime.now(timezone.utc)

@@ -9,6 +9,10 @@ export interface MetaObject {
   description?: string;
   source: 'system' | 'custom';
   created_at?: string;
+  /**
+   * Fields are only populated when fetching a single object via `getObject()`.
+   * When listing objects via `getObjects()`, this property is typically undefined.
+   */
   fields?: MetaField[];
 }
 

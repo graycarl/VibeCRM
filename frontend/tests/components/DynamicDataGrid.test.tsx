@@ -4,10 +4,10 @@ import DynamicDataGrid from '../../src/components/data/DynamicDataGrid';
 import { MetaField } from '../../src/services/metaApi';
 
 describe('DynamicDataGrid', () => {
-  const mockFields: any[] = [
-    { name: 'name', label: 'Name', data_type: 'Text' },
-    { name: 'age', label: 'Age', data_type: 'Number' },
-    { name: 'created_at', label: 'Created At', data_type: 'Datetime' },
+  const mockFields: MetaField[] = [
+    { id: '1', object_id: 'obj1', name: 'name', label: 'Name', data_type: 'Text', is_required: true, source: 'custom' },
+    { id: '2', object_id: 'obj1', name: 'age', label: 'Age', data_type: 'Number', is_required: false, source: 'custom' },
+    { id: '3', object_id: 'obj1', name: 'created_at', label: 'Created At', data_type: 'Datetime', is_required: false, source: 'system' },
   ];
 
   const mockRows = [

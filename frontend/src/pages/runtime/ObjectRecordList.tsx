@@ -23,12 +23,9 @@ const ObjectRecordList = () => {
           const fullObj = await metaApi.getObject(obj.id);
           const allFields: MetaField[] = fullObj.fields || [];
           
-          try {
-              // We'll temporarily use all fields until a dedicated list-view service is integrated into metaApi
-              setFields(allFields);
-          } catch (e) {
-              setFields(allFields);
-          }
+          // Use all fields for now. 
+          // Future: Filter by ListView configuration once metaApi supports it.
+          setFields(allFields);
           
           const data = await dataApi.listRecords(objectName!);
           setRecords(data);

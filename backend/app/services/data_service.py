@@ -74,6 +74,7 @@ class DataService:
         data.pop("id", None)
         data.pop("uid", None)
         data.pop("created_at", None)
+        data.pop("updated_at", None)
         
         if not data:
             return self.get_record(db, object_name, record_uid)
