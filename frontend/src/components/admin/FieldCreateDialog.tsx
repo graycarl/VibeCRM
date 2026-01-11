@@ -12,7 +12,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-const FIELD_TYPES = ['Text', 'Number', 'Date', 'Boolean', 'Picklist', 'Lookup'];
+const FIELD_TYPES = ['Text', 'Number', 'Date', 'Datetime', 'Boolean', 'Picklist', 'Lookup'];
 
 const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess }) => {
   const [name, setName] = useState('');

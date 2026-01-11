@@ -29,6 +29,14 @@ objects:
         label: Role
         data_type: Text
         source: system
+      - name: created_at
+        label: Created At
+        data_type: Datetime
+        source: system
+      - name: updated_at
+        label: Updated At
+        data_type: Datetime
+        source: system
   - name: account
     label: Account
     description: Account Information
@@ -49,4 +57,12 @@ objects:
       - name: birth
         label: Birth Date
         data_type: Date
+        source: system
+      - name: created_at
+        label: Created At
+        data_type: Datetime
+        source: system
+      - name: updated_at
+        label: Updated At
+        data_type: Datetime
         source: system

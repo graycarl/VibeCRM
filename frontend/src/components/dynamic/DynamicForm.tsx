@@ -12,6 +12,27 @@ interface Props {
 
 const DEFAULT_INITIAL_VALUES = {};
 
+const toLocalDatetime = (utcString: string | undefined) => {
+  if (!utcString) return '';
+  const date = new Date(utcString);
+  if (isNaN(date.getTime())) return '';
+  
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+const toUTCISO = (localString: string) => {
+  if (!localString) return '';
+  const date = new Date(localString);
+  if (isNaN(date.getTime())) return '';
+  return date.toISOString();
+};
+
 const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues = DEFAULT_INITIAL_VALUES }) => {
   const { control, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: initialValues
@@ -24,6 +45,8 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
   }, [initialValues, reset]);
 
   const renderField = (field: MetaField) => {
+    const isSystemTimestamp = ['created_at', 'updated_at'].includes(field.name);
+
     switch (field.data_type) {
       case 'Text':
         return (
@@ -38,6 +61,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={onChange}
+                disabled={isSystemTimestamp}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -58,6 +82,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
+                disabled={isSystemTimestamp}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -71,7 +96,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
             control={control}
             render={({ field: { onChange, value } }) => (
               <FormControlLabel
-                control={<Checkbox checked={!!value} onChange={onChange} color="primary" />}
+                control={<Checkbox checked={!!value} onChange={onChange} color="primary" disabled={isSystemTimestamp} />}
                 label={field.label}
               />
             )}
@@ -92,6 +117,29 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 InputLabelProps={{ shrink: true }}
                 value={value || ''}
                 onChange={onChange}
+                disabled={isSystemTimestamp}
+                error={!!errors[field.name]}
+                helperText={errors[field.name] ? '该字段必填' : ''}
+              />
+            )}
+          />
+        );
+      case 'Datetime':
+        return (
+          <Controller
+            name={field.name}
+            control={control}
+            rules={{ required: field.is_required }}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                label={field.label}
+                type="datetime-local"
+                fullWidth
+                variant="outlined"
+                InputLabelProps={{ shrink: true }}
+                value={toLocalDatetime(value)}
+                onChange={(e) => onChange(toUTCISO(e.target.value))}
+                disabled={isSystemTimestamp}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -111,6 +159,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={onChange}
+                disabled={isSystemTimestamp}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />

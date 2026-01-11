@@ -46,17 +46,30 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         minWidth: 100,
       };
 
-      switch (field.type) {
+      const type = field.data_type || (field as any).type;
+
+      switch (type) {
         case 'Number':
           colDef.type = 'number';
           colDef.align = 'right';
           colDef.headerAlign = 'right';
           break;
         case 'Date':
-          colDef.type = 'date';
-          colDef.valueGetter = (params) => {
-            if (!params.value) return null;
-            return new Date(params.value);
+        case 'Datetime':
+          colDef.type = 'string';
+          colDef.valueFormatter = (value: any) => {
+            if (value == null || value === '') return '';
+            try {
+              const date = new Date(value);
+              if (isNaN(date.getTime())) return String(value);
+              
+              if (type === 'Date') {
+                return date.toLocaleDateString();
+              }
+              return date.toLocaleString();
+            } catch (e) {
+              return String(value);
+            }
           };
           break;
         case 'Boolean':
