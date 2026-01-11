@@ -23,8 +23,8 @@ description: "Task list for Picklist field implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 [P] Define TypeScript types for Picklist Option in `frontend/src/types/metadata.ts`
-- [ ] T002 [P] Update `MetaField` Pydantic schemas to include `options` structure in `backend/app/schemas/metadata.py`
+- [x] T001 [P] Define TypeScript types for Picklist Option in `frontend/src/types/metadata.ts`
+- [x] T002 [P] Update `MetaField` Pydantic schemas to include `options` structure in `backend/app/schemas/metadata.py`
 
 ---
 
@@ -34,8 +34,8 @@ description: "Task list for Picklist field implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Implement `MetaService` helper methods for options manipulation in `backend/app/services/meta_service.py`
-- [ ] T004 [P] Create backend unit tests for `MetaService` options logic in `backend/tests/unit/test_meta_service_options.py`
+- [x] T003 Implement `MetaService` helper methods for options manipulation in `backend/app/services/meta_service.py`
+- [x] T004 [P] Create backend unit tests for `MetaService` options logic in `backend/tests/unit/test_meta_service_options.py`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -49,17 +49,17 @@ description: "Task list for Picklist field implementation"
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T005 [P] [US1] Create integration tests for options CRUD endpoints in `backend/tests/api/test_options_api.py`
-- [ ] T006 [P] [US1] Create component tests for options editor UI in `frontend/src/components/admin/PicklistOptionsEditor.test.tsx`
+- [x] T005 [P] [US1] Create integration tests for options CRUD endpoints in `backend/tests/api/test_options_api.py`
+- [x] T006 [P] [US1] Create component tests for options editor UI in `frontend/src/components/admin/PicklistOptionsEditor.test.tsx`
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Implement `POST /api/meta/fields/{id}/options` endpoint with name format validation in `backend/app/api/endpoints/metadata.py`
-- [ ] T008 [US1] Implement `PATCH /api/meta/fields/{id}/options/{name}` endpoint with name format validation in `backend/app/api/endpoints/metadata.py`
-- [ ] T009 [US1] Implement `DELETE /api/meta/fields/{id}/options/{name}` with migration logic in `backend/app/api/endpoints/metadata.py`
-- [ ] T010 [P] [US1] Create `PicklistOptionsEditor` component with drag-and-drop or button-based ordering in `frontend/src/components/admin/PicklistOptionsEditor.tsx`
-- [ ] T011 [US1] Integrate `PicklistOptionsEditor` into `FieldCreateDialog.tsx` in `frontend/src/components/admin/FieldCreateDialog.tsx`
-- [ ] T012 [US1] Implement real-time saving logic for options in `frontend/src/services/metaApi.ts`
+- [x] T007 [US1] Implement `POST /api/meta/fields/{id}/options` endpoint with name format validation in `backend/app/api/endpoints/metadata.py`
+- [x] T008 [US1] Implement `PATCH /api/meta/fields/{id}/options/{name}` endpoint with name format validation in `backend/app/api/endpoints/metadata.py`
+- [x] T009 [US1] Implement `DELETE /api/meta/fields/{id}/options/{name}` with migration logic in `backend/app/api/endpoints/metadata.py`
+- [x] T010 [P] [US1] Create `PicklistOptionsEditor` component with drag-and-drop or button-based ordering in `frontend/src/components/admin/PicklistOptionsEditor.tsx`
+- [x] T011 [US1] Integrate `PicklistOptionsEditor` into `FieldCreateDialog.tsx` in `frontend/src/components/admin/FieldCreateDialog.tsx`
+- [x] T012 [US1] Implement real-time saving logic for options in `frontend/src/services/metaApi.ts`
 
 **Checkpoint**: At this point, User Story 1 is fully functional. Admin can manage Picklist options.
 
@@ -73,14 +73,14 @@ description: "Task list for Picklist field implementation"
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T013 [P] [US2] Create component tests for Picklist field in `frontend/src/components/dynamic/PicklistField.test.tsx`
-- [ ] T014 [P] [US2] Create integration test for record creation with Picklist in `backend/tests/api/test_data_picklist.py`
+- [x] T013 [P] [US2] Create component tests for Picklist field in `frontend/src/components/dynamic/PicklistField.test.tsx`
+- [x] T014 [P] [US2] Create integration test for record creation with Picklist in `backend/tests/api/test_data_picklist.py`
 
 ### Implementation for User Story 2
 
-- [ ] T015 [P] [US2] Create `PicklistField` component using MUI Autocomplete in `frontend/src/components/dynamic/PicklistField.tsx`
-- [ ] T016 [US2] Integrate `PicklistField` into `DynamicForm.tsx` to handle Picklist type in `frontend/src/components/dynamic/DynamicForm.tsx`
-- [ ] T017 [US2] Update `dataApi.ts` to ensure Picklist values are handled correctly in `frontend/src/services/dataApi.ts`
+- [x] T015 [P] [US2] Create `PicklistField` component using MUI Autocomplete in `frontend/src/components/dynamic/PicklistField.tsx`
+- [x] T016 [US2] Integrate `PicklistField` into `DynamicForm.tsx` to handle Picklist type in `frontend/src/components/dynamic/DynamicForm.tsx`
+- [x] T017 [US2] Update `dataApi.ts` to ensure Picklist values are handled correctly in `frontend/src/services/dataApi.ts`
 
 **Checkpoint**: At this point, User Stories 1 and 2 are functional. Users can now input Picklist data.
 
@@ -94,17 +94,17 @@ description: "Task list for Picklist field implementation"
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T018 [P] [US3] Create validation tests for Picklist in `backend/tests/unit/test_data_service_validation.py`
-- [ ] T019 [P] [US3] Create UI tests for Name-to-Label mapping in `frontend/src/components/data/DataDisplay.test.tsx`
+- [x] T018 [P] [US3] Create validation tests for Picklist in `backend/tests/unit/test_data_service_validation.py`
+- [x] T019 [P] [US3] Create UI tests for Name-to-Label mapping in `frontend/src/utils/metadata.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T020 [US3] Implement range validation for Picklist fields in `backend/app/services/data_service.py`
-- [ ] T021 [P] [US3] Create `getOptionLabel` utility function in `frontend/src/utils/metadata.ts`
-- [ ] T022 [US3] Update `DynamicDataGrid.tsx` to display labels for Picklist columns in `frontend/src/components/data/DynamicDataGrid.tsx`
-- [ ] T023 [US3] Update Record Detail view to display labels in `frontend/src/components/data/RecordDetail.tsx`
-- [ ] T024 [US3] Add `sex` picklist field and options to `Account` object in `db/seed/meta.yml`
-- [ ] T025 [US3] Update existing test data to include `sex` values in `db/seed/record-account.yml`
+- [x] T020 [US3] Implement range validation for Picklist fields in `backend/app/services/data_service.py`
+- [x] T021 [P] [US3] Create `getOptionLabel` utility function in `frontend/src/utils/metadata.ts`
+- [x] T022 [US3] Update `DynamicDataGrid.tsx` to display labels for Picklist columns in `frontend/src/components/data/DynamicDataGrid.tsx`
+- [x] T023 [US3] Update Record Detail view to display labels in `frontend/src/pages/runtime/ObjectRecordDetail.tsx`
+- [x] T024 [US3] Add `sex` picklist field and options to `Account` object in `db/seed/meta.yml`
+- [x] T025 [US3] Update existing test data to include `sex` values in `db/seed/record-account.yml`
 
 **Checkpoint**: All user stories are functional and data integrity is guaranteed.
 
@@ -114,11 +114,11 @@ description: "Task list for Picklist field implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T026 [P] Update project documentation (README/GEMINI.md) in Chinese
-- [ ] T027 Code cleanup and refactor redundant mapping logic
-- [ ] T028 UX review: Ensure Autocomplete clearable behavior matches FR-009
-- [ ] T029 Security check: Ensure Name character validation (FR-012) is enforced on backend
-- [ ] T030 Run `quickstart.md` validation steps
+- [x] T026 [P] Update project documentation (README/GEMINI.md) in Chinese
+- [x] T027 Code cleanup and refactor redundant mapping logic
+- [x] T028 UX review: Ensure Autocomplete clearable behavior matches FR-009
+- [x] T029 Security check: Ensure Name character validation (FR-012) is enforced on backend
+- [x] T030 Run `quickstart.md` validation steps
 
 ---
 

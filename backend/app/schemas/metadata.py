@@ -2,11 +2,18 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Any
 from datetime import datetime
 
+class PicklistOption(BaseModel):
+    name: str
+    label: str
+
+class PicklistOptionUpdate(BaseModel):
+    label: str
+
 class MetaFieldBase(BaseModel):
     name: str
     label: str
     data_type: str
-    options: Optional[Any] = None
+    options: Optional[List[PicklistOption]] = None
     is_required: bool = False
     source: str = "custom"
 

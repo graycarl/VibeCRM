@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from app.schemas.metadata import (
     MetaObject, MetaObjectCreate, 
     MetaField, MetaFieldCreate,
-    MetaRole, MetaRoleCreate, MetaRoleUpdate
+    MetaRole, MetaRoleCreate, MetaRoleUpdate,
+    PicklistOption, PicklistOptionUpdate
 )
 from app.services.meta_service import meta_service
+from app.services.data_service import data_service
 from app.api.deps import get_db
 
 router = APIRouter()
@@ -84,5 +86,35 @@ def delete_role(role_id: str, db: Session = Depends(get_db)):
         if not success:
             raise HTTPException(status_code=404, detail="Role not found")
         return {"message": "Role deleted"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Picklist Options Endpoints
+
+@router.post("/fields/{field_id}/options", response_model=MetaField, status_code=201)
+def add_option(field_id: str, option: PicklistOption, db: Session = Depends(get_db)):
+    try:
+        return meta_service.add_option(db, field_id, option.name, option.label)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.patch("/fields/{field_id}/options/{name}", response_model=MetaField)
+def update_option(field_id: str, name: str, option_update: PicklistOptionUpdate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.update_option(db, field_id, name, option_update.label)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.delete("/fields/{field_id}/options/{name}", response_model=MetaField)
+def delete_option(
+    field_id: str, 
+    name: str, 
+    migrate_to: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    try:
+        # Perform migration before deleting from metadata
+        data_service.migrate_picklist_values(db, field_id, name, migrate_to)
+        return meta_service.delete_option(db, field_id, name)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

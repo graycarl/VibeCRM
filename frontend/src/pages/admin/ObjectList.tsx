@@ -34,10 +34,10 @@ const ObjectList = () => {
     }
   };
 
-  const fields: MetaField[] = [
-    { name: 'label', label: 'Label', type: 'Text' },
-    { name: 'name', label: 'API Name', type: 'Text' },
-    { name: 'source', label: 'Source', type: 'Text' },
+  const fields: (Partial<MetaField> & { name: string, label: string })[] = [
+    { name: 'label', label: 'Label', data_type: 'Text' },
+    { name: 'name', label: 'API Name', data_type: 'Text' },
+    { name: 'source', label: 'Source', data_type: 'Text' },
   ];
 
   return (

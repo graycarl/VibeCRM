@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { PicklistOption } from '../types/metadata';
 
 const API_URL = 'http://localhost:8000/api/v1';
 
@@ -89,6 +90,25 @@ export const metaApi = {
 
   deleteRole: async (id: string) => {
     const response = await axios.delete(`${API_URL}/meta/roles/${id}`, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  // Picklist Options
+  addOption: async (fieldId: string, option: PicklistOption) => {
+    const response = await axios.post<MetaField>(`${API_URL}/meta/fields/${fieldId}/options`, option, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  updateOption: async (fieldId: string, name: string, label: string) => {
+    const response = await axios.patch<MetaField>(`${API_URL}/meta/fields/${fieldId}/options/${name}`, { label }, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  deleteOption: async (fieldId: string, name: string, migrateTo?: string) => {
+    const url = migrateTo 
+      ? `${API_URL}/meta/fields/${fieldId}/options/${name}?migrate_to=${migrateTo}`
+      : `${API_URL}/meta/fields/${fieldId}/options/${name}`;
+    const response = await axios.delete<MetaField>(url, { headers: getAuthHeader() });
     return response.data;
   }
 };

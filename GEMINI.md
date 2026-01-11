@@ -43,8 +43,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - N/A (Frontend display only) (004-migrate-to-datagrid)
 - Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend) (005-admin-roles-mgmt)
 - SQLite (via SQLAlchemy) (005-admin-roles-mgmt)
-- Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend) (006-add-datetime-field)
-- SQLite (Mapped via `SchemaService`) (006-add-datetime-field)
+- Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend) (007-picklist-field)
+- SQLite (Mapped via `SchemaService`, Picklist options in `MetaField.options` JSON) (007-picklist-field)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -64,6 +64,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 
 ## Recent Changes
+- 007-picklist-field: Added Picklist field support with Admin Console options management, backend validation, and Runtime App Autocomplete search.
 - 006-add-datetime-field: Added Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend)
 - 005-admin-roles-mgmt: Added Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend)
 

@@ -3,6 +3,7 @@ from app.models.metadata import MetaObject, MetaField, MetaRole
 from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
 from app.services.schema_service import schema_service
 import uuid
+import re
 
 class MetaService:
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
@@ -41,18 +42,29 @@ class MetaService:
     def get_object_by_name(self, db: Session, name: str):
         return db.query(MetaObject).filter(MetaObject.name == name).first()
 
+    def get_field(self, db: Session, field_id: str) -> MetaField:
+        return db.query(MetaField).filter(MetaField.id == field_id).first()
+
     def create_field(self, db: Session, object_id: str, field_in: MetaFieldCreate) -> MetaField:
         # Get object to check existence and name
         obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
             
+        options = field_in.options
+        if options:
+            options = [opt.model_dump() if hasattr(opt, 'model_dump') else opt for opt in options]
+            # FR-012: Name format validation for initial options
+            for opt in options:
+                if not re.match(r'^[a-z_][a-z0-9_]*$', opt['name']):
+                    raise ValueError(f"Option name '{opt['name']}' must be lowercase letters, numbers, and underscores, and cannot start with a number.")
+
         db_field = MetaField(
             object_id=object_id,
             name=field_in.name,
             label=field_in.label,
             data_type=field_in.data_type,
-            options=field_in.options,
+            options=options,
             is_required=field_in.is_required,
             source=field_in.source
         )
@@ -70,6 +82,71 @@ class MetaService:
             raise e
         
         return db_field
+
+    def add_option(self, db: Session, field_id: str, name: str, label: str) -> MetaField:
+        field = self.get_field(db, field_id)
+        if not field:
+            raise ValueError("Field not found")
+        if field.data_type != "Picklist":
+            raise ValueError("Field is not a Picklist")
+        
+        # FR-012: Name format validation
+        if not re.match(r'^[a-z_][a-z0-9_]*$', name):
+            raise ValueError("Option name must be lowercase letters, numbers, and underscores, and cannot start with a number.")
+
+        options = field.options or []
+        if any(opt['name'] == name for opt in options):
+            raise ValueError(f"Option with name '{name}' already exists.")
+        
+        # Create a new list to ensure SQLAlchemy detects the change
+        new_options = [dict(opt) for opt in options]
+        new_options.append({"name": name, "label": label})
+        field.options = new_options
+        db.add(field)
+        db.commit()
+        db.refresh(field)
+        return field
+
+    def update_option(self, db: Session, field_id: str, name: str, label: str) -> MetaField:
+        field = self.get_field(db, field_id)
+        if not field:
+            raise ValueError("Field not found")
+        
+        options = field.options or []
+        # Create a new list to ensure SQLAlchemy detects the change
+        new_options = [dict(opt) for opt in options]
+        found = False
+        for opt in new_options:
+            if opt['name'] == name:
+                opt['label'] = label
+                found = True
+                break
+        
+        if not found:
+            raise ValueError(f"Option with name '{name}' not found.")
+        
+        field.options = new_options
+        db.add(field)
+        db.commit()
+        db.refresh(field)
+        return field
+
+    def delete_option(self, db: Session, field_id: str, name: str) -> MetaField:
+        field = self.get_field(db, field_id)
+        if not field:
+            raise ValueError("Field not found")
+        
+        options = field.options or []
+        new_options = [opt for opt in options if opt['name'] != name]
+        
+        if len(new_options) == len(options):
+            raise ValueError(f"Option with name '{name}' not found.")
+        
+        field.options = new_options
+        db.add(field)
+        db.commit()
+        db.refresh(field)
+        return field
         
     def delete_object(self, db: Session, object_id: str):
         obj = self.get_object(db, object_id)

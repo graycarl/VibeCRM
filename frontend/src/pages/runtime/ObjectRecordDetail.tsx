@@ -6,6 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
 import { LoadingOverlay } from '../../components/common/Feedback';
+import { getOptionLabel } from '../../utils/metadata';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api/v1';
@@ -82,9 +83,11 @@ const ObjectRecordDetail = () => {
                             {field.label}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 0.5, minHeight: '1.5em' }}>
-                            {typeof record[field.name] === 'boolean' 
-                                ? (record[field.name] ? '是' : '否') 
-                                : (record[field.name] || '-')}
+                            {field.data_type === 'Picklist'
+                                ? getOptionLabel(field, record[field.name])
+                                : (typeof record[field.name] === 'boolean' 
+                                    ? (record[field.name] ? '是' : '否') 
+                                    : (record[field.name] || '-'))}
                         </Typography>
                     </Grid>
                 ))}
