@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import MainLayout from '../src/layouts/MainLayout';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -33,10 +33,13 @@ describe('MainLayout', () => {
      vi.spyOn(metaApi.metaApi, 'getObjects').mockResolvedValue([]);
 
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <MainLayout />
       </BrowserRouter>
     );
-    expect(screen.getByText('VibeCRM')).toBeInTheDocument();
+    
+    await waitFor(() => {
+      expect(screen.getByText('VibeCRM')).toBeInTheDocument();
+    });
   });
 });
