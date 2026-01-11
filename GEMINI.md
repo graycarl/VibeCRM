@@ -39,6 +39,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - SQLite (via `backend/app/db/init_db.py`) (002-setup-dev-makefile)
 - TypeScript 5.0+, React 18.2+ + `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto` (003-integrate-material-ui)
 - N/A (Frontend only) (003-integrate-material-ui)
+- TypeScript 5.0+, React 18.2+ + `@mui/x-data-grid` (New), `@mui/material` (Existing) (004-migrate-to-datagrid)
+- N/A (Frontend display only) (004-migrate-to-datagrid)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -58,6 +60,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 
 ## Recent Changes
+- 004-migrate-to-datagrid: Added TypeScript 5.0+, React 18.2+ + `@mui/x-data-grid` (New), `@mui/material` (Existing)
 - 003-integrate-material-ui: Added TypeScript 5.0+, React 18.2+ + `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto`
 - 002-setup-dev-makefile: Added Make (GNU Make 3.81+), Python 3.11+ (Backend), Node.js 18+ (Frontend) + `uv` (Python pkg manager), `npm` (Node pkg manager), `pytest`
 
