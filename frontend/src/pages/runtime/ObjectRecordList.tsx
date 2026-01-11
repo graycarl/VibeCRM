@@ -24,7 +24,7 @@ const ObjectRecordList = () => {
       if (obj) {
           setObject(obj);
           const fullObj = await metaApi.getObject(obj.id);
-          const allFields: MetaField[] = (fullObj as any).fields || [];
+          const allFields: MetaField[] = fullObj.fields || [];
           
           try {
               const viewsRes = await axios.get(`${API_URL}/meta/objects/${obj.id}/list-views`);

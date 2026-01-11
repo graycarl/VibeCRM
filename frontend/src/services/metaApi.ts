@@ -9,6 +9,7 @@ export interface MetaObject {
   description?: string;
   source: 'system' | 'custom';
   created_at?: string;
+  fields?: MetaField[];
 }
 
 export interface MetaField {
