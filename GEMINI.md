@@ -43,6 +43,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - N/A (Frontend display only) (004-migrate-to-datagrid)
 - Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend) (005-admin-roles-mgmt)
 - SQLite (via SQLAlchemy) (005-admin-roles-mgmt)
+- Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend) (006-add-datetime-field)
+- SQLite (Mapped via `SchemaService`) (006-add-datetime-field)
 
 - Python 3.11+ (Backend)
 - React 18 / TypeScript 5.0+ (Frontend)
@@ -62,7 +64,6 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 
 ## Recent Changes
+- 006-add-datetime-field: Added Python 3.11 (Backend), TypeScript 5.0+ (Frontend) + FastAPI, SQLAlchemy (Backend); React, MUI (Frontend)
 - 005-admin-roles-mgmt: Added Python 3.11, TypeScript 5.0+ + FastAPI, SQLAlchemy (Backend); React 18, Material UI (Frontend)
-- 004-migrate-to-datagrid: Added TypeScript 5.0+, React 18.2+ + `@mui/x-data-grid` (New), `@mui/material` (Existing)
-- 003-integrate-material-ui: Added TypeScript 5.0+, React 18.2+ + `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`, `@fontsource/roboto`
 

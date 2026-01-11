@@ -17,6 +17,13 @@ class DataService:
         record_uid = str(uuid.uuid4())
         now = datetime.now(timezone.utc).isoformat()
         
+        # Remove system managed fields from data to prevent override
+        data.pop("id", None)
+        data.pop("uid", None)
+        data.pop("created_at", None)
+        data.pop("updated_at", None)
+        data.pop("owner_id", None)
+
         insert_data = {
             "uid": record_uid,
             "created_at": now,
@@ -53,7 +60,7 @@ class DataService:
             raise ValueError(f"Object {object_name} not found")
 
         table_name = f"data_{object_name}"
-        stmt = text(f"SELECT * FROM {table_name} LIMIT :limit OFFSET :skip")
+        stmt = text(f"SELECT * FROM {table_name} ORDER BY created_at DESC LIMIT :limit OFFSET :skip")
         
         with engine.connect() as conn:
             result = conn.execute(stmt, {"limit": limit, "skip": skip}).mappings().all()
@@ -62,6 +69,12 @@ class DataService:
 
     def update_record(self, db: Session, object_name: str, record_uid: str, data: Dict[str, Any]) -> Dict[str, Any]:
         table_name = f"data_{object_name}"
+        
+        # Remove protected fields
+        data.pop("id", None)
+        data.pop("uid", None)
+        data.pop("created_at", None)
+        data.pop("updated_at", None)
         
         if not data:
             return self.get_record(db, object_name, record_uid)

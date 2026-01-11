@@ -7,9 +7,6 @@ import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
 import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 import { LoadingOverlay } from '../../components/common/Feedback';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8000/api/v1';
 
 const ObjectRecordList = () => {
   const { objectName } = useParams<{ objectName: string }>();
@@ -24,20 +21,11 @@ const ObjectRecordList = () => {
       if (obj) {
           setObject(obj);
           const fullObj = await metaApi.getObject(obj.id);
-          const allFields: MetaField[] = (fullObj as any).fields || [];
+          const allFields: MetaField[] = fullObj.fields || [];
           
-          try {
-              const viewsRes = await axios.get(`${API_URL}/meta/objects/${obj.id}/list-views`);
-              const views = viewsRes.data;
-              if (views.length > 0) {
-                  const columns = views[0].columns;
-                  setFields(allFields.filter(f => columns.includes(f.name)));
-              } else {
-                  setFields(allFields);
-              }
-          } catch (e) {
-              setFields(allFields);
-          }
+          // Use all fields for now. 
+          // Future: Filter by ListView configuration once metaApi supports it.
+          setFields(allFields);
           
           const data = await dataApi.listRecords(objectName!);
           setRecords(data);

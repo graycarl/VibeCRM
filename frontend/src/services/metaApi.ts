@@ -9,6 +9,11 @@ export interface MetaObject {
   description?: string;
   source: 'system' | 'custom';
   created_at?: string;
+  /**
+   * Fields are only populated when fetching a single object via `getObject()`.
+   * When listing objects via `getObjects()`, this property is typically undefined.
+   */
+  fields?: MetaField[];
 }
 
 export interface MetaField {
@@ -16,7 +21,7 @@ export interface MetaField {
   object_id: string;
   name: string;
   label: string;
-  data_type: 'Text' | 'Number' | 'Date' | 'Boolean' | 'Picklist' | 'Lookup' | 'Metadata';
+  data_type: 'Text' | 'Number' | 'Date' | 'Datetime' | 'Boolean' | 'Picklist' | 'Lookup' | 'Metadata';
   options?: any;
   is_required: boolean;
   source: 'system' | 'custom';
