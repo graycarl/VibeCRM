@@ -18,6 +18,12 @@
 - Q: 只读字段展示方式? → A: 使用禁用的输入框 (Disabled Input Field) 以保持布局一致性。
 - Q: 后端对 created_at 字段的写保护策略? → A: 在 API Schema 层将 `created_at` 标记为只读，确保 API 忽略任何传入的该字段值。
 - Q: created_at 字段的适用范围? → A: 将 `created_at` 作为所有对象（包括自定义对象）的默认标准字段，统一数据模型。
+- Q: 种子数据 (Seed Data) 是否需要显式包含 created_at? → A: 不需要，由后端在写入数据库时自动填充。
+- Q: 是否同时添加 updated_at 字段? → A: 是，同时将 `updated_at` 作为标准字段实现。
+- Q: 列表页默认排序方式? → A: 默认按 `created_at` 降序 (DESC) 排列，确保最新数据排在前面。
+- Q: 批量操作或脚本修改时的 updated_at 处理? → A: 始终强制更新 (无论操作来源)，以保证审计数据的一致性。
+- Q: 是否允许用户搜索/筛选时间范围? → A: 否，目前仅在列表页进行展示和排序，暂不提供范围筛选功能。
+- Q: 历史记录迁移策略 (已有数据)? → A: 对于存量数据，在迁移时使用当前时间 (Now) 统一填充，以避免空值。
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -70,7 +76,7 @@ User 和 Account 系统对象在创建记录时，自动记录创建时间到 cr
 
 ### Edge Cases
 
-- **原有数据处理**: 系统中已存在的 User/Account 记录，在字段添加后 `created_at` 是否为空或需填充默认值？(Assumption: 新增字段允许为空，或在迁移时填充默认值，本需求主要关注新功能，旧数据可为空或脚本处理)。
+- **原有数据处理**: 系统中已存在的记录，在字段添加后，将通过迁移脚本统一填充为当前迁移时间 (Now)，以确保数据完整性并避免排序异常。
 - **时区问题**: 系统统一采用 UTC 时间存储，前端根据用户本地时区进行展示。
 
 ## Requirements *(mandatory)*
@@ -79,17 +85,17 @@ User 和 Account 系统对象在创建记录时，自动记录创建时间到 cr
 
 - **FR-001**: 元数据系统 (Metadata System) 必须支持 `Datetime` 作为一种 `MetaField` 的 `data_type`。
 - **FR-002**: 数据库层必须存储 UTC 格式 (ISO8601) 的 `Datetime` 数据，以确保跨时区的一致性。
-- **FR-003**: 所有对象 (包括 System Objects 和 Custom Objects) 都必须包含 `name="created_at"`、`data_type="Datetime"` 的标准系统字段。
-- **FR-004**: 在创建任何对象的记录时，后端服务必须自动将 `created_at` 设置为当前服务器时间 (UTC)，并忽略请求体中可能存在的该字段。
-- **FR-005**: 所有对象的默认列表视图 (ListView) 配置应包含 `created_at` 列 (具体展示可配置)。
-- **FR-006**: 所有对象的默认页面布局 (PageLayout) 应包含 `created_at` 字段。
+- **FR-003**: 所有对象 (包括 System Objects 和 Custom Objects) 都必须包含 `name="created_at"` 和 `name="updated_at"` 的标准系统字段 (类型均为 `Datetime`)。
+- **FR-004**: 在创建记录时，后端服务必须自动将 `created_at` 和 `updated_at` 设置为当前服务器时间 (UTC)；在更新记录时，自动更新 `updated_at`。
+- **FR-005**: 所有对象的默认列表视图 (ListView) 配置应包含 `created_at` 和 `updated_at` 列，且默认按 `created_at` 降序 (DESC) 排列。
+- **FR-006**: 所有对象的默认页面布局 (PageLayout) 应包含 `created_at` 和 `updated_at` 字段。
 - **FR-007**: 前端动态表单 (DynamicForm) 针对 `Datetime` 类型字段必须提供日期时间选择器组件 (采用原生 `type="datetime-local"`)。
-- **FR-008**: 前端必须将 `created_at` 字段在编辑模式下渲染为禁用的输入框 (Disabled Input Field)，以保持界面布局一致。
-- **FR-009**: 在更新 (Update/Patch) 记录时，后端 API Schema 必须严格过滤或忽略 `created_at` 字段，禁止任何形式的修改。
+- **FR-008**: 前端必须将 `created_at` 和 `updated_at` 字段在编辑模式下渲染为禁用的输入框 (Disabled Input Field)，以保持界面布局一致。
+- **FR-009**: 在更新 (Update/Patch) 记录时，后端 API Schema 必须严格过滤或忽略 `created_at` 和 `updated_at` (由后端自动处理)，禁止客户端修改。
 
 ### Non-Functional Requirements
 
-- **PERF-001**: 添加 `created_at` 字段不应显著影响对象的查询性能。
+- **PERF-001**: 添加时间戳字段不应显著影响对象的查询性能。
 - **UX-001**: 日期时间显示格式应清晰易读 (建议 `YYYY-MM-DD HH:mm:ss`)，并转换为用户本地时区。
 
 ### UX/UI Consistency
@@ -100,7 +106,7 @@ User 和 Account 系统对象在创建记录时，自动记录创建时间到 cr
 ### Key Entities
 
 - **MetaField**: 新增 `Datetime` 枚举支持。
-- **All Objects**: 所有元数据对象现在默认包含 `created_at` 属性。
+- **All Objects**: 所有元数据对象默认包含 `created_at` 和 `updated_at` 属性。
 
 ## Success Criteria *(mandatory)*
 
