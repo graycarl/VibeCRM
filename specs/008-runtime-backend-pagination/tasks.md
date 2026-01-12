@@ -21,7 +21,7 @@ description: "Task list for feature 008-runtime-backend-pagination"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Verify project structure and dependencies for backend (FastAPI) and frontend (MUI X DataGrid)
+- [x] T001 Verify project structure and dependencies for backend (FastAPI) and frontend (MUI X DataGrid)
 
 ---
 
@@ -31,9 +31,9 @@ description: "Task list for feature 008-runtime-backend-pagination"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Create generic pagination response schema in `backend/app/schemas/dynamic.py`
-- [ ] T003 Update backend `list_records` in `backend/app/services/data_service.py` to support count query and return `items` + `total`
-- [ ] T004 Update backend API endpoint `list_records` in `backend/app/api/endpoints/data.py` to use new response schema
+- [x] T002 Create generic pagination response schema in `backend/app/schemas/dynamic.py`
+- [x] T003 Update backend `list_records` in `backend/app/services/data_service.py` to support count query and return `items` + `total`
+- [x] T004 Update backend API endpoint `list_records` in `backend/app/api/endpoints/data.py` to use new response schema
 
 **Checkpoint**: Foundation ready - API now returns `{"items": [], "total": 0}` format
 
@@ -47,15 +47,15 @@ description: "Task list for feature 008-runtime-backend-pagination"
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T005 [P] [US1] Create backend API test for pagination in `backend/tests/api/test_data_pagination.py`
-- [ ] T006 [P] [US1] Create frontend test for DataGrid server pagination in `frontend/tests/components/DynamicDataGrid_pagination.test.tsx`
+- [x] T005 [P] [US1] Create backend API test for pagination in `backend/tests/api/test_data_pagination.py`
+- [x] T006 [P] [US1] Create frontend test for DataGrid server pagination in `frontend/tests/components/DynamicDataGrid_pagination.test.tsx`
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Update `frontend/src/services/dataApi.ts` to type the response as `{ items: any[], total: number }`
-- [ ] T008 [US1] Update `frontend/src/components/data/DynamicDataGrid.tsx` to accept `rowCount`, `paginationModel`, `onPaginationModelChange` props and set `paginationMode="server"`
-- [ ] T009 [US1] Update `frontend/src/pages/runtime/ObjectRecordList.tsx` to manage pagination state and pass it to `DynamicDataGrid`
-- [ ] T010 [US1] Update `frontend/src/pages/runtime/ObjectRecordList.tsx` to fetch data using `paginationModel.page` and `paginationModel.pageSize`
+- [x] T007 [US1] Update `frontend/src/services/dataApi.ts` to type the response as `{ items: any[], total: number }`
+- [x] T008 [US1] Update `frontend/src/components/data/DynamicDataGrid.tsx` to accept `rowCount`, `paginationModel`, `onPaginationModelChange` props and set `paginationMode="server"`
+- [x] T009 [US1] Update `frontend/src/pages/runtime/ObjectRecordList.tsx` to manage pagination state and pass it to `DynamicDataGrid`
+- [x] T010 [US1] Update `frontend/src/pages/runtime/ObjectRecordList.tsx` to fetch data using `paginationModel.page` and `paginationModel.pageSize`
 
 **Checkpoint**: User Story 1 functional - pagination works for >50 records
 
@@ -69,12 +69,12 @@ description: "Task list for feature 008-runtime-backend-pagination"
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T011 [P] [US2] Add test case for changing page size in `frontend/tests/components/DynamicDataGrid_pagination.test.tsx`
+- [x] T011 [P] [US2] Add test case for changing page size in `frontend/tests/components/DynamicDataGrid_pagination.test.tsx`
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Update `frontend/src/components/data/DynamicDataGrid.tsx` to ensure `pageSizeOptions` includes [10, 25, 50] and handles change events correctly (already standard in DataGrid but needs verification with server mode)
-- [ ] T013 [US2] Ensure `frontend/src/pages/runtime/ObjectRecordList.tsx` resets page to 0 when page size changes (per Clarification in spec)
+- [x] T012 [US2] Update `frontend/src/components/data/DynamicDataGrid.tsx` to ensure `pageSizeOptions` includes [10, 25, 50] and handles change events correctly (already standard in DataGrid but needs verification with server mode)
+- [x] T013 [US2] Ensure `frontend/src/pages/runtime/ObjectRecordList.tsx` resets page to 0 when page size changes (per Clarification in spec)
 
 **Checkpoint**: User Stories 1 AND 2 functional
 
@@ -84,10 +84,10 @@ description: "Task list for feature 008-runtime-backend-pagination"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T014 [P] Verify error handling in `ObjectRecordList.tsx` (e.g. if backend returns 500)
-- [ ] T015 [P] Verify loading state behavior in `DynamicDataGrid.tsx` during page transitions
-- [ ] T016 [P] Run verification steps in `specs/008-runtime-backend-pagination/quickstart.md`
-- [ ] T017 [P] Clean up any unused legacy pagination code
+- [x] T014 [P] Verify error handling in `ObjectRecordList.tsx` (e.g. if backend returns 500)
+- [x] T015 [P] Verify loading state behavior in `DynamicDataGrid.tsx` during page transitions
+- [x] T016 [P] Run verification steps in `specs/008-runtime-backend-pagination/quickstart.md`
+- [x] T017 [P] Clean up any unused legacy pagination code
 
 ---
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { MetaField } from '../../services/metaApi';
 import { getOptionLabel } from '../../utils/metadata';
@@ -14,6 +14,21 @@ export interface DynamicDataGridProps {
    * Data rows to display.
    */
   rows: any[];
+
+  /**
+   * Total number of rows on the server.
+   */
+  rowCount?: number;
+
+  /**
+   * Current pagination model.
+   */
+  paginationModel?: GridPaginationModel;
+
+  /**
+   * Callback when pagination model changes.
+   */
+  onPaginationModelChange?: (model: GridPaginationModel) => void;
 
   /**
    * Loading state.
@@ -34,6 +49,9 @@ export interface DynamicDataGridProps {
 const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
   fields,
   rows,
+  rowCount,
+  paginationModel,
+  onPaginationModelChange,
   loading = false,
   onRowClick,
   actions,
@@ -113,12 +131,11 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         getRowId={(row) => row.uid || row.id}
         onRowClick={(params) => onRowClick && onRowClick(params.row)}
         pagination
+        paginationMode={paginationModel ? "server" : "client"}
+        rowCount={rowCount ?? rows.length}
+        paginationModel={paginationModel}
+        onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={[10, 25, 50]}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 10 },
-          },
-        }}
         disableColumnSorting
         disableColumnFilter
         disableRowSelectionOnClick

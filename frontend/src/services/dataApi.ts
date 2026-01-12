@@ -7,8 +7,13 @@ const getAuthHeader = () => {
     return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+}
+
 export const dataApi = {
-  listRecords: async (objectName: string, skip = 0, limit = 50) => {
+  listRecords: async (objectName: string, skip = 0, limit = 50): Promise<PaginatedResponse<any>> => {
     const response = await axios.get(`${API_URL}/data/${objectName}`, {
       params: { skip, limit },
       headers: getAuthHeader()
