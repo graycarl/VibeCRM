@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": { "type": "object", "description": "Dynamic record object" }
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total count of records"
+    }
+  },
+  "required": ["items", "total"]
+}
