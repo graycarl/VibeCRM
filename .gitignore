@@ -37,3 +37,9 @@ pnpm-debug.log*
 .idea/
 .vscode/
 *.swp
+frontend/.eslintignore
+frontend/.prettierignore
+
+# Backend Generated
+backend/vibecrm_backend.egg-info/
+backend/uv.lock
