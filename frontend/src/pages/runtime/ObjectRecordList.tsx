@@ -66,6 +66,7 @@ const ObjectRecordList = () => {
           loadMetadata();
           // Reset pagination when object changes
           setPaginationModel({ page: 0, pageSize: 50 });
+          prevPageSize.current = 50;
       }
   }, [objectName]);
 
