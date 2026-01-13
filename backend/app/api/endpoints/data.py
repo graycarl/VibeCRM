@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 from app.api.deps import get_db
 from app.services.data_service import data_service
 from app.services.meta_service import meta_service
-from app.schemas.dynamic import create_dynamic_model
+from app.schemas.dynamic import create_dynamic_model, PaginatedResponse
 
 router = APIRouter()
 
@@ -33,7 +33,7 @@ def create_record(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/{object_name}")
+@router.get("/{object_name}", response_model=PaginatedResponse[Dict[str, Any]])
 def list_records(
     object_name: str, 
     skip: int = 0, 

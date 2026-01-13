@@ -70,19 +70,28 @@ class DataService:
             return dict(result)
         return None
 
-    def list_records(self, db: Session, object_name: str, skip: int = 0, limit: int = 50) -> List[Dict[str, Any]]:
+    def list_records(self, db: Session, object_name: str, skip: int = 0, limit: int = 50) -> Dict[str, Any]:
         # Check object existence first to avoid SQL injection on table name
         obj = meta_service.get_object_by_name(db, object_name)
         if not obj:
             raise ValueError(f"Object {object_name} not found")
 
         table_name = f"data_{object_name}"
+        
+        # Count total records
+        count_stmt = text(f"SELECT COUNT(*) FROM {table_name}")
+        
+        # Fetch data
         stmt = text(f"SELECT * FROM {table_name} ORDER BY created_at DESC LIMIT :limit OFFSET :skip")
         
         with engine.connect() as conn:
+            total = conn.execute(count_stmt).scalar()
             result = conn.execute(stmt, {"limit": limit, "skip": skip}).mappings().all()
             
-        return [dict(row) for row in result]
+        return {
+            "items": [dict(row) for row in result],
+            "total": total
+        }
 
     def update_record(self, db: Session, object_name: str, record_uid: str, data: Dict[str, Any]) -> Dict[str, Any]:
         self._validate_data(db, object_name, data)

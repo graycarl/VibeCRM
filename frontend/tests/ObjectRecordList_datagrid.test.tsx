@@ -26,7 +26,7 @@ describe('ObjectRecordList with DataGrid', () => {
     vi.resetAllMocks();
     (metaApi.getObjects as any).mockResolvedValue([mockObject]);
     (metaApi.getObject as any).mockResolvedValue({ ...mockObject, fields: mockFields });
-    (dataApi.listRecords as any).mockResolvedValue(mockRecords);
+    (dataApi.listRecords as any).mockResolvedValue({ items: mockRecords, total: mockRecords.length });
     (axios.get as any).mockResolvedValue({ data: [] }); // No list views
   });
 

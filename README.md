@@ -52,7 +52,7 @@ make dev
 
 ## TODO
 
-- [ ] 完整的分页功能（当前为客户端分页）
+- [x] 完整的分页功能（当前为客户端分页）
 - [ ] 对 number 类型字段支持页面上指定排序
 - [ ] Custom Field 的 Name 必须以 cs_ 开头
 - [ ] System Picklist Field 的选项不允许修改
