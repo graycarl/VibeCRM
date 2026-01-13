@@ -132,10 +132,15 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         onRowClick={(params) => onRowClick && onRowClick(params.row)}
         pagination
         paginationMode={paginationModel ? "server" : "client"}
-        rowCount={rowCount ?? rows.length}
+        rowCount={paginationModel ? (rowCount ?? -1) : undefined}
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={[10, 25, 50]}
+        initialState={paginationModel ? undefined : {
+          pagination: {
+            paginationModel: { pageSize: 10 },
+          },
+        }}
         disableColumnSorting
         disableColumnFilter
         disableRowSelectionOnClick
