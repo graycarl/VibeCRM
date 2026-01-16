@@ -104,7 +104,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
             margin="dense"
             label="API Name"
             fullWidth
-            value={isEditMode ? name : name}
+            value={name}
             onChange={(e) => setName(e.target.value)}
             helperText="Unique, lowercase, no spaces."
             disabled={!!createdField}
