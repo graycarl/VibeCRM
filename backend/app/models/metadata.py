@@ -25,6 +25,7 @@ class MetaField(Base):
     object_id: Mapped[str] = mapped_column(String(36), ForeignKey("meta_objects.id"), nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
     label: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     data_type: Mapped[str] = mapped_column(String, nullable=False)
     options: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
     is_required: Mapped[bool] = mapped_column(Boolean, default=False)

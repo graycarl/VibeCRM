@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.schemas.metadata import (
-    MetaObject, MetaObjectCreate, 
+    MetaObject, MetaObjectCreate, MetaObjectUpdate,
     MetaField, MetaFieldCreate, MetaFieldUpdate,
     MetaRole, MetaRoleCreate, MetaRoleUpdate,
     PicklistOption, PicklistOptionUpdate, PicklistReorder
@@ -34,6 +34,15 @@ def get_object(object_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Object not found")
     return obj
 
+@router.patch("/objects/{object_id}", response_model=MetaObject)
+def update_object(object_id: str, obj_in: MetaObjectUpdate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.update_object(db, object_id, obj_in)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.delete("/objects/{object_id}")
 def delete_object(object_id: str, db: Session = Depends(get_db)):
     success = meta_service.delete_object(db, object_id)
@@ -53,7 +62,7 @@ def create_field(object_id: str, field_in: MetaFieldCreate, db: Session = Depend
 @router.patch("/fields/{field_id}", response_model=MetaField)
 def update_field(field_id: str, field_in: MetaFieldUpdate, db: Session = Depends(get_db)):
     try:
-        return meta_service.update_field(db, field_id, field_in.label, field_in.is_required)
+        return meta_service.update_field(db, field_id, field_in.label, field_in.is_required, field_in.description)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

@@ -22,6 +22,7 @@ export interface MetaField {
   object_id: string;
   name: string;
   label: string;
+  description?: string;
   data_type: 'Text' | 'Number' | 'Date' | 'Datetime' | 'Boolean' | 'Picklist' | 'Lookup' | 'Metadata';
   options?: any;
   is_required: boolean;
@@ -58,6 +59,11 @@ export const metaApi = {
     return response.data;
   },
   
+  updateObject: async (id: string, data: { label?: string, description?: string }) => {
+    const response = await axios.patch<MetaObject>(`${API_URL}/meta/objects/${id}`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+  
   deleteObject: async (id: string) => {
     const response = await axios.delete(`${API_URL}/meta/objects/${id}`, { headers: getAuthHeader() });
     return response.data;
@@ -68,7 +74,7 @@ export const metaApi = {
     return response.data;
   },
 
-  updateField: async (fieldId: string, data: { label?: string, is_required?: boolean }) => {
+  updateField: async (fieldId: string, data: { label?: string, is_required?: boolean, description?: string }) => {
     const response = await axios.patch<MetaField>(`${API_URL}/meta/fields/${fieldId}`, data, { headers: getAuthHeader() });
     return response.data;
   },
