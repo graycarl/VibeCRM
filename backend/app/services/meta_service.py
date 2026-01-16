@@ -1,12 +1,27 @@
 from sqlalchemy.orm import Session
+from typing import Optional, List
 from app.models.metadata import MetaObject, MetaField, MetaRole
 from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
 from app.services.schema_service import schema_service
 import uuid
 import re
 
+# Custom metadata prefix constant
+CUSTOM_PREFIX = "cs_"
+
+def validate_custom_name(name: str, source: str, entity_type: str) -> None:
+    """Validate that custom metadata name starts with cs_ prefix."""
+    if source == "custom" and not name.startswith(CUSTOM_PREFIX):
+        raise ValueError(
+            f"{entity_type} with source='custom' must have name starting with '{CUSTOM_PREFIX}'. "
+            f"Got: '{name}'"
+        )
+
 class MetaService:
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
+        # Validate custom prefix
+        validate_custom_name(obj_in.name, obj_in.source, "Object")
+        
         # Check if name exists
         existing = db.query(MetaObject).filter(MetaObject.name == obj_in.name).first()
         if existing:
@@ -50,6 +65,9 @@ class MetaService:
         obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
+        
+        # Validate custom prefix
+        validate_custom_name(field_in.name, field_in.source, "Field")
             
         options = field_in.options
         if options:
@@ -201,6 +219,9 @@ class MetaService:
 
     # Role Methods
     def create_role(self, db: Session, role_in: MetaRoleCreate) -> MetaRole:
+        # Validate custom prefix
+        validate_custom_name(role_in.name, role_in.source, "Role")
+        
         existing = db.query(MetaRole).filter(MetaRole.name == role_in.name).first()
         if existing:
             raise ValueError(f"Role with name '{role_in.name}' already exists.")

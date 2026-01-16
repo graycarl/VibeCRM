@@ -7,7 +7,7 @@ from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate
 def test_pagination_response_structure(client: TestClient, db: Session):
     # 1. Create a custom object
     obj_data = MetaObjectCreate(
-        name="TestPagination",
+        name="cs_test_pagination",
         label="Test Pagination",
         description="Object for pagination test"
     )
@@ -15,7 +15,7 @@ def test_pagination_response_structure(client: TestClient, db: Session):
 
     # 1.5 Create a 'name' field for the object so we can store data
     name_field = MetaFieldCreate(
-        name="name",
+        name="cs_name",
         label="Name",
         data_type="Text",
         is_required=True
@@ -24,10 +24,10 @@ def test_pagination_response_structure(client: TestClient, db: Session):
     
     # 2. Create 55 records
     for i in range(55):
-        data_service.create_record(db, "TestPagination", {"name": f"Record {i}"})
+        data_service.create_record(db, "cs_test_pagination", {"cs_name": f"Record {i}"})
         
     # 3. Test default pagination (limit=50)
-    response = client.get("/api/v1/data/TestPagination")
+    response = client.get("/api/v1/data/cs_test_pagination")
     assert response.status_code == 200
     data = response.json()
     
@@ -40,7 +40,7 @@ def test_pagination_response_structure(client: TestClient, db: Session):
     assert data["total"] == 55
     
     # 4. Test page 2 (skip=50)
-    response = client.get("/api/v1/data/TestPagination?skip=50&limit=50")
+    response = client.get("/api/v1/data/cs_test_pagination?skip=50&limit=50")
     assert response.status_code == 200
     data = response.json()
     
@@ -48,7 +48,7 @@ def test_pagination_response_structure(client: TestClient, db: Session):
     assert data["total"] == 55
     
     # 5. Test custom page size (limit=10)
-    response = client.get("/api/v1/data/TestPagination?limit=10")
+    response = client.get("/api/v1/data/cs_test_pagination?limit=10")
     assert response.status_code == 200
     data = response.json()
     

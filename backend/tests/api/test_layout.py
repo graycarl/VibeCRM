@@ -4,7 +4,7 @@ def test_layout_lifecycle(client: TestClient):
     # 1. Create Object first
     obj_res = client.post(
         "/api/v1/meta/objects",
-        json={"name": "layout_test", "label": "Layout Test"}
+        json={"name": "cs_layout_test", "label": "Layout Test"}
     )
     assert obj_res.status_code == 200
     obj_id = obj_res.json()["id"]
@@ -30,7 +30,7 @@ def test_listview_lifecycle(client: TestClient):
     # 1. Create Object
     obj_res = client.post(
         "/api/v1/meta/objects",
-        json={"name": "lv_test", "label": "LV Test"}
+        json={"name": "cs_lv_test", "label": "LV Test"}
     )
     assert obj_res.status_code == 200
     obj_id = obj_res.json()["id"]

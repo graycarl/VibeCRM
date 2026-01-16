@@ -7,7 +7,7 @@ def test_add_option(db):
     # 1. Create a picklist field
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="test_picklist",
+        name="cs_test_picklist",
         label="Test Picklist",
         data_type="Picklist",
         options=[]
@@ -26,7 +26,7 @@ def test_add_option(db):
 def test_add_duplicate_option(db):
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="test_picklist_dup",
+        name="cs_test_picklist_dup",
         label="Test Picklist Dup",
         data_type="Picklist",
         options=[{"name": "opt1", "label": "Opt 1"}]
@@ -39,7 +39,7 @@ def test_add_duplicate_option(db):
 def test_update_option(db):
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="test_picklist_update",
+        name="cs_test_picklist_update",
         label="Test Picklist Update",
         data_type="Picklist",
         options=[{"name": "opt1", "label": "Old Label"}]
@@ -54,7 +54,7 @@ def test_update_option(db):
 def test_delete_option(db):
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="test_picklist_delete",
+        name="cs_test_picklist_delete",
         label="Test Picklist Delete",
         data_type="Picklist",
         options=[{"name": "opt1", "label": "Opt 1"}]
@@ -69,7 +69,7 @@ def test_delete_option(db):
 def test_invalid_option_name(db):
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="test_picklist_invalid",
+        name="cs_test_picklist_invalid",
         label="Test Picklist Invalid",
         data_type="Picklist",
         options=[]

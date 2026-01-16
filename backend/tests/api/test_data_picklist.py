@@ -5,7 +5,7 @@ from app.schemas.metadata import MetaFieldCreate
 def test_create_record_with_picklist(client: TestClient, db):
     # 1. Setup a picklist field
     obj = meta_service.get_object_by_name(db, "account")
-    field_name = "test_sex"
+    field_name = "cs_test_sex"
     field_in = MetaFieldCreate(
         name=field_name,
         label="测试性别",
