@@ -6,7 +6,7 @@ def test_options_crud_api(client: TestClient, db):
     # 1. Setup a picklist field
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="api_picklist",
+        name="cs_api_picklist",
         label="API Picklist",
         data_type="Picklist",
         options=[]
@@ -45,7 +45,7 @@ def test_options_crud_api(client: TestClient, db):
 def test_add_option_invalid_name(client: TestClient, db):
     obj = meta_service.get_object_by_name(db, "account")
     field_in = MetaFieldCreate(
-        name="api_picklist_invalid",
+        name="cs_api_picklist_invalid",
         label="API Picklist Invalid",
         data_type="Picklist",
         options=[]

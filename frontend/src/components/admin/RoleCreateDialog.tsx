@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button 
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
+  InputAdornment
 } from '@mui/material';
 import { metaApi } from '../../services/metaApi';
+
+const CUSTOM_PREFIX = 'cs_';
 
 interface Props {
   open: boolean;
@@ -29,8 +32,9 @@ const RoleCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
         return;
       }
 
+      const fullName = CUSTOM_PREFIX + name;
       await metaApi.createRole({ 
-        name, 
+        name: fullName, 
         label, 
         description, 
         permissions: parsedPermissions, 
@@ -70,6 +74,11 @@ const RoleCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           helperText="Unique, lowercase, no spaces."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
+            ),
+          }}
         />
         <TextField
           margin="dense"

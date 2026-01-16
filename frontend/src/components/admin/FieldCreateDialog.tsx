@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, 
   FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox,
-  Box, Divider
+  Box, Divider, InputAdornment
 } from '@mui/material';
 import { metaApi, MetaField } from '../../services/metaApi';
 import { PicklistOptionsEditor } from './PicklistOptionsEditor';
+
+const CUSTOM_PREFIX = 'cs_';
 
 interface Props {
   open: boolean;
@@ -58,8 +60,9 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         return;
       }
 
+      const fullName = CUSTOM_PREFIX + name;
       const field = await metaApi.createField(objectId, { 
-        name, 
+        name: fullName, 
         label, 
         data_type: dataType as any, 
         is_required: required,
@@ -81,6 +84,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
 
   const isPicklist = dataType === 'Picklist';
   const showOptionsEditor = isPicklist && createdField;
+  const isEditMode = !!fieldToEdit;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={showOptionsEditor ? "sm" : "xs"}>
@@ -104,6 +108,11 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
             onChange={(e) => setName(e.target.value)}
             helperText="Unique, lowercase, no spaces."
             disabled={!!createdField}
+            InputProps={isEditMode ? undefined : {
+              startAdornment: (
+                <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
+              ),
+            }}
           />
           
           <FormControl fullWidth margin="dense">

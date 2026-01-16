@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button 
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
+  InputAdornment
 } from '@mui/material';
 import { metaApi } from '../../services/metaApi';
+
+const CUSTOM_PREFIX = 'cs_';
 
 interface Props {
   open: boolean;
@@ -19,7 +22,8 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await metaApi.createObject({ name, label, description, source: 'custom' });
+      const fullName = CUSTOM_PREFIX + name;
+      await metaApi.createObject({ name: fullName, label, description, source: 'custom' });
       onSuccess();
       onClose();
       // Reset form
@@ -53,6 +57,11 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           helperText="Must be unique, lowercase, no spaces."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
+            ),
+          }}
         />
         <TextField
           margin="dense"
