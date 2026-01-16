@@ -15,6 +15,7 @@ class PicklistReorder(BaseModel):
 class MetaFieldBase(BaseModel):
     name: str
     label: str
+    description: Optional[str] = None
     data_type: str
     options: Optional[List[PicklistOption]] = None
     is_required: bool = False
@@ -25,11 +26,13 @@ class MetaFieldCreate(MetaFieldBase):
 
 class MetaFieldUpdate(BaseModel):
     label: Optional[str] = None
+    description: Optional[str] = None
     is_required: Optional[bool] = None
 
 class MetaField(MetaFieldBase):
     id: str 
     object_id: str
+    description: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -41,6 +44,10 @@ class MetaObjectBase(BaseModel):
 
 class MetaObjectCreate(MetaObjectBase):
     pass
+
+class MetaObjectUpdate(BaseModel):
+    label: Optional[str] = None
+    description: Optional[str] = None
 
 class MetaObject(MetaObjectBase):
     id: str

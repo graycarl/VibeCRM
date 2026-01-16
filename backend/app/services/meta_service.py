@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from app.models.metadata import MetaObject, MetaField, MetaRole
-from app.schemas.metadata import MetaObjectCreate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
+from app.schemas.metadata import MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaFieldUpdate, MetaRoleCreate, MetaRoleUpdate
 from app.services.schema_service import schema_service
 import uuid
 import re
@@ -48,6 +48,31 @@ class MetaService:
         
         return db_obj
 
+    def update_object(self, db: Session, object_id: str, obj_in: MetaObjectUpdate) -> MetaObject:
+        obj = self.get_object(db, object_id)
+        if not obj:
+            raise ValueError("Object not found")
+
+        # Apply permissions logic
+        if obj.source == "system":
+            # System objects: only label is editable
+            if obj_in.label is not None:
+                obj.label = obj_in.label
+            # Ignore description update for system objects or raise error?
+            # Design decision: Ignore silently or validation error?
+            # Assuming we just ignore what's not allowed based on "Disabled" UI state logic
+        else:
+            # Custom objects: label and description are editable
+            if obj_in.label is not None:
+                obj.label = obj_in.label
+            if obj_in.description is not None:
+                obj.description = obj_in.description
+
+        db.add(obj)
+        db.commit()
+        db.refresh(obj)
+        return obj
+
     def get_objects(self, db: Session, skip: int = 0, limit: int = 100):
         return db.query(MetaObject).offset(skip).limit(limit).all()
 
@@ -81,6 +106,7 @@ class MetaService:
             object_id=object_id,
             name=field_in.name,
             label=field_in.label,
+            description=field_in.description,
             data_type=field_in.data_type,
             options=options,
             is_required=field_in.is_required,
@@ -108,6 +134,9 @@ class MetaService:
         if field.data_type != "Picklist":
             raise ValueError("Field is not a Picklist")
         
+        if field.source == "system":
+            raise ValueError("Cannot modify options of a system field")
+        
         # FR-012: Name format validation
         if not re.match(r'^[a-z_][a-z0-9_]*$', name):
             raise ValueError("Option name must be lowercase letters, numbers, and underscores, and cannot start with a number.")
@@ -129,6 +158,9 @@ class MetaService:
         field = self.get_field(db, field_id)
         if not field:
             raise ValueError("Field not found")
+        
+        if field.source == "system":
+            raise ValueError("Cannot modify options of a system field")
         
         options = field.options or []
         # Create a new list to ensure SQLAlchemy detects the change
@@ -154,6 +186,9 @@ class MetaService:
         if not field:
             raise ValueError("Field not found")
         
+        if field.source == "system":
+            raise ValueError("Cannot modify options of a system field")
+        
         options = field.options or []
         new_options = [opt for opt in options if opt['name'] != name]
         
@@ -172,6 +207,9 @@ class MetaService:
             raise ValueError("Field not found")
         if field.data_type != "Picklist":
             raise ValueError("Field is not a Picklist")
+        
+        if field.source == "system":
+            raise ValueError("Cannot modify options of a system field")
         
         current_options = field.options or []
         if len(names) != len(current_options):
@@ -192,15 +230,25 @@ class MetaService:
         db.refresh(field)
         return field
 
-    def update_field(self, db: Session, field_id: str, label: Optional[str] = None, is_required: Optional[bool] = None) -> MetaField:
+    def update_field(self, db: Session, field_id: str, label: Optional[str] = None, is_required: Optional[bool] = None, description: Optional[str] = None) -> MetaField:
         field = self.get_field(db, field_id)
         if not field:
             raise ValueError("Field not found")
         
-        if label is not None:
-            field.label = label
-        if is_required is not None:
-            field.is_required = is_required
+        # Apply permissions logic
+        if field.source == "system":
+            # System fields: only label is editable
+            if label is not None:
+                field.label = label
+            # Ignore is_required and description updates for system fields
+        else:
+            # Custom fields: label, description, is_required are editable
+            if label is not None:
+                field.label = label
+            if is_required is not None:
+                field.is_required = is_required
+            if description is not None:
+                field.description = description
             
         db.add(field)
         db.commit()

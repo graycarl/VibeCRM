@@ -14,7 +14,7 @@ interface Props {
   onClose: () => void;
   objectId: string;
   onSuccess: () => void;
-  fieldToEdit?: MetaField | null; // Added to support editing
+  fieldToEdit?: MetaField | null;
 }
 
 const FIELD_TYPES = ['Text', 'Number', 'Date', 'Datetime', 'Boolean', 'Picklist', 'Lookup'];
@@ -22,21 +22,27 @@ const FIELD_TYPES = ['Text', 'Number', 'Date', 'Datetime', 'Boolean', 'Picklist'
 const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess, fieldToEdit }) => {
   const [name, setName] = useState('');
   const [label, setLabel] = useState('');
+  const [description, setDescription] = useState('');
   const [dataType, setDataType] = useState('Text');
   const [required, setRequired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createdField, setCreatedField] = useState<MetaField | null>(null);
 
+  const isEditMode = !!fieldToEdit;
+  const isSystem = fieldToEdit?.source === 'system';
+
   useEffect(() => {
     if (fieldToEdit) {
       setName(fieldToEdit.name);
       setLabel(fieldToEdit.label);
+      setDescription(fieldToEdit.description || '');
       setDataType(fieldToEdit.data_type);
       setRequired(fieldToEdit.is_required);
       setCreatedField(fieldToEdit);
     } else {
       setName('');
       setLabel('');
+      setDescription('');
       setDataType('Text');
       setRequired(false);
       setCreatedField(null);
@@ -46,10 +52,11 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (fieldToEdit) {
+      if (isEditMode && fieldToEdit) {
         const updatedField = await metaApi.updateField(fieldToEdit.id, { 
           label, 
-          is_required: required 
+          is_required: required,
+          description
         });
         setCreatedField(updatedField);
         onSuccess();
@@ -60,10 +67,12 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         return;
       }
 
+      // Create Mode
       const fullName = CUSTOM_PREFIX + name;
       const field = await metaApi.createField(objectId, { 
         name: fullName, 
         label, 
+        description,
         data_type: dataType as any, 
         is_required: required,
         source: 'custom' 
@@ -75,20 +84,31 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         onClose();
       }
     } catch (error) {
-      console.error("Failed to create field", error);
-      alert("Failed to create field");
+      console.error(isEditMode ? "Failed to update field" : "Failed to create field", error);
+      alert(isEditMode ? "Failed to update field" : "Failed to create field");
     } finally {
       setLoading(false);
     }
   };
 
   const isPicklist = dataType === 'Picklist';
-  const showOptionsEditor = isPicklist && createdField;
-  const isEditMode = !!fieldToEdit;
+  // We only want to show the Save button if we haven't just created a Picklist and are now editing options
+  // OR if we are in edit mode and just want to save metadata changes.
+  const isNewPicklistJustCreated = !isEditMode && !!createdField && isPicklist;
+  const showOptionsEditor = isPicklist && !!createdField;
+
+  // Permission Logic
+  const isFullyLocked = !isEditMode && !!createdField; // Just created a new field, awaiting option edits or closure
+  
+  const isNameDisabled = isEditMode || isFullyLocked;
+  const isTypeDisabled = isEditMode || isFullyLocked;
+  const isLabelDisabled = isFullyLocked;
+  const isDescriptionDisabled = isFullyLocked || (isEditMode && isSystem);
+  const isRequiredDisabled = isFullyLocked || (isEditMode && isSystem);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={showOptionsEditor ? "sm" : "xs"}>
-      <DialogTitle>{fieldToEdit ? 'Edit Field' : 'Add Custom Field'}</DialogTitle>
+      <DialogTitle>{isEditMode ? 'Edit Field' : 'Add Custom Field'}</DialogTitle>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <TextField
@@ -98,7 +118,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
             fullWidth
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            disabled={!!createdField}
+            disabled={isLabelDisabled}
           />
           <TextField
             margin="dense"
@@ -106,8 +126,8 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
-            helperText="Unique, lowercase, no spaces."
-            disabled={!!createdField}
+            helperText={isEditMode ? "Cannot be changed after creation." : "Unique, lowercase, no spaces."}
+            disabled={isNameDisabled}
             InputProps={isEditMode ? undefined : {
               startAdornment: (
                 <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
@@ -121,7 +141,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
               value={dataType}
               label="Data Type"
               onChange={(e) => setDataType(e.target.value)}
-              disabled={!!createdField}
+              disabled={isTypeDisabled}
             >
               {FIELD_TYPES.map(type => (
                 <MenuItem key={type} value={type}>{type}</MenuItem>
@@ -129,11 +149,23 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
             </Select>
           </FormControl>
 
+          <TextField
+            margin="dense"
+            label="Description"
+            fullWidth
+            multiline
+            rows={2}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={isDescriptionDisabled}
+            helperText={isDescriptionDisabled && isEditMode ? "System field descriptions cannot be modified." : ""}
+          />
+
           <FormControlLabel
             control={<Checkbox checked={required} onChange={(e) => setRequired(e.target.checked)} />}
             label="Required"
             sx={{ mt: 1 }}
-            disabled={!!createdField}
+            disabled={isRequiredDisabled}
           />
         </Box>
 
@@ -141,19 +173,20 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
           <>
             <Divider sx={{ my: 2 }} />
             <PicklistOptionsEditor 
-              fieldId={createdField.id} 
-              initialOptions={createdField.options || []} 
+              fieldId={createdField!.id} 
+              initialOptions={createdField!.options || []} 
+              readOnly={isSystem}
             />
           </>
         )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>
-          {showOptionsEditor ? 'Close' : 'Cancel'}
+          {isNewPicklistJustCreated ? 'Close' : 'Cancel'}
         </Button>
-        {!createdField && (
+        {!isNewPicklistJustCreated && (
           <Button onClick={handleSubmit} variant="contained" disabled={loading}>
-            {isPicklist ? 'Next' : 'Add'}
+            {isEditMode ? 'Save' : (isPicklist ? 'Next' : 'Add')}
           </Button>
         )}
       </DialogActions>

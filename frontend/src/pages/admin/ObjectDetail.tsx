@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import FieldCreateDialog from '../../components/admin/FieldCreateDialog';
+import ObjectCreateDialog from '../../components/admin/ObjectCreateDialog';
 import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 import { LoadingOverlay } from '../../components/common/Feedback';
 
@@ -12,6 +13,7 @@ const ObjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [object, setObject] = useState<MetaObject | null>(null);
   const [openFieldDialog, setOpenFieldDialog] = useState(false);
+  const [openObjectDialog, setOpenObjectDialog] = useState(false);
   const [selectedField, setSelectedField] = useState<MetaField | null>(null);
 
   const loadObject = async () => {
@@ -58,10 +60,17 @@ const ObjectDetail = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Box mb={4}>
-        <Typography variant="h4">{object.label} ({object.name})</Typography>
-        <Typography variant="subtitle1" color="textSecondary">
-          Source: {object.source} | ID: {object.id}
-        </Typography>
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+          <Box>
+            <Typography variant="h4">{object.label} ({object.name})</Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              Source: {object.source} | ID: {object.id}
+            </Typography>
+          </Box>
+          <Button variant="outlined" onClick={() => setOpenObjectDialog(true)}>
+            Edit Object
+          </Button>
+        </Box>
         <Typography variant="body1" mt={2}>{object.description}</Typography>
       </Box>
 
@@ -84,6 +93,13 @@ const ObjectDetail = () => {
         objectId={object.id}
         onSuccess={loadObject} 
         fieldToEdit={selectedField}
+      />
+
+      <ObjectCreateDialog
+        open={openObjectDialog}
+        onClose={() => setOpenObjectDialog(false)}
+        onSuccess={loadObject}
+        objectToEdit={object}
       />
     </Container>
   );

@@ -36,9 +36,10 @@ import { metaApi } from '../../services/metaApi';
 interface PicklistOptionsEditorProps {
   fieldId: string;
   initialOptions: PicklistOption[];
+  readOnly?: boolean;
 }
 
-export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fieldId, initialOptions }) => {
+export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fieldId, initialOptions, readOnly }) => {
   const [options, setOptions] = useState<PicklistOption[]>(initialOptions);
   const [newOption, setNewOption] = useState<PicklistOption>({ name: '', label: '' });
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -137,33 +138,35 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
     <Box sx={{ mt: 2 }}>
       <Typography variant="subtitle1" gutterBottom>管理选项</Typography>
       
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <TextField
-            size="small"
-            label="Name (API)"
-            value={newOption.name}
-            onChange={(e) => setNewOption({ ...newOption, name: e.target.value })}
-            placeholder="e.g. male"
-          />
-          <TextField
-            size="small"
-            label="Label (显示)"
-            value={newOption.label}
-            onChange={(e) => setNewOption({ ...newOption, label: e.target.value })}
-            placeholder="e.g. 男"
-          />
-          <Button 
-            variant="contained" 
-            startIcon={<AddIcon />}
-            onClick={handleAdd}
-            disabled={!newOption.name || !newOption.label}
-          >
-            添加
-          </Button>
-        </Box>
-        {error && <Typography color="error" variant="caption" sx={{ mt: 1, display: 'block' }}>{error}</Typography>}
-      </Paper>
+      {!readOnly && (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <TextField
+              size="small"
+              label="Name (API)"
+              value={newOption.name}
+              onChange={(e) => setNewOption({ ...newOption, name: e.target.value })}
+              placeholder="e.g. male"
+            />
+            <TextField
+              size="small"
+              label="Label (显示)"
+              value={newOption.label}
+              onChange={(e) => setNewOption({ ...newOption, label: e.target.value })}
+              placeholder="e.g. 男"
+            />
+            <Button 
+              variant="contained" 
+              startIcon={<AddIcon />}
+              onClick={handleAdd}
+              disabled={!newOption.name || !newOption.label}
+            >
+              添加
+            </Button>
+          </Box>
+          {error && <Typography color="error" variant="caption" sx={{ mt: 1, display: 'block' }}>{error}</Typography>}
+        </Paper>
+      )}
 
       <List>
         {options.map((opt, index) => (
@@ -194,23 +197,27 @@ export const PicklistOptionsEditor: React.FC<PicklistOptionsEditorProps> = ({ fi
                     secondary={opt.name} 
                   />
                   <ListItemSecondaryAction>
-                    <IconButton size="small" onClick={() => handleMove(index, 'up')} disabled={index === 0}>
+                    <IconButton size="small" onClick={() => handleMove(index, 'up')} disabled={readOnly || index === 0}>
                       <UpIcon />
                     </IconButton>
-                    <IconButton size="small" onClick={() => handleMove(index, 'down')} disabled={index === options.length - 1}>
+                    <IconButton size="small" onClick={() => handleMove(index, 'down')} disabled={readOnly || index === options.length - 1}>
                       <DownIcon />
                     </IconButton>
-                    <IconButton size="small" onClick={() => handleStartEdit(index)} color="info">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton 
-                      size="small" 
-                      onClick={() => handleDeleteClick(opt.name, opt.label, index)} 
-                      color="error"
-                      data-testid={`delete-option-${opt.name}`}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    {!readOnly && (
+                      <>
+                        <IconButton size="small" onClick={() => handleStartEdit(index)} color="info">
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton 
+                          size="small" 
+                          onClick={() => handleDeleteClick(opt.name, opt.label, index)} 
+                          color="error"
+                          data-testid={`delete-option-${opt.name}`}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
+                    )}
                   </ListItemSecondaryAction>
                 </>
               )}
