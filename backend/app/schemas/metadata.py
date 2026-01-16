@@ -32,7 +32,6 @@ class MetaFieldUpdate(BaseModel):
 class MetaField(MetaFieldBase):
     id: str 
     object_id: str
-    description: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)
 

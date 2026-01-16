@@ -92,8 +92,8 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   };
 
   const isPicklist = dataType === 'Picklist';
-  // We only want to show the Save button if we haven't just created a Picklist and are now editing options
-  // OR if we are in edit mode and just want to save metadata changes.
+  // True when a newly created Picklist field exists and we're now configuring its options;
+  // in this state we treat the dialog as being in the post-creation options-editing phase.
   const isNewPicklistJustCreated = !isEditMode && !!createdField && isPicklist;
   const showOptionsEditor = isPicklist && !!createdField;
 
@@ -169,12 +169,12 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
           />
         </Box>
 
-        {showOptionsEditor && (
+        {showOptionsEditor && createdField && (
           <>
             <Divider sx={{ my: 2 }} />
             <PicklistOptionsEditor 
-              fieldId={createdField!.id} 
-              initialOptions={createdField!.options || []} 
+              fieldId={createdField.id} 
+              initialOptions={createdField.options || []} 
               readOnly={isSystem}
             />
           </>

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from app.models.metadata import MetaObject, MetaField, MetaRole
-from app.schemas.metadata import MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaFieldUpdate, MetaRoleCreate, MetaRoleUpdate
+from app.schemas.metadata import MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
 from app.services.schema_service import schema_service
 import uuid
 import re
@@ -58,9 +58,9 @@ class MetaService:
             # System objects: only label is editable
             if obj_in.label is not None:
                 obj.label = obj_in.label
-            # Ignore description update for system objects or raise error?
-            # Design decision: Ignore silently or validation error?
-            # Assuming we just ignore what's not allowed based on "Disabled" UI state logic
+            # Raise error if attempting to modify description
+            if obj_in.description is not None:
+                raise ValueError("Cannot modify description of a system object")
         else:
             # Custom objects: label and description are editable
             if obj_in.label is not None:
@@ -240,7 +240,11 @@ class MetaService:
             # System fields: only label is editable
             if label is not None:
                 field.label = label
-            # Ignore is_required and description updates for system fields
+            # Raise error if attempting to modify restricted fields
+            if is_required is not None:
+                raise ValueError("Cannot modify 'is_required' of a system field")
+            if description is not None:
+                raise ValueError("Cannot modify 'description' of a system field")
         else:
             # Custom fields: label, description, is_required are editable
             if label is not None:
