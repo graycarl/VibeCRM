@@ -90,7 +90,7 @@ class DataService:
             
             # Allow sorting by system fields if needed, or strictly by defined fields
             # Here we strictly check against metadata fields plus common system fields
-            system_fields = ['created_at', 'updated_at', 'id']
+            system_fields = ['created_at', 'updated_at', 'id', 'uid']
             
             if valid_field or sort_field in system_fields:
                 # Sanitize sort order

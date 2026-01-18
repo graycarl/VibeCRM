@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import DynamicDataGrid from './DynamicDataGrid';
 import { GridSortModel } from '@mui/x-data-grid';
 
@@ -21,25 +21,6 @@ describe('DynamicDataGrid Sorting', () => {
     { id: '1', uid: '1', name: 'A', amount: 10, event_date: '2023-01-01' },
     { id: '2', uid: '2', name: 'B', amount: 20, event_date: '2023-01-02' },
   ];
-
-  it('enables sorting only for allowed types', () => {
-    const { container } = render(
-      <DynamicDataGrid 
-        fields={mockFields} 
-        rows={mockRows} 
-      />
-    );
-
-    // This is a bit tricky to test with implementation details of MUI DataGrid
-    // But we can inspect the props passed to columns if we could, 
-    // or check if sort icon appears / clickable area exists.
-    // However, simplest way in unit test is to check if column definitions are correct.
-    // Since we can't easily access internal state, we rely on behavior or snapshot?
-    
-    // Better approach: Check if clicking header triggers sort callback ONLY for allowed fields
-    // But DataGrid handles internal sort state if we don't control it.
-    // We are controlling it via server side props usually.
-  });
 
   it('calls onSortModelChange when a sortable column header is clicked', async () => {
     const handleSortChange = vi.fn();
@@ -64,7 +45,7 @@ describe('DynamicDataGrid Sorting', () => {
     fireEvent.click(sortButton!);
 
     // Wait for callback
-    // Note: MUI DataGrid might debouce or delay updates slightly?
+    // Note: MUI DataGrid might debounce or delay updates slightly?
     // Actually, checking if it was called with expected params.
     // By default, first click is ASC.
     

@@ -67,9 +67,9 @@ def test_list_records_sorting_date_asc(client: TestClient, db: Session, sorting_
 def test_list_records_sorting_invalid_field(client: TestClient, db: Session, sorting_setup):
     obj_name = sorting_setup
     
-    # Test Invalid Field (Should fallback to default created_at desc)
+    # Test Invalid Field: both sort_field and sort_order are ignored, falling back to default created_at DESC.
     # The default creation order is 10, 30, 20. 
-    # created_at desc means 20 (newest), 30, 10 (oldest)
+    # created_at DESC means 20 (newest), 30, 10 (oldest), regardless of the provided sort_order=asc.
     response = client.get(f"/api/v1/data/{obj_name}?sort_field=invalid_field&sort_order=asc")
     assert response.status_code == 200
     items = response.json()["items"]
