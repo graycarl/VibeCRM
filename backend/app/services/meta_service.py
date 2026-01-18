@@ -85,9 +85,9 @@ class MetaService:
     def get_field(self, db: Session, field_id: str) -> MetaField:
         return db.query(MetaField).filter(MetaField.id == field_id).first()
 
-    def create_field(self, db: Session, field_in: MetaFieldCreate) -> MetaField:
+    def create_field(self, db: Session, object_id: str, field_in: MetaFieldCreate) -> MetaField:
         # Get object to check existence and name
-        obj = self.get_object(db, field_in.object_id)
+        obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
         
@@ -103,7 +103,7 @@ class MetaService:
                     raise ValueError(f"Option name '{opt['name']}' must be lowercase letters, numbers, and underscores, and cannot start with a number.")
 
         db_field = MetaField(
-            object_id=field_in.object_id,
+            object_id=object_id,
             name=field_in.name,
             label=field_in.label,
             description=field_in.description,
