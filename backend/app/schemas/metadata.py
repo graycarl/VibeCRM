@@ -22,7 +22,7 @@ class MetaFieldBase(BaseModel):
     source: str = "custom"
 
 class MetaFieldCreate(MetaFieldBase):
-    pass 
+    object_id: str 
 
 class MetaFieldUpdate(BaseModel):
     label: Optional[str] = None

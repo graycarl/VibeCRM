@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { GridPaginationModel } from '@mui/x-data-grid';
+import { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
 import DynamicDataGrid from '../../components/data/DynamicDataGrid';
@@ -21,6 +21,7 @@ const ObjectRecordList = () => {
     page: 0,
     pageSize: 50,
   });
+  const [sortModel, setSortModel] = useState<GridSortModel>([]);
   const navigate = useNavigate();
   
   // To detect page size changes
@@ -50,7 +51,15 @@ const ObjectRecordList = () => {
       try {
           const skip = paginationModel.page * paginationModel.pageSize;
           const limit = paginationModel.pageSize;
-          const response = await dataApi.listRecords(objectName, skip, limit);
+          
+          let sortField = undefined;
+          let sortOrder = undefined;
+          if (sortModel.length > 0) {
+              sortField = sortModel[0].field;
+              sortOrder = sortModel[0].sort?.toUpperCase(); // asc or desc
+          }
+
+          const response = await dataApi.listRecords(objectName, skip, limit, sortField, sortOrder);
           setRecords(response.items);
           setTotalCount(response.total);
       } catch (err: any) {
@@ -59,13 +68,14 @@ const ObjectRecordList = () => {
       } finally {
           setLoading(false);
       }
-  }, [objectName, paginationModel.page, paginationModel.pageSize]);
+  }, [objectName, paginationModel.page, paginationModel.pageSize, sortModel]);
 
   useEffect(() => {
       if (objectName) {
           loadMetadata();
-          // Reset pagination when object changes
+          // Reset pagination and sort when object changes
           setPaginationModel({ page: 0, pageSize: 50 });
+          setSortModel([]);
           prevPageSize.current = 50;
       }
   }, [objectName]);
@@ -115,6 +125,8 @@ const ObjectRecordList = () => {
             rowCount={totalCount}
             paginationModel={paginationModel}
             onPaginationModelChange={handlePaginationModelChange}
+            sortModel={sortModel}
+            onSortModelChange={setSortModel}
             loading={loading}
             onRowClick={(row) => navigate(`/app/${objectName}/${row.uid}`)}
             actions={(row) => (
