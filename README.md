@@ -53,10 +53,10 @@ make dev
 ## TODO
 
 - [x] 完整的分页功能（当前为客户端分页）
-- [ ] 对 number 类型字段支持页面上指定排序
-- [ ] Custom Field 的 Name 必须以 cs_ 开头
-- [ ] System Picklist Field 的选项不允许修改
-- [ ] Custom Field 只有 Name, Type 等关键属性不允许修改，其他属性允许修改
+- [ ] 对 number 类型字段支持页面上指定排序和 Filter
+- [x] Custom Field 的 Name 必须以 cs_ 开头
+- [x] System Picklist Field 的选项不允许修改
+- [x] Custom Field 只有 Name, Type 等关键属性不允许修改，其他属性允许修改
 - [ ] 支持 Record Type 和 State 概念
 - [ ] 实现完整的 Lookup Field
 - [ ] 实现完整的 Metadata Field
