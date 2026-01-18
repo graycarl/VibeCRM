@@ -13,9 +13,13 @@ export interface PaginatedResponse<T> {
 }
 
 export const dataApi = {
-  listRecords: async (objectName: string, skip = 0, limit = 50): Promise<PaginatedResponse<any>> => {
+  listRecords: async (objectName: string, skip = 0, limit = 50, sortField?: string, sortOrder?: string): Promise<PaginatedResponse<any>> => {
+    const params: any = { skip, limit };
+    if (sortField) params.sort_field = sortField;
+    if (sortOrder) params.sort_order = sortOrder;
+
     const response = await axios.get(`${API_URL}/data/${objectName}`, {
-      params: { skip, limit },
+      params,
       headers: getAuthHeader()
     });
     return response.data;

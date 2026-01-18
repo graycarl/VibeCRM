@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DataGrid, GridColDef, GridRenderCellParams, GridPaginationModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { MetaField } from '../../services/metaApi';
 import { getOptionLabel } from '../../utils/metadata';
@@ -31,6 +31,16 @@ export interface DynamicDataGridProps {
   onPaginationModelChange?: (model: GridPaginationModel) => void;
 
   /**
+   * Current sort model.
+   */
+  sortModel?: GridSortModel;
+
+  /**
+   * Callback when sort model changes.
+   */
+  onSortModelChange?: (model: GridSortModel) => void;
+
+  /**
    * Loading state.
    */
   loading?: boolean;
@@ -52,6 +62,8 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
   rowCount,
   paginationModel,
   onPaginationModelChange,
+  sortModel,
+  onSortModelChange,
   loading = false,
   onRowClick,
   actions,
@@ -63,6 +75,7 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         headerName: field.label,
         flex: 1,
         minWidth: 100,
+        sortable: false, // Default to not sortable
       };
 
       const type = field.data_type || (field as any).type;
@@ -72,10 +85,12 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
           colDef.type = 'number';
           colDef.align = 'right';
           colDef.headerAlign = 'right';
+          colDef.sortable = true;
           break;
         case 'Date':
         case 'Datetime':
           colDef.type = 'string';
+          colDef.sortable = true;
           colDef.valueFormatter = (value: any) => {
             if (value == null || value === '') return '';
             try {
@@ -135,13 +150,15 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
         rowCount={paginationModel ? (rowCount ?? -1) : undefined}
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
+        sortingMode={sortModel ? "server" : "client"}
+        sortModel={sortModel}
+        onSortModelChange={onSortModelChange}
         pageSizeOptions={[10, 25, 50]}
         initialState={paginationModel ? undefined : {
           pagination: {
             paginationModel: { pageSize: 10 },
           },
         }}
-        disableColumnSorting
         disableColumnFilter
         disableRowSelectionOnClick
         sx={{

@@ -70,7 +70,7 @@ class DataService:
             return dict(result)
         return None
 
-    def list_records(self, db: Session, object_name: str, skip: int = 0, limit: int = 50) -> Dict[str, Any]:
+    def list_records(self, db: Session, object_name: str, skip: int = 0, limit: int = 50, sort_field: str = None, sort_order: str = None) -> Dict[str, Any]:
         # Check object existence first to avoid SQL injection on table name
         obj = meta_service.get_object_by_name(db, object_name)
         if not obj:
@@ -81,8 +81,28 @@ class DataService:
         # Count total records
         count_stmt = text(f"SELECT COUNT(*) FROM {table_name}")
         
+        # Determine sorting
+        order_clause = "created_at DESC"
+        
+        if sort_field:
+            # Security check: verify field exists in metadata
+            valid_field = next((f for f in obj.fields if f.name == sort_field), None)
+            
+            # Allow sorting by system fields if needed, or strictly by defined fields
+            # Here we strictly check against metadata fields plus common system fields
+            system_fields = ['created_at', 'updated_at', 'id', 'uid']
+            
+            if valid_field or sort_field in system_fields:
+                # Sanitize sort order
+                direction = "ASC" if sort_order and sort_order.upper() == "ASC" else "DESC"
+                
+                # Use quoted identifier to be safe (although we validated existence)
+                preparer = engine.dialect.identifier_preparer
+                safe_col = preparer.quote(sort_field)
+                order_clause = f"{safe_col} {direction}"
+
         # Fetch data
-        stmt = text(f"SELECT * FROM {table_name} ORDER BY created_at DESC LIMIT :limit OFFSET :skip")
+        stmt = text(f"SELECT * FROM {table_name} ORDER BY {order_clause} LIMIT :limit OFFSET :skip")
         
         with engine.connect() as conn:
             total = conn.execute(count_stmt).scalar()

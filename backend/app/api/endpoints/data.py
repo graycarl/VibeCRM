@@ -38,10 +38,12 @@ def list_records(
     object_name: str, 
     skip: int = 0, 
     limit: int = 50, 
+    sort_field: str = None,
+    sort_order: str = None,
     db: Session = Depends(get_db)
 ):
     try:
-        return data_service.list_records(db, object_name, skip, limit)
+        return data_service.list_records(db, object_name, skip, limit, sort_field, sort_order)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
