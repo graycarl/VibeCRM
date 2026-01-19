@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
-  InputAdornment
+  InputAdornment, FormControlLabel, Switch, Box, Divider
 } from '@mui/material';
 import { metaApi, MetaObject } from '../../services/metaApi';
+import { RecordTypeOptionsEditor } from './RecordTypeOptionsEditor';
 
 const CUSTOM_PREFIX = 'cs_';
 
@@ -18,44 +19,62 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
   const [name, setName] = useState('');
   const [label, setLabel] = useState('');
   const [description, setDescription] = useState('');
+  const [hasRecordType, setHasRecordType] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  // Need to reload full object to get record types if editing
+  const [fullObject, setFullObject] = useState<MetaObject | null>(null);
 
   const isEditMode = !!objectToEdit;
 
   useEffect(() => {
-    if (objectToEdit) {
-      // For editing, we display the full name
-      setName(objectToEdit.name);
-      setLabel(objectToEdit.label);
-      setDescription(objectToEdit.description || '');
-    } else {
-      // Reset for create mode
-      setName('');
-      setLabel('');
-      setDescription('');
-    }
+    const load = async () => {
+        if (objectToEdit && open) {
+            try {
+                const data = await metaApi.getObject(objectToEdit.id);
+                setFullObject(data);
+                setName(data.name);
+                setLabel(data.label);
+                setDescription(data.description || '');
+                setHasRecordType(!!data.has_record_type);
+            } catch (e) {
+                console.error("Failed to load object details", e);
+            }
+        } else if (!open) {
+            setFullObject(null);
+            setName('');
+            setLabel('');
+            setDescription('');
+            setHasRecordType(false);
+        }
+    };
+    load();
   }, [objectToEdit, open]);
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       if (isEditMode && objectToEdit) {
-        await metaApi.updateObject(objectToEdit.id, { label, description });
+        await metaApi.updateObject(objectToEdit.id, { 
+            label, 
+            description,
+            has_record_type: hasRecordType 
+        });
       } else {
         const fullName = CUSTOM_PREFIX + name;
-        await metaApi.createObject({ name: fullName, label, description, source: 'custom' });
+        await metaApi.createObject({ 
+            name: fullName, 
+            label, 
+            description, 
+            source: 'custom',
+            has_record_type: hasRecordType
+        });
       }
       onSuccess();
       onClose();
-      // Reset form if creating
-      if (!isEditMode) {
-        setName('');
-        setLabel('');
-        setDescription('');
-      }
-    } catch (error) {
+    } catch (error: any) {
       console.error(isEditMode ? "Failed to update object" : "Failed to create object", error);
-      alert(isEditMode ? "Failed to update object" : "Failed to create object");
+      alert((isEditMode ? "Failed to update object: " : "Failed to create object: ") + (error.response?.data?.detail || error.message));
     } finally {
       setLoading(false);
     }
@@ -68,44 +87,78 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
   // Description is disabled for system objects
   const isNameDisabled = isEditMode;
   const isDescriptionDisabled = isEditMode && isSystemObject;
+  // System objects: cannot toggle record type support (locked)
+  const isRecordTypeToggleDisabled = isSystemObject;
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{isEditMode ? 'Edit Object' : 'Create Custom Object'}</DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Label (e.g. Sales Order)"
-          fullWidth
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label={isEditMode ? "API Name" : "API Name (e.g. sales_order)"}
-          fullWidth
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          helperText={isEditMode ? "Cannot be changed after creation." : "Must be unique, lowercase, no spaces."}
-          disabled={isNameDisabled}
-          InputProps={!isEditMode ? {
-            startAdornment: (
-              <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
-            ),
-          } : undefined}
-        />
-        <TextField
-          margin="dense"
-          label="Description"
-          fullWidth
-          multiline
-          rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          disabled={isDescriptionDisabled}
-          helperText={isDescriptionDisabled ? "System object descriptions cannot be modified." : ""}
-        />
+        <Box display="flex" flexDirection="column" gap={2} mt={1}>
+            <TextField
+            autoFocus
+            label="Label (e.g. Sales Order)"
+            fullWidth
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            />
+            <TextField
+            label={isEditMode ? "API Name" : "API Name (e.g. sales_order)"}
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            helperText={isEditMode ? "Cannot be changed after creation." : "Must be unique, lowercase, no spaces."}
+            disabled={isNameDisabled}
+            InputProps={!isEditMode ? {
+                startAdornment: (
+                <InputAdornment position="start">{CUSTOM_PREFIX}</InputAdornment>
+                ),
+            } : undefined}
+            />
+            <TextField
+            label="Description"
+            fullWidth
+            multiline
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={isDescriptionDisabled}
+            helperText={isDescriptionDisabled ? "System object descriptions cannot be modified." : ""}
+            />
+            
+            <Divider />
+            
+            <Box>
+                <FormControlLabel 
+                    control={
+                        <Switch 
+                            checked={hasRecordType} 
+                            onChange={(e) => setHasRecordType(e.target.checked)} 
+                            disabled={isRecordTypeToggleDisabled}
+                        />
+                    }
+                    label="Enable Record Types"
+                />
+                <Typography variant="caption" display="block" color="textSecondary">
+                    Allows defining multiple sub-types (e.g. Professional, Enterprise) for this object.
+                    {isSystemObject && " (System setting locked)"}
+                </Typography>
+            </Box>
+
+            {/* Record Type Editor - Only visible in edit mode if enabled, or if creating and enabled (but we can't add options until object exists... so only in Edit mode) */}
+            {isEditMode && hasRecordType && fullObject && (
+                <RecordTypeOptionsEditor 
+                    objectId={fullObject.id}
+                    initialRecordTypes={fullObject.record_types || []}
+                    readOnly={isSystemObject}
+                />
+            )}
+            {!isEditMode && hasRecordType && (
+                <Typography variant="body2" color="warning.main">
+                    Note: You can configure record type options after creating the object.
+                </Typography>
+            )}
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

@@ -9,6 +9,8 @@ interface Props {
   fields: MetaField[];
   onSubmit: (data: any) => void;
   initialValues?: any;
+  readOnlyFields?: string[];
+  recordTypeLabels?: Record<string, string>;
 }
 
 const DEFAULT_INITIAL_VALUES = {};
@@ -34,7 +36,14 @@ const toUTCISO = (localString: string) => {
   return date.toISOString();
 };
 
-const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues = DEFAULT_INITIAL_VALUES }) => {
+const DynamicForm: React.FC<Props> = ({ 
+    object, 
+    fields, 
+    onSubmit, 
+    initialValues = DEFAULT_INITIAL_VALUES,
+    readOnlyFields = [],
+    recordTypeLabels = {}
+}) => {
   const { control, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: initialValues
   });
@@ -47,6 +56,29 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
 
   const renderField = (field: MetaField) => {
     const isSystemTimestamp = ['created_at', 'updated_at'].includes(field.name);
+    const isReadOnly = readOnlyFields.includes(field.name);
+    const isDisabled = isSystemTimestamp || isReadOnly;
+    
+    // Special handling for record_type field to show label instead of name
+    if (field.name === 'record_type' && isDisabled) {
+        return (
+          <Controller
+            name={field.name}
+            control={control}
+            render={({ field: { value } }) => (
+              <TextField
+                label={field.label}
+                fullWidth
+                variant="outlined"
+                // Show label if available, otherwise value
+                value={(value && recordTypeLabels[value]) ? recordTypeLabels[value] : (value || '')}
+                disabled
+                InputProps={{ readOnly: true }}
+              />
+            )}
+          />
+        );
+    }
 
     switch (field.data_type) {
       case 'Text':
@@ -62,7 +94,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={onChange}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -83,7 +115,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -97,7 +129,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
             control={control}
             render={({ field: { onChange, value } }) => (
               <FormControlLabel
-                control={<Checkbox checked={!!value} onChange={onChange} color="primary" disabled={isSystemTimestamp} />}
+                control={<Checkbox checked={!!value} onChange={onChange} color="primary" disabled={isDisabled} />}
                 label={field.label}
               />
             )}
@@ -118,7 +150,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 InputLabelProps={{ shrink: true }}
                 value={value || ''}
                 onChange={onChange}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -140,7 +172,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 InputLabelProps={{ shrink: true }}
                 value={toLocalDatetime(value)}
                 onChange={(e) => onChange(toUTCISO(e.target.value))}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />
@@ -159,7 +191,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 options={field.options || []}
                 value={value || null}
                 onChange={onChange}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
                 required={field.is_required}
@@ -180,7 +212,7 @@ const DynamicForm: React.FC<Props> = ({ object, fields, onSubmit, initialValues 
                 variant="outlined"
                 value={value || ''}
                 onChange={onChange}
-                disabled={isSystemTimestamp}
+                disabled={isDisabled}
                 error={!!errors[field.name]}
                 helperText={errors[field.name] ? '该字段必填' : ''}
               />

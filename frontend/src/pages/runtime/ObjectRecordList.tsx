@@ -4,10 +4,11 @@ import { Container, Typography, Box, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
-import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
+import { metaApi, MetaObject, MetaField, MetaObjectRecordType } from '../../services/metaApi';
 import { dataApi } from '../../services/dataApi';
 import DynamicDataGrid from '../../components/data/DynamicDataGrid';
 import { LoadingOverlay, ErrorAlert } from '../../components/common/Feedback';
+import { RecordTypeSelectorDialog } from '../../components/common/RecordTypeSelectorDialog';
 
 const ObjectRecordList = () => {
   const { objectName } = useParams<{ objectName: string }>();
@@ -22,9 +23,12 @@ const ObjectRecordList = () => {
     pageSize: 50,
   });
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
-  const navigate = useNavigate();
   
-  // To detect page size changes
+  // Record Type State
+  const [recordTypes, setRecordTypes] = useState<MetaObjectRecordType[]>([]);
+  const [rtDialogOpen, setRtDialogOpen] = useState(false);
+  
+  const navigate = useNavigate();
   const prevPageSize = useRef(50);
 
   const loadMetadata = async () => {
@@ -33,10 +37,16 @@ const ObjectRecordList = () => {
           const objects = await metaApi.getObjects();
           const obj = objects.find(o => o.name === objectName);
           if (obj) {
-              setObject(obj);
               const fullObj = await metaApi.getObject(obj.id);
+              setObject(fullObj); // Use full object with detailed props
               const allFields: MetaField[] = fullObj.fields || [];
               setFields(allFields);
+              
+              if (fullObj.has_record_type && fullObj.record_types) {
+                  setRecordTypes(fullObj.record_types);
+              } else {
+                  setRecordTypes([]);
+              }
           }
       } catch (err: any) {
           console.error("Failed to load metadata", err);
@@ -73,7 +83,6 @@ const ObjectRecordList = () => {
   useEffect(() => {
       if (objectName) {
           loadMetadata();
-          // Reset pagination and sort when object changes
           setPaginationModel({ page: 0, pageSize: 50 });
           setSortModel([]);
           prevPageSize.current = 50;
@@ -85,13 +94,32 @@ const ObjectRecordList = () => {
   }, [loadRecords]);
 
   const handlePaginationModelChange = (newModel: GridPaginationModel) => {
-    // If page size changed, reset to page 0 per specification
     if (newModel.pageSize !== prevPageSize.current) {
         prevPageSize.current = newModel.pageSize;
         setPaginationModel({ ...newModel, page: 0 });
     } else {
         setPaginationModel(newModel);
     }
+  };
+
+  const handleCreateClick = () => {
+      if (!object) return;
+      
+      if (object.has_record_type && recordTypes.length > 0) {
+          // If only one option, auto select
+          if (recordTypes.length === 1) {
+              navigate(`/app/${objectName}/new?record_type=${recordTypes[0].name}`);
+          } else {
+              setRtDialogOpen(true);
+          }
+      } else {
+          navigate(`/app/${objectName}/new`);
+      }
+  };
+  
+  const handleRecordTypeSelect = (rt: MetaObjectRecordType) => {
+      setRtDialogOpen(false);
+      navigate(`/app/${objectName}/new?record_type=${rt.name}`);
   };
 
   const handleDelete = async (uid: string) => {
@@ -105,6 +133,34 @@ const ObjectRecordList = () => {
           }
       }
   };
+  
+  // Transform records to include record type label if needed
+  const displayRecords = records.map(r => {
+      if (object?.has_record_type && r.record_type && recordTypes.length > 0) {
+          const rt = recordTypes.find(t => t.name === r.record_type);
+          return { ...r, record_type: rt ? rt.label : r.record_type };
+      }
+      return r;
+  });
+  
+  // Inject record_type pseudo-field if needed for display
+  const displayFields = [...fields];
+  if (object?.has_record_type) {
+      // Use label as field key if we mapped it, or just record_type
+      // But DynamicDataGrid uses field.name to lookup.
+      // Let's rely on DynamicDataGrid's logic or just inject a field definition.
+      if (!displayFields.find(f => f.name === 'record_type')) {
+        displayFields.unshift({
+            id: 'rt_pseudo',
+            object_id: object.id,
+            name: 'record_type', // Maps to raw value if we don't transform, or we can use valueGetter in DataGrid
+            label: 'Record Type',
+            data_type: 'Text', // It's text effectively
+            is_required: true,
+            source: 'system'
+        });
+      }
+  }
 
   if (!object && !error) return <LoadingOverlay />;
 
@@ -112,7 +168,7 @@ const ObjectRecordList = () => {
     <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
             <Typography variant="h4">{object?.label || objectName}</Typography>
-            <Button variant="contained" onClick={() => navigate(`/app/${objectName}/new`)} disabled={!object}>
+            <Button variant="contained" onClick={handleCreateClick} disabled={!object}>
                 新建 {object?.label || ''}
             </Button>
         </Box>
@@ -120,8 +176,8 @@ const ObjectRecordList = () => {
         {error && <ErrorAlert message={error} />}
 
         <DynamicDataGrid 
-            fields={fields} 
-            rows={records} 
+            fields={displayFields} 
+            rows={displayRecords} 
             rowCount={totalCount}
             paginationModel={paginationModel}
             onPaginationModelChange={handlePaginationModelChange}
@@ -139,6 +195,21 @@ const ObjectRecordList = () => {
                 </IconButton>
               </>
             )}
+            // Custom renderer or value getter logic could be passed here if DynamicDataGrid supported it more flexibly
+            // For now, we rely on `displayRecords` having `record_type` or `record_type_label`
+            // If field is 'record_type', DataGrid looks for row['record_type'].
+            // We want it to show label. 
+            // Quick fix: Replace 'record_type' value in displayRecords with label directly?
+            // Yes, done in displayRecords mapping above: actually we added `record_type_label` but kept `record_type`.
+            // If we simply overwrite `record_type` in `displayRecords`, it works for display.
+            // Let's refine the map above.
+        />
+        
+        <RecordTypeSelectorDialog
+            open={rtDialogOpen}
+            recordTypes={recordTypes}
+            onSelect={handleRecordTypeSelect}
+            onClose={() => setRtDialogOpen(false)}
         />
     </Container>
   );

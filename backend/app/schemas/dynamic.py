@@ -28,5 +28,21 @@ def create_dynamic_model(obj_meta):
         # Use 'is_required' attribute and Ellipsis (...) for required fields
         is_required = getattr(field, "is_required", getattr(field, "required", False))
         fields[field.name] = (field_type, ... if is_required else default)
+    
+    # Add record_type field if enabled
+    if getattr(obj_meta, 'has_record_type', False):
+        # Optional because validation handles it specifically, or logic handles updates.
+        # But for creation it is required. Pydantic can be loose here and let service validate.
+        fields['record_type'] = (Optional[str], None)
         
     return create_model(f"Dynamic_{obj_meta.name}", **fields)
+
+class RecordCreate(BaseModel):
+    # Base schema for creating a record, allowing extra fields dynamically
+    class Config:
+        extra = "allow"
+
+class RecordUpdate(BaseModel):
+    # Base schema for updating a record
+    class Config:
+        extra = "allow"

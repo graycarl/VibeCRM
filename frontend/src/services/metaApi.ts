@@ -1,42 +1,9 @@
 import axios from 'axios';
-import { PicklistOption } from '../types/metadata';
+import { PicklistOption, MetaObjectRecordType, MetaObject, MetaField, MetaRole } from '../types/metadata';
 
 const API_URL = 'http://localhost:8000/api/v1';
 
-export interface MetaObject {
-  id: string;
-  name: string;
-  label: string;
-  description?: string;
-  source: 'system' | 'custom';
-  created_at?: string;
-  /**
-   * Fields are only populated when fetching a single object via `getObject()`.
-   * When listing objects via `getObjects()`, this property is typically undefined.
-   */
-  fields?: MetaField[];
-}
-
-export interface MetaField {
-  id: string;
-  object_id: string;
-  name: string;
-  label: string;
-  description?: string;
-  data_type: 'Text' | 'Number' | 'Date' | 'Datetime' | 'Boolean' | 'Picklist' | 'Lookup' | 'Metadata';
-  options?: any;
-  is_required: boolean;
-  source: 'system' | 'custom';
-}
-
-export interface MetaRole {
-  id: string;
-  name: string;
-  label: string;
-  description?: string;
-  permissions?: any;
-  source: 'system' | 'custom';
-}
+export type { MetaObject, MetaField, MetaRole, MetaObjectRecordType };
 
 const getAuthHeader = () => {
     const token = localStorage.getItem('token');
@@ -59,7 +26,7 @@ export const metaApi = {
     return response.data;
   },
   
-  updateObject: async (id: string, data: { label?: string, description?: string }) => {
+  updateObject: async (id: string, data: { label?: string, description?: string, has_record_type?: boolean }) => {
     const response = await axios.patch<MetaObject>(`${API_URL}/meta/objects/${id}`, data, { headers: getAuthHeader() });
     return response.data;
   },
@@ -125,6 +92,33 @@ export const metaApi = {
       ? `${API_URL}/meta/fields/${fieldId}/options/${name}?migrate_to=${migrateTo}`
       : `${API_URL}/meta/fields/${fieldId}/options/${name}`;
     const response = await axios.delete<MetaField>(url, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  // Record Type Options
+  addRecordTypeOption: async (objectId: string, option: Partial<MetaObjectRecordType>) => {
+    const response = await axios.post<MetaObjectRecordType>(`${API_URL}/meta/objects/${objectId}/record-types`, option, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  updateRecordTypeOption: async (rtId: string, data: { label?: string, description?: string }) => {
+    const response = await axios.patch<MetaObjectRecordType>(`${API_URL}/meta/record-types/${rtId}`, data, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  deleteRecordTypeOption: async (rtId: string) => {
+    const response = await axios.delete(`${API_URL}/meta/record-types/${rtId}`, { headers: getAuthHeader() });
+    return response.data;
+  },
+  
+  reorderRecordTypeOptions: async (objectId: string, names: string[]) => {
+    // Note: The backend reorder endpoint expects names or IDs? 
+    // Checking backend `reorder_record_type_options` takes `id_list`.
+    // Let's adjust TS to pass IDs. 
+    // Wait, backend `reorder_options` (picklist) takes `names`. 
+    // Backend `reorder_record_type_options` takes `id_list` (List[str]).
+    // So here we should pass IDs.
+    const response = await axios.put<MetaObjectRecordType[]>(`${API_URL}/meta/objects/${objectId}/record-types/reorder`, { names }, { headers: getAuthHeader() });
     return response.data;
   }
 };
