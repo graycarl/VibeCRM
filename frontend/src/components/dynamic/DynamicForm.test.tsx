@@ -8,7 +8,9 @@ const mockObject: MetaObject = {
   id: '1',
   name: 'test_obj',
   label: 'Test Object',
-  source: 'custom'
+  source: 'custom',
+  created_at: new Date().toISOString(),
+  fields: []
 };
 
 const mockFields: MetaField[] = [

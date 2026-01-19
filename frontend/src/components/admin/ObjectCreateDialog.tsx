@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
-  InputAdornment, FormControlLabel, Switch, Box, Divider
+  InputAdornment, FormControlLabel, Switch, Box, Divider, Typography
 } from '@mui/material';
 import { metaApi, MetaObject } from '../../services/metaApi';
 import { RecordTypeOptionsEditor } from './RecordTypeOptionsEditor';
