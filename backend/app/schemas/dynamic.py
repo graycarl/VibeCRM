@@ -31,8 +31,6 @@ def create_dynamic_model(obj_meta):
     
     # Add record_type field if enabled
     if getattr(obj_meta, 'has_record_type', False):
-        # Optional because validation handles it specifically, or logic handles updates.
-        # But for creation it is required. Pydantic can be loose here and let service validate.
         fields['record_type'] = (Optional[str], None)
         
     return create_model(f"Dynamic_{obj_meta.name}", **fields)

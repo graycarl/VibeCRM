@@ -111,14 +111,12 @@ export const metaApi = {
     return response.data;
   },
   
-  reorderRecordTypeOptions: async (objectId: string, names: string[]) => {
-    // Note: The backend reorder endpoint expects names or IDs? 
-    // Checking backend `reorder_record_type_options` takes `id_list`.
-    // Let's adjust TS to pass IDs. 
-    // Wait, backend `reorder_options` (picklist) takes `names`. 
-    // Backend `reorder_record_type_options` takes `id_list` (List[str]).
-    // So here we should pass IDs.
-    const response = await axios.put<MetaObjectRecordType[]>(`${API_URL}/meta/objects/${objectId}/record-types/reorder`, { names }, { headers: getAuthHeader() });
+  reorderRecordTypeOptions: async (objectId: string, ids: string[]) => {
+    const response = await axios.put<MetaObjectRecordType[]>(
+      `${API_URL}/meta/objects/${objectId}/record-types/reorder`,
+      { id_list: ids },
+      { headers: getAuthHeader() }
+    );
     return response.data;
   }
 };

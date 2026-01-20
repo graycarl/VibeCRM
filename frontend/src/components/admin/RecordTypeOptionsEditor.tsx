@@ -192,16 +192,6 @@ export const RecordTypeOptionsEditor: React.FC<Props> = ({ objectId, initialReco
                     <IconButton size="small" onClick={() => handleMove(index, 'down')} disabled={readOnly || index === recordTypes.length - 1}>
                       <DownIcon />
                     </IconButton>
-                    
-                    {/* System options only allow label edit if permission allows, but logic says system options might be locked.
-                        For now, let's allow editing labels for system options as per our backend logic.
-                        However, if readOnly (passed from parent when object is system), block add/delete, but maybe allow edit?
-                        Current implementation: if readOnly prop is true, buttons are hidden.
-                        If object is system, readOnly is true. But we want to allow editing Labels of system types?
-                        Let's assume "readOnly" means "Full Lock". To support partial edit, we need finer grains.
-                        For MVP/Spec: "System source objects do not allow editing record_type config". 
-                        So full readOnly is correct for system objects.
-                    */}
                     {!readOnly && (
                         <>
                             <IconButton size="small" onClick={() => handleStartEdit(index)} color="info">

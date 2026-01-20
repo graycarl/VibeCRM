@@ -7,7 +7,8 @@ from app.schemas.metadata import (
     MetaField, MetaFieldCreate, MetaFieldUpdate,
     MetaRole, MetaRoleCreate, MetaRoleUpdate,
     PicklistOption, PicklistOptionUpdate, PicklistReorder,
-    MetaObjectRecordType, MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate, MetaObjectRecordTypeBase
+    MetaObjectRecordType, MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate, MetaObjectRecordTypeBase,
+    RecordTypeReorder
 )
 from app.services.meta_service import meta_service
 from app.services.data_service import data_service
@@ -172,8 +173,8 @@ def delete_record_type(rt_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.put("/objects/{object_id}/record-types/reorder", response_model=List[MetaObjectRecordType])
-def reorder_record_types(object_id: str, reorder: PicklistReorder, db: Session = Depends(get_db)):
+def reorder_record_types(object_id: str, reorder: RecordTypeReorder, db: Session = Depends(get_db)):
     try:
-        return meta_service.reorder_record_type_options(db, object_id, reorder.names)
+        return meta_service.reorder_record_type_options(db, object_id, reorder.id_list)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

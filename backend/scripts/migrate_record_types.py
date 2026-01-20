@@ -48,18 +48,18 @@ def migrate():
             
             if "professional" not in existing_rts:
                 meta_service.add_record_type_option(db, account.id, MetaObjectRecordTypeCreate(
-                    name="professional", label="Professional", description="Professional Account", source="system", order=0
+                    name="professional", label="Professional", description="Professional Account", source="system", order=1
                 ), allow_system_override=True)
             if "hospital" not in existing_rts:
                 meta_service.add_record_type_option(db, account.id, MetaObjectRecordTypeCreate(
-                    name="hospital", label="Hospital", description="Hospital Account", source="system", order=1
+                    name="hospital", label="Hospital", description="Hospital Account", source="system", order=2
                 ), allow_system_override=True)
             
             # Backfill data if needed (default to professional)
             # Check for records with null record_type
             with engine.begin() as conn:
-                update_stmt = text(f"UPDATE data_account SET record_type = 'professional' WHERE record_type IS NULL")
-                conn.execute(update_stmt)
+                update_stmt = text("UPDATE data_account SET record_type = :default_type WHERE record_type IS NULL")
+                conn.execute(update_stmt, {"default_type": "professional"})
             
         print("Migration completed successfully.")
     except Exception as e:

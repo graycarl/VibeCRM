@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, 
-  Button, List, ListItem, ListItemText, Typography,
+  Button, List, ListItemText, Typography,
   ListItemButton
 } from '@mui/material';
 import { MetaObjectRecordType } from '../../services/metaApi';

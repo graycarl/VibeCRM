@@ -100,14 +100,6 @@ class MetaService:
         db.commit()
         db.refresh(obj)
         
-        # Validation: if record_type enabled, must have at least one option? 
-        # Requirement says: "Admin Console ... when enabling ... must configure at least one option."
-        # However, typically this is done in steps. We enforce validation on *Data* entry, or perhaps check here?
-        # For now, we allow enabling without options but data entry will fail or UI will block saving object config.
-        # Strict backend enforcement: if enabling and options=0, maybe allow but runtime will fail?
-        # Requirement: "Enable record_type ... must configure at least one ... option". 
-        # This implies transactional update or UI flow. Let's rely on checking during record creation or UI prompt.
-        
         return obj
 
     def get_objects(self, db: Session, skip: int = 0, limit: int = 100):
@@ -169,24 +161,15 @@ class MetaService:
         obj = self.get_object(db, rt.object_id)
         
         # Permission logic
-        if rt.source == "system":
-             # System options: only label is editable? 
-             # Spec: "System source objects do not allow editing record_type config... Custom source allows editing".
-             # Assuming system source record types on system objects are locked.
-             if obj.source == "system":
-                 # Requirement: "system source objects do not allow editing record_type config" -> Implies READ ONLY.
-                 # But later spec says: "System objects adhere to strict permissions... custom allow flexible modification."
-                 # And: "record_type options... system objects follow source rules (system uneditable)".
-                 # However, usually labels are editable. Let's follow "System Integrity" rule: Label is editable.
-                 if rt_in.label is not None:
-                     rt.label = rt_in.label
-                 if rt_in.description is not None:
-                     raise ValueError("Cannot modify description of system record type")
+        if rt.source == "system" and obj.source == "system":
+            if rt_in.label is not None:
+                rt.label = rt_in.label
+            # Description changes are ignored for locked system record types
         else:
-             if rt_in.label is not None:
-                 rt.label = rt_in.label
-             if rt_in.description is not None:
-                 rt.description = rt_in.description
+            if rt_in.label is not None:
+                rt.label = rt_in.label
+            if rt_in.description is not None:
+                rt.description = rt_in.description
         
         db.add(rt)
         db.commit()

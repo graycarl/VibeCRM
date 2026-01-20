@@ -12,6 +12,9 @@ class PicklistOptionUpdate(BaseModel):
 class PicklistReorder(BaseModel):
     names: List[str]
 
+class RecordTypeReorder(BaseModel):
+    id_list: List[str]
+
 class MetaFieldBase(BaseModel):
     name: str
     label: str

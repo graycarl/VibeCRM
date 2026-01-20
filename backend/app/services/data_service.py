@@ -24,11 +24,8 @@ class DataService:
                     raise ValueError(f"Invalid record type '{data['record_type']}'. Valid options are: {', '.join(valid_rts)}")
             else:
                 # Update: forbid changing record_type
-                if "record_type" in data:
-                    # We can either silently drop it or raise error. 
-                    # Spec says "immutable". Let's drop it to be safe, or raise if it differs.
-                    # Simplest is to remove it from payload so it's not updated.
-                    data.pop("record_type", None)
+                if "record_type" in data and data["record_type"] is not None:
+                    raise ValueError("Record type cannot be modified after creation")
 
         for field in obj.fields:
             if field.data_type == 'Picklist' and field.name in data:
