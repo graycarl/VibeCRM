@@ -29,7 +29,6 @@ class MetaService:
         {"name": "created_at", "label": "Created At", "data_type": "Datetime", "is_required": False},
         {"name": "updated_at", "label": "Updated At", "data_type": "Datetime", "is_required": False},
         {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": False, "options": [{"name": "ref_object", "label": "user"}]},
-        {"name": "record_type", "label": "Record Type", "data_type": "Text", "is_required": False},
     ]
 
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
@@ -75,6 +74,19 @@ class MetaService:
                     options=field_def.get("options")
                 )
                 db.add(sys_field)
+            
+            # Conditionally add record_type field metadata
+            if db_obj.has_record_type:
+                rt_field = MetaField(
+                    object_id=db_obj.id,
+                    name="record_type",
+                    label="Record Type",
+                    data_type="Text",
+                    is_required=False,
+                    source="system"
+                )
+                db.add(rt_field)
+
             db.commit()
             
         except Exception as e:
