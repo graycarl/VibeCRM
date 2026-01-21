@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from sqlalchemy.orm import Session
 from app.services.meta_service import MetaService
 from app.schemas.metadata import MetaObjectCreate
@@ -13,7 +14,6 @@ class TestSystemFieldsAutoCreation:
 
     def test_system_fields_created_automatically(self, db: Session):
         """Test that system fields are automatically created when a new object is created."""
-        import uuid
         # Create a new custom object with unique name
         obj_in = MetaObjectCreate(
             name=f"cs_test_auto_fields_{uuid.uuid4().hex[:8]}",
@@ -41,7 +41,7 @@ class TestSystemFieldsAutoCreation:
         # Cleanup
         try:
             schema_service.drop_object_table(db_obj.name)
-        except:
+        except Exception:
             pass
         db.query(MetaField).filter(MetaField.object_id == db_obj.id).delete()
         db.delete(db_obj)
@@ -49,7 +49,6 @@ class TestSystemFieldsAutoCreation:
 
     def test_system_fields_have_correct_attributes(self, db: Session):
         """Test that system fields have correct attributes (source='system', correct data_types, etc.)."""
-        import uuid
         # Create a new custom object with unique name
         obj_in = MetaObjectCreate(
             name=f"cs_test_field_attrs_{uuid.uuid4().hex[:8]}",
@@ -105,7 +104,7 @@ class TestSystemFieldsAutoCreation:
         # Cleanup
         try:
             schema_service.drop_object_table(db_obj.name)
-        except:
+        except Exception:
             pass
         db.query(MetaField).filter(MetaField.object_id == db_obj.id).delete()
         db.delete(db_obj)
@@ -113,7 +112,6 @@ class TestSystemFieldsAutoCreation:
 
     def test_record_type_field_created_when_enabled(self, db: Session):
         """Test that record_type field is created when has_record_type=True."""
-        import uuid
         # Create a new custom object with record type enabled and unique name
         obj_in = MetaObjectCreate(
             name=f"cs_test_record_type_{uuid.uuid4().hex[:8]}",
@@ -145,7 +143,7 @@ class TestSystemFieldsAutoCreation:
         # Cleanup
         try:
             schema_service.drop_object_table(db_obj.name)
-        except:
+        except Exception:
             pass
         db.query(MetaField).filter(MetaField.object_id == db_obj.id).delete()
         db.delete(db_obj)
@@ -153,7 +151,6 @@ class TestSystemFieldsAutoCreation:
 
     def test_record_type_field_not_created_when_disabled(self, db: Session):
         """Test that record_type field is NOT created when has_record_type=False."""
-        import uuid
         # Create a new custom object with record type disabled and unique name
         obj_in = MetaObjectCreate(
             name=f"cs_test_no_record_type_{uuid.uuid4().hex[:8]}",
@@ -178,7 +175,7 @@ class TestSystemFieldsAutoCreation:
         # Cleanup
         try:
             schema_service.drop_object_table(db_obj.name)
-        except:
+        except Exception:
             pass
         db.query(MetaField).filter(MetaField.object_id == db_obj.id).delete()
         db.delete(db_obj)
@@ -186,7 +183,6 @@ class TestSystemFieldsAutoCreation:
 
     def test_system_fields_count(self, db: Session):
         """Test that the correct number of system fields are created."""
-        import uuid
         # Test without record_type
         obj_in_no_rt = MetaObjectCreate(
             name=f"cs_test_count_no_rt_{uuid.uuid4().hex[:8]}",
@@ -218,11 +214,11 @@ class TestSystemFieldsAutoCreation:
         # Cleanup
         try:
             schema_service.drop_object_table(db_obj_no_rt.name)
-        except:
+        except Exception:
             pass
         try:
             schema_service.drop_object_table(db_obj_with_rt.name)
-        except:
+        except Exception:
             pass
         db.query(MetaField).filter(MetaField.object_id == db_obj_no_rt.id).delete()
         db.delete(db_obj_no_rt)
