@@ -31,7 +31,7 @@ export interface MetaObject {
   label: string;
   description?: string | null;
   source: 'system' | 'custom';
-  created_at: string;
+  created_on: string;
   fields: MetaField[];
   has_record_type?: boolean;
   record_types?: MetaObjectRecordType[];

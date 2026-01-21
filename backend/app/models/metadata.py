@@ -15,7 +15,7 @@ class MetaObject(Base):
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source: Mapped[str] = mapped_column(String, nullable=False, default="custom") # system or custom
     has_record_type: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+    created_on: Mapped[datetime] = mapped_column(DateTime, default=func.now())
     
     fields: Mapped[List["MetaField"]] = relationship("MetaField", back_populates="object", cascade="all, delete-orphan")
     record_types: Mapped[List["MetaObjectRecordType"]] = relationship("MetaObjectRecordType", back_populates="object", cascade="all, delete-orphan", order_by="MetaObjectRecordType.order")
@@ -30,7 +30,7 @@ class MetaObjectRecordType(Base):
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source: Mapped[str] = mapped_column(String, nullable=False, default="custom")
     order: Mapped[int] = mapped_column(Integer, default=0)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+    created_on: Mapped[datetime] = mapped_column(DateTime, default=func.now())
 
     object: Mapped["MetaObject"] = relationship("MetaObject", back_populates="record_types")
     

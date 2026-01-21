@@ -9,7 +9,7 @@ const mockObject: MetaObject = {
   name: 'test_obj',
   label: 'Test Object',
   source: 'custom',
-  created_at: new Date().toISOString(),
+  created_on: new Date().toISOString(),
   fields: []
 };
 

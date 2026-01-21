@@ -56,14 +56,14 @@ class DataService:
         # Remove system managed fields from data to prevent override
         data.pop("id", None)
         data.pop("uid", None)
-        data.pop("created_at", None)
-        data.pop("updated_at", None)
+        data.pop("created_on", None)
+        data.pop("modified_on", None)
         data.pop("owner_id", None)
 
         insert_data = {
             "uid": record_uid,
-            "created_at": now,
-            "updated_at": now,
+            "created_on": now,
+            "modified_on": now,
             "owner_id": user_id,
             **data
         }
@@ -101,7 +101,7 @@ class DataService:
         count_stmt = text(f"SELECT COUNT(*) FROM {table_name}")
         
         # Determine sorting
-        order_clause = "created_at DESC"
+        order_clause = "created_on DESC"
         
         if sort_field:
             # Security check: verify field exists in metadata
@@ -109,7 +109,7 @@ class DataService:
             
             # Allow sorting by system fields if needed, or strictly by defined fields
             # Here we strictly check against metadata fields plus common system fields
-            system_fields = ['created_at', 'updated_at', 'id', 'uid']
+            system_fields = ['created_on', 'modified_on', 'id', 'uid']
             
             if valid_field or sort_field in system_fields:
                 # Sanitize sort order
@@ -143,13 +143,13 @@ class DataService:
         # Remove protected fields
         data.pop("id", None)
         data.pop("uid", None)
-        data.pop("created_at", None)
-        data.pop("updated_at", None)
+        data.pop("created_on", None)
+        data.pop("modified_on", None)
         
         if not data:
             return self.get_record(db, object_name, record_uid)
 
-        data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        data["modified_on"] = datetime.now(timezone.utc).isoformat()
         
         set_clauses = ", ".join([f"{k} = :{k}" for k in data.keys()])
         stmt = text(f"UPDATE {table_name} SET {set_clauses} WHERE uid = :uid")
