@@ -5,7 +5,7 @@
 - [x] System Metadata 只有 Label 允许修改，其他属性不允许修改
 - [x] 支持 Page List 上按 Number / datetime 字段排序
 - [x] 新增 Record Type 概念
-- [ ] 把 created_at 和 updated_at 改名为 created_on / updated_on
+- [x] 把 created_at 和 updated_at 改名为 created_on / modified_on
 - [ ] 新增 State 概念
 - [ ] 实现完整的 Lookup Field 功能
 - [ ] 实现完整的 Metadata Field 功能

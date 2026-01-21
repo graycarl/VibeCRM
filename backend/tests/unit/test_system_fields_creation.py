@@ -31,8 +31,8 @@ class TestSystemFieldsAutoCreation:
         
         # Verify all required system fields are present
         assert "uid" in field_names, "uid field should be created automatically"
-        assert "created_at" in field_names, "created_at field should be created automatically"
-        assert "updated_at" in field_names, "updated_at field should be created automatically"
+        assert "created_on" in field_names, "created_on field should be created automatically"
+        assert "modified_on" in field_names, "modified_on field should be created automatically"
         assert "owner_id" in field_names, "owner_id field should be created automatically"
         
         # Verify record_type is NOT created when has_record_type=False
@@ -72,21 +72,21 @@ class TestSystemFieldsAutoCreation:
         assert uid_field.is_required == True, "uid should be required"
         assert uid_field.label == "UID", "uid should have correct label"
         
-        # Test created_at field
-        created_at_field = fields_dict.get("created_at")
-        assert created_at_field is not None, "created_at field should exist"
-        assert created_at_field.source == "system", "created_at should have source='system'"
-        assert created_at_field.data_type == "Datetime", "created_at should have data_type='Datetime'"
-        assert created_at_field.is_required == True, "created_at should be required"
-        assert created_at_field.label == "Created At", "created_at should have correct label"
+        # Test created_on field
+        created_on_field = fields_dict.get("created_on")
+        assert created_on_field is not None, "created_on field should exist"
+        assert created_on_field.source == "system", "created_on should have source='system'"
+        assert created_on_field.data_type == "Datetime", "created_on should have data_type='Datetime'"
+        assert created_on_field.is_required == True, "created_on should be required"
+        assert created_on_field.label == "Created On", "created_on should have correct label"
         
-        # Test updated_at field
-        updated_at_field = fields_dict.get("updated_at")
-        assert updated_at_field is not None, "updated_at field should exist"
-        assert updated_at_field.source == "system", "updated_at should have source='system'"
-        assert updated_at_field.data_type == "Datetime", "updated_at should have data_type='Datetime'"
-        assert updated_at_field.is_required == True, "updated_at should be required"
-        assert updated_at_field.label == "Updated At", "updated_at should have correct label"
+        # Test modified_on field
+        modified_on_field = fields_dict.get("modified_on")
+        assert modified_on_field is not None, "modified_on field should exist"
+        assert modified_on_field.source == "system", "modified_on should have source='system'"
+        assert modified_on_field.data_type == "Datetime", "modified_on should have data_type='Datetime'"
+        assert modified_on_field.is_required == True, "modified_on should be required"
+        assert modified_on_field.label == "Modified On", "modified_on should have correct label"
         
         # Test owner_id field
         owner_id_field = fields_dict.get("owner_id")
@@ -170,7 +170,7 @@ class TestSystemFieldsAutoCreation:
         assert "record_type" not in field_names, "record_type field should NOT be created when has_record_type=False"
         
         # Verify only the 4 core system fields are present
-        assert len(fields) == 4, "Should have exactly 4 system fields (uid, created_at, updated_at, owner_id)"
+        assert len(fields) == 4, "Should have exactly 4 system fields (uid, created_on, modified_on, owner_id)"
         
         # Cleanup
         try:

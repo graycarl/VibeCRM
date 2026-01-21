@@ -14,7 +14,7 @@ describe('DynamicForm', () => {
   const mockFields: MetaField[] = [
     { id: 'f1', object_id: '1', name: 'name', label: 'Name', data_type: 'Text', is_required: true, source: 'custom' },
     { id: 'f2', object_id: '1', name: 'start_at', label: 'Start At', data_type: 'Datetime', is_required: false, source: 'custom' },
-    { id: 'f3', object_id: '1', name: 'created_at', label: 'Created At', data_type: 'Datetime', is_required: false, source: 'system' },
+    { id: 'f3', object_id: '1', name: 'created_on', label: 'Created On', data_type: 'Datetime', is_required: false, source: 'system' },
   ];
 
   it('renders datetime-local input for Datetime fields', () => {
@@ -67,11 +67,19 @@ describe('DynamicForm', () => {
     expect(submittedDate.toISOString()).toBe(new Date('2023-12-25T15:30').toISOString());
   });
 
-  it('disables created_at and updated_at fields', () => {
-    render(<DynamicForm object={mockObject} fields={mockFields} onSubmit={() => {}} />);
+  it('disables created_on and modified_on fields', () => {
+    // Add modified_on to fields for this test
+    const fieldsWithModifiedOn = [
+        ...mockFields,
+        { id: 'f4', object_id: '1', name: 'modified_on', label: 'Modified On', data_type: 'Datetime', is_required: false, source: 'system' }
+    ];
+    render(<DynamicForm object={mockObject} fields={fieldsWithModifiedOn} onSubmit={() => {}} />);
     
-    const createdAtInput = screen.getByLabelText('Created At');
-    expect(createdAtInput).toBeDisabled();
+    const createdOnInput = screen.getByLabelText('Created On');
+    expect(createdOnInput).toBeDisabled();
+
+    const modifiedOnInput = screen.getByLabelText('Modified On');
+    expect(modifiedOnInput).toBeDisabled();
     
     const nameInput = screen.getByLabelText('Name');
     expect(nameInput).not.toBeDisabled();

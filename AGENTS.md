@@ -58,7 +58,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 系统中的字段按照来源和用途分为三类：
 
-1.  **系统字段 (System Fields)**：由平台内核在元数据层自动创建和维护的系统字段，存在于所有对象的元数据定义中（如 `uid`, `created_at`，区别于物理表中的自增 `id` 字段，后者不作为元数据字段暴露）。用户无法删除或修改其核心属性。
+1.  **系统字段 (System Fields)**：由平台内核在元数据层自动创建 and 维护的系统字段，存在于所有对象的元数据定义中（如 `uid`, `created_on`，区别于物理表中的自增 `id` 字段，后者不作为元数据字段暴露）。用户无法删除或修改其核心属性。
 2.  **标准字段 (Standard Fields)**：系统预置对象（如 `User`）中包含的默认业务字段（如 `email`, `username`）。这些字段由系统预定义，但属于业务层。
 3.  **自定义字段 (Custom Fields)**：用户根据业务需求在标准对象或自定义对象上创建的字段。
 
@@ -69,8 +69,8 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 | 字段名 | 类型 | 说明 | 必须性 |
 | :--- | :--- | :--- | :--- |
 | `uid` | String | 全局唯一标识符 (UUID) | ✅ 必须 |
-| `created_at` | Datetime | 创建时间 (UTC) | ✅ 必须 |
-| `updated_at` | Datetime | 最后更新时间 (UTC) | ✅ 必须 |
+| `created_on` | Datetime | 创建时间 (UTC) | ✅ 必须 |
+| `modified_on` | Datetime | 最后更新时间 (UTC) | ✅ 必须 |
 | `owner_id` | Lookup | 所有者 (关联 User) | ✅ 必须 |
 | `record_type` | String | 记录类型 (用于业务分类) | ⚪️ 可选 |
 
@@ -90,7 +90,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 #### 详细说明
 
 1.  **标识符不可变 (Identity Immutable)**：所有元数据的唯一标识 `Name` 和基础类型 `Type` 一旦创建，均**不可修改**，以确保系统引用的稳定性。
-2.  **系统元数据保护 (System Integrity)**：系统预置的元数据（如 `User` 对象, `created_at` 字段）承载了核心业务逻辑。为了防止破坏系统功能，仅允许修改其对用户展示的 `Label`，其他属性（如描述、必填性、权限配置等）均受保护，不可修改。
+2.  **系统元数据保护 (System Integrity)**：系统预置的元数据（如 `User` 对象, `created_on` 字段）承载了核心业务逻辑。为了防止破坏系统功能，仅允许修改其对用户展示的 `Label`，其他属性（如描述、必填性、权限配置等）均受保护，不可修改。
 3.  **自定义元数据灵活 (Custom Flexibility)**：用户创建的元数据，除了标识符和类型外，允许灵活修改 `Label`、`Description` 以及其他配置项（如必填性、选项值等）。
 4.  **前端交互**：在编辑界面中，受限不可修改的属性应以 **Disabled (置灰)** 状态展示，明确告知用户该属性存在但当前不可变更。
 
@@ -157,7 +157,7 @@ frontend/
 
 - 数据库存储：UTC 格式 (ISO8601 字符串)
 - 前端显示：自动转换为用户本地时区
-- **系统时间戳**：所有对象默认包含 `created_at` 和 `updated_at` 字段，由后端自动维护，前端只读
+- **系统时间戳**：所有对象默认包含 `created_on` 和 `modified_on` 字段，由后端自动维护，前端只读
 
 ### 2. Picklist 字段处理
 
@@ -167,7 +167,7 @@ frontend/
 ### 3. 分页策略
 
 - 默认每页 50 条，支持 10/25/50 选项
-- 默认按 `created_at` 降序排列
+- 默认按 `created_on` 降序排列
 
 ---
 
