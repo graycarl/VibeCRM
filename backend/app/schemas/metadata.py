@@ -12,6 +12,9 @@ class PicklistOptionUpdate(BaseModel):
 class PicklistReorder(BaseModel):
     names: List[str]
 
+class RecordTypeReorder(BaseModel):
+    id_list: List[str]
+
 class MetaFieldBase(BaseModel):
     name: str
     label: str
@@ -40,6 +43,7 @@ class MetaObjectBase(BaseModel):
     label: str
     description: Optional[str] = None
     source: str = "custom"
+    has_record_type: bool = False
 
 class MetaObjectCreate(MetaObjectBase):
     pass
@@ -47,11 +51,34 @@ class MetaObjectCreate(MetaObjectBase):
 class MetaObjectUpdate(BaseModel):
     label: Optional[str] = None
     description: Optional[str] = None
+    has_record_type: Optional[bool] = None
+
+class MetaObjectRecordTypeBase(BaseModel):
+    name: str
+    label: str
+    description: Optional[str] = None
+    source: str = "custom"
+    order: int = 0
+
+class MetaObjectRecordTypeCreate(MetaObjectRecordTypeBase):
+    pass
+
+class MetaObjectRecordTypeUpdate(BaseModel):
+    label: Optional[str] = None
+    description: Optional[str] = None
+
+class MetaObjectRecordType(MetaObjectRecordTypeBase):
+    id: str
+    object_id: str
+    created_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)
 
 class MetaObject(MetaObjectBase):
     id: str
     created_at: datetime
     fields: List[MetaField] = []
+    record_types: List[MetaObjectRecordType] = []
 
     model_config = ConfigDict(from_attributes=True)
 

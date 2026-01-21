@@ -12,7 +12,7 @@ class SchemaService:
         metadata = MetaData()
         
         # Define standard columns
-        # id (PK), uid (UUID), created_at, updated_at, owner_id
+        # id (PK), uid (UUID), created_at, updated_at, owner_id, record_type
         table = Table(
             table_name,
             metadata,
@@ -20,7 +20,8 @@ class SchemaService:
             Column("uid", String(36), unique=True, nullable=False),
             Column("created_at", String), # Storing as ISO string
             Column("updated_at", String),
-            Column("owner_id", Integer, nullable=True) # FK to User (data_user.id)
+            Column("owner_id", Integer, nullable=True), # FK to User (data_user.id)
+            Column("record_type", String, nullable=True) # Storing record type name
         )
         
         with engine.begin() as conn:
@@ -53,6 +54,7 @@ class SchemaService:
             sql_type = "INTEGER" # FK ID
         elif data_type in ["Date", "Datetime"]:
             sql_type = "TEXT"
+        # record_type is just TEXT but handled via explicit creation or migrations
         
         with engine.begin() as conn:
             # Check if column already exists
@@ -60,6 +62,12 @@ class SchemaService:
             columns = [row[1] for row in conn.execute(check_stmt).fetchall()]
             if field_name not in columns:
                 conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {field_name} {sql_type}"))
+
+    def ensure_record_type_column(self, object_name: str):
+        """
+        Ensures record_type column exists (for migration of existing tables).
+        """
+        self.add_column(object_name, "record_type", "Text")
 
     def remove_column(self, object_name: str, field_name: str):
         """

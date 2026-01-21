@@ -6,7 +6,9 @@ from app.schemas.metadata import (
     MetaObject, MetaObjectCreate, MetaObjectUpdate,
     MetaField, MetaFieldCreate, MetaFieldUpdate,
     MetaRole, MetaRoleCreate, MetaRoleUpdate,
-    PicklistOption, PicklistOptionUpdate, PicklistReorder
+    PicklistOption, PicklistOptionUpdate, PicklistReorder,
+    MetaObjectRecordType, MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate, MetaObjectRecordTypeBase,
+    RecordTypeReorder
 )
 from app.services.meta_service import meta_service
 from app.services.data_service import data_service
@@ -139,5 +141,40 @@ def delete_option(
         # Perform migration before deleting from metadata
         data_service.migrate_picklist_values(db, field_id, name, migrate_to)
         return meta_service.delete_option(db, field_id, name)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Record Type Options Endpoints
+
+@router.post("/objects/{object_id}/record-types", response_model=MetaObjectRecordType)
+def create_record_type(object_id: str, rt_in: MetaObjectRecordTypeCreate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.add_record_type_option(db, object_id, rt_in)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.patch("/record-types/{rt_id}", response_model=MetaObjectRecordType)
+def update_record_type(rt_id: str, rt_in: MetaObjectRecordTypeUpdate, db: Session = Depends(get_db)):
+    try:
+        return meta_service.update_record_type_option(db, rt_id, rt_in)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.delete("/record-types/{rt_id}")
+def delete_record_type(rt_id: str, db: Session = Depends(get_db)):
+    try:
+        success = meta_service.delete_record_type_option(db, rt_id)
+        if not success:
+            raise HTTPException(status_code=404, detail="Record type not found")
+        return {"message": "Record type deleted"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/objects/{object_id}/record-types/reorder", response_model=List[MetaObjectRecordType])
+def reorder_record_types(object_id: str, reorder: RecordTypeReorder, db: Session = Depends(get_db)):
+    try:
+        return meta_service.reorder_record_type_options(db, object_id, reorder.id_list)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

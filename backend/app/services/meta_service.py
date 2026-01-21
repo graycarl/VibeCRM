@@ -1,8 +1,13 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import text, func
 from typing import Optional, List
-from app.models.metadata import MetaObject, MetaField, MetaRole
-from app.schemas.metadata import MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate
+from app.models.metadata import MetaObject, MetaField, MetaRole, MetaObjectRecordType
+from app.schemas.metadata import (
+    MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate,
+    MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate
+)
 from app.services.schema_service import schema_service
+from app.db.session import engine
 import uuid
 import re
 
@@ -31,7 +36,8 @@ class MetaService:
             name=obj_in.name,
             label=obj_in.label,
             description=obj_in.description,
-            source=obj_in.source
+            source=obj_in.source,
+            has_record_type=obj_in.has_record_type
         )
         db.add(db_obj)
         db.commit()
@@ -40,6 +46,9 @@ class MetaService:
         # Create physical table
         try:
             schema_service.create_object_table(db_obj.name)
+            # Ensure record type column if enabled
+            if db_obj.has_record_type:
+                 schema_service.ensure_record_type_column(db_obj.name)
         except Exception as e:
             # Rollback metadata if DDL fails
             db.delete(db_obj)
@@ -48,10 +57,29 @@ class MetaService:
         
         return db_obj
 
-    def update_object(self, db: Session, object_id: str, obj_in: MetaObjectUpdate) -> MetaObject:
+    def update_object(self, db: Session, object_id: str, obj_in: MetaObjectUpdate, allow_system_override: bool = False) -> MetaObject:
         obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
+
+        # Handle has_record_type change logic
+        if obj_in.has_record_type is not None and obj_in.has_record_type != obj.has_record_type:
+             if obj.source == "system" and not allow_system_override:
+                 raise ValueError("Cannot change 'has_record_type' for system objects")
+             
+             if obj.has_record_type:
+                 # Disabling record type
+                 # Check if any data exists for this object
+                 count_stmt = text(f"SELECT COUNT(*) FROM data_{obj.name}")
+                 count = db.execute(count_stmt).scalar()
+                 if count > 0:
+                     raise ValueError("Cannot disable record type when object has existing data records")
+             
+             obj.has_record_type = obj_in.has_record_type
+             # If enabling, ensure physical column exists (though create_object_table adds it by default, 
+             # older tables or during toggle we ensure it exists)
+             if obj.has_record_type:
+                 schema_service.ensure_record_type_column(obj.name)
 
         # Apply permissions logic
         if obj.source == "system":
@@ -71,6 +99,7 @@ class MetaService:
         db.add(obj)
         db.commit()
         db.refresh(obj)
+        
         return obj
 
     def get_objects(self, db: Session, skip: int = 0, limit: int = 100):
@@ -81,6 +110,116 @@ class MetaService:
         
     def get_object_by_name(self, db: Session, name: str):
         return db.query(MetaObject).filter(MetaObject.name == name).first()
+
+    # Record Type Options Management
+    def get_record_type_option(self, db: Session, rt_id: str) -> MetaObjectRecordType:
+        return db.query(MetaObjectRecordType).filter(MetaObjectRecordType.id == rt_id).first()
+
+    def add_record_type_option(self, db: Session, object_id: str, rt_in: MetaObjectRecordTypeCreate, allow_system_override: bool = False) -> MetaObjectRecordType:
+        obj = self.get_object(db, object_id)
+        if not obj:
+            raise ValueError("Object not found")
+        
+        # Permissions: system object options cannot be added
+        if obj.source == "system" and not allow_system_override:
+             raise ValueError("Cannot add record types to system objects")
+
+        # Name validation: lowercase letters, numbers, underscores
+        if not re.match(r'^[a-z_][a-z0-9_]*$', rt_in.name):
+            raise ValueError("Record type name must be lowercase letters, numbers, and underscores.")
+
+        # Check uniqueness
+        existing = db.query(MetaObjectRecordType).filter(
+            MetaObjectRecordType.object_id == object_id,
+            MetaObjectRecordType.name == rt_in.name
+        ).first()
+        if existing:
+            raise ValueError(f"Record type with name '{rt_in.name}' already exists for this object.")
+
+        # Determine order
+        max_order = db.query(func.max(MetaObjectRecordType.order)).filter(MetaObjectRecordType.object_id == object_id).scalar()
+        next_order = (max_order or 0) + 1
+
+        db_rt = MetaObjectRecordType(
+            object_id=object_id,
+            name=rt_in.name,
+            label=rt_in.label,
+            description=rt_in.description,
+            source=rt_in.source,
+            order=next_order
+        )
+        db.add(db_rt)
+        db.commit()
+        db.refresh(db_rt)
+        return db_rt
+
+    def update_record_type_option(self, db: Session, rt_id: str, rt_in: MetaObjectRecordTypeUpdate) -> MetaObjectRecordType:
+        rt = self.get_record_type_option(db, rt_id)
+        if not rt:
+            raise ValueError("Record type not found")
+        
+        obj = self.get_object(db, rt.object_id)
+        
+        # Permission logic
+        if rt.source == "system" and obj.source == "system":
+            if rt_in.label is not None:
+                rt.label = rt_in.label
+            # Description changes are ignored for locked system record types
+        else:
+            if rt_in.label is not None:
+                rt.label = rt_in.label
+            if rt_in.description is not None:
+                rt.description = rt_in.description
+        
+        db.add(rt)
+        db.commit()
+        db.refresh(rt)
+        return rt
+
+    def delete_record_type_option(self, db: Session, rt_id: str) -> bool:
+        rt = self.get_record_type_option(db, rt_id)
+        if not rt:
+            return False
+            
+        obj = self.get_object(db, rt.object_id)
+        
+        if obj.source == "system" or rt.source == "system":
+            raise ValueError("Cannot delete system record types")
+            
+        # Check for data usage
+        count_stmt = text(f"SELECT COUNT(*) FROM data_{obj.name} WHERE record_type = :rt_name")
+        count = db.execute(count_stmt, {"rt_name": rt.name}).scalar()
+        if count > 0:
+            raise ValueError(f"Cannot delete record type '{rt.name}' because it is used by {count} records.")
+            
+        db.delete(rt)
+        db.commit()
+        return True
+
+    def reorder_record_type_options(self, db: Session, object_id: str, id_list: List[str]) -> List[MetaObjectRecordType]:
+        obj = self.get_object(db, object_id)
+        if not obj:
+             raise ValueError("Object not found")
+        
+        # System objects usually don't allow reordering if completely locked, but let's allow reorder for custom at least.
+        # If system object, maybe allow reorder? Spec says "config uneditable". Let's block for system.
+        if obj.source == "system":
+             raise ValueError("Cannot reorder record types on system object")
+
+        rts = db.query(MetaObjectRecordType).filter(MetaObjectRecordType.object_id == object_id).all()
+        rt_map = {rt.id: rt for rt in rts}
+        
+        if len(id_list) != len(rts):
+             raise ValueError("Must provide all record type IDs for reordering")
+             
+        for i, rt_id in enumerate(id_list):
+            if rt_id in rt_map:
+                rt_map[rt_id].order = i
+                db.add(rt_map[rt_id])
+                
+        db.commit()
+        return db.query(MetaObjectRecordType).filter(MetaObjectRecordType.object_id == object_id).order_by(MetaObjectRecordType.order).all()
+
 
     def get_field(self, db: Session, field_id: str) -> MetaField:
         return db.query(MetaField).filter(MetaField.id == field_id).first()

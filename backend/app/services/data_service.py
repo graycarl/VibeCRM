@@ -7,11 +7,26 @@ import uuid
 from datetime import datetime, timezone
 
 class DataService:
-    def _validate_data(self, db: Session, object_name: str, data: Dict[str, Any]):
+    def _validate_data(self, db: Session, object_name: str, data: Dict[str, Any], is_create: bool = False):
         obj = meta_service.get_object_by_name(db, object_name)
         if not obj:
             raise ValueError(f"Object {object_name} not found")
         
+        # Record Type Validation
+        if obj.has_record_type:
+            if is_create:
+                if "record_type" not in data or not data["record_type"]:
+                     raise ValueError("Record type is required.")
+                
+                # Check valid option
+                valid_rts = [rt.name for rt in obj.record_types]
+                if data["record_type"] not in valid_rts:
+                    raise ValueError(f"Invalid record type '{data['record_type']}'. Valid options are: {', '.join(valid_rts)}")
+            else:
+                # Update: forbid changing record_type
+                if "record_type" in data and data["record_type"] is not None:
+                    raise ValueError("Record type cannot be modified after creation")
+
         for field in obj.fields:
             if field.data_type == 'Picklist' and field.name in data:
                 val = data[field.name]
@@ -24,7 +39,11 @@ class DataService:
                     raise ValueError(f"Invalid value '{val}' for picklist field '{field.name}'. Valid options are: {', '.join(valid_names)}")
 
     def create_record(self, db: Session, object_name: str, data: Dict[str, Any], user_id: int = None) -> Dict[str, Any]:
-        self._validate_data(db, object_name, data)
+        # Unwrap Pydantic model if passed
+        if hasattr(data, 'model_dump'):
+             data = data.model_dump(exclude_unset=True)
+        
+        self._validate_data(db, object_name, data, is_create=True)
         obj = meta_service.get_object_by_name(db, object_name)
         if not obj:
             raise ValueError(f"Object {object_name} not found")
@@ -114,7 +133,11 @@ class DataService:
         }
 
     def update_record(self, db: Session, object_name: str, record_uid: str, data: Dict[str, Any]) -> Dict[str, Any]:
-        self._validate_data(db, object_name, data)
+        # Unwrap Pydantic model if passed
+        if hasattr(data, 'model_dump'):
+             data = data.model_dump(exclude_unset=True)
+
+        self._validate_data(db, object_name, data, is_create=False)
         table_name = f"data_{object_name}"
         
         # Remove protected fields

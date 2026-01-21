@@ -153,7 +153,8 @@ frontend/
 
 ### 1. Python 后端
 
-- 使用 `uv run` 运行 Python 程序或脚本
+- 进入 backend 目录并使用 `uv run` 运行 Python 程序或脚本；
+- 开发新 feature 如何涉及到 DB 结构变更，不需要考虑 DB 迁移的工作，只需要确保在执行 seed db 后能够正确初始化正确的表结构即可；
 
 ### 2. React 前端
 

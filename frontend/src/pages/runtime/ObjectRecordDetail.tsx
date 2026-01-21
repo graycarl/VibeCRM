@@ -24,23 +24,47 @@ const ObjectRecordDetail = () => {
           const objects = await metaApi.getObjects();
           const obj = objects.find(o => o.name === objectName);
           if (obj) {
-              setObject(obj);
               const fullObj = await metaApi.getObject(obj.id);
-              const allFields: MetaField[] = (fullObj as any).fields || [];
+              setObject(fullObj);
+              const allFields: MetaField[] = fullObj.fields || [];
 
+              // Inject record_type field logic similar to Edit page
+              if (fullObj.has_record_type) {
+                  if (!allFields.find(f => f.name === 'record_type')) {
+                      allFields.unshift({
+                          id: 'rt_pseudo',
+                          object_id: fullObj.id,
+                          name: 'record_type',
+                          label: 'Record Type',
+                          data_type: 'Text', 
+                          is_required: true,
+                          source: 'system'
+                      });
+                  }
+              }
+
+              let orderedFields = allFields;
               try {
                   const layoutRes = await axios.get(`${API_URL}/meta/objects/${obj.id}/layouts`);
                   const layouts = layoutRes.data;
                   if (layouts.length > 0) {
                       const fieldNames = layouts[0].layout_config.sections[0].fields;
-                      const ordered = fieldNames.map((name: string) => allFields.find(f => f.name === name)).filter(Boolean);
-                      setFields(ordered);
+                      const layoutFields = fieldNames.map((name: string) => allFields.find(f => f.name === name)).filter(Boolean);
+                      
+                      // Ensure record_type is displayed if enabled
+                      if (fullObj.has_record_type && !layoutFields.find((f: any) => f.name === 'record_type')) {
+                          const rtField = allFields.find(f => f.name === 'record_type');
+                          if (rtField) layoutFields.unshift(rtField);
+                      }
+                      orderedFields = layoutFields;
                   } else {
-                      setFields(allFields);
+                      // Fallback: if record_type enabled, put it first in default order if not there
+                      // (already unshifted above)
                   }
               } catch (e) {
-                  setFields(allFields);
+                  // Ignore layout error
               }
+              setFields(orderedFields);
               
               const data = await dataApi.getRecord(objectName, uid);
               setRecord(data);
@@ -48,6 +72,21 @@ const ObjectRecordDetail = () => {
       };
       load();
   }, [objectName, uid]);
+  
+  const getDisplayValue = (field: MetaField, value: any) => {
+      if (field.name === 'record_type' && object?.has_record_type && object?.record_types) {
+          const rt = object.record_types.find(r => r.name === value);
+          return rt ? rt.label : value;
+      }
+      
+      if (field.data_type === 'Picklist') {
+          return getOptionLabel(field, value);
+      }
+      if (field.data_type === 'Boolean' || typeof value === 'boolean') {
+          return value ? '是' : '否';
+      }
+      return value || '-';
+  };
 
   if (!object || !record) return <LoadingOverlay />;
 
@@ -83,11 +122,7 @@ const ObjectRecordDetail = () => {
                             {field.label}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 0.5, minHeight: '1.5em' }}>
-                            {field.data_type === 'Picklist'
-                                ? getOptionLabel(field, record[field.name])
-                                : (typeof record[field.name] === 'boolean' 
-                                    ? (record[field.name] ? '是' : '否') 
-                                    : (record[field.name] || '-'))}
+                            {getDisplayValue(field, record[field.name])}
                         </Typography>
                     </Grid>
                 ))}
