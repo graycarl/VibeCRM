@@ -58,7 +58,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 系统中的字段按照来源和用途分为三类：
 
-1.  **系统字段 (System Fields)**：由平台内核自动创建和维护的底层字段，存在于所有对象中（如 `id`, `created_at`）。用户无法删除或修改其核心属性。
+1.  **系统字段 (System Fields)**：由平台内核自动创建和维护的底层字段，存在于所有对象中（如 `created_at`）。用户无法删除或修改其核心属性。
 2.  **标准字段 (Standard Fields)**：系统预置对象（如 `User`）中包含的默认业务字段（如 `email`, `username`）。这些字段由系统预定义，但属于业务层。
 3.  **自定义字段 (Custom Fields)**：用户根据业务需求在标准对象或自定义对象上创建的字段。
 
@@ -68,12 +68,13 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 | 字段名 | 类型 | 说明 | 必须性 |
 | :--- | :--- | :--- | :--- |
-| `id` | Integer | 数据库主键，自增 | ✅ 必须 |
 | `uid` | String | 全局唯一标识符 (UUID) | ✅ 必须 |
 | `created_at` | Datetime | 创建时间 (UTC) | ✅ 必须 |
 | `updated_at` | Datetime | 最后更新时间 (UTC) | ✅ 必须 |
 | `owner_id` | Lookup | 所有者 (关联 User) | ✅ 必须 |
 | `record_type` | String | 记录类型 (用于业务分类) | ⚪️ 可选 |
+
+> 注意：`id` 字段作为数据库内部主键，虽然存在于物理表中，但不作为元数据暴露给用户。
 
 ### 6. 元数据权限管理 (Metadata Permissions)
 
