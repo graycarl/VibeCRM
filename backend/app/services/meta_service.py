@@ -25,10 +25,10 @@ def validate_custom_name(name: str, source: str, entity_type: str) -> None:
 class MetaService:
     # System fields definition template
     SYSTEM_FIELDS = [
-        {"name": "uid", "label": "UID", "data_type": "Text", "is_required": False},
-        {"name": "created_at", "label": "Created At", "data_type": "Datetime", "is_required": False},
-        {"name": "updated_at", "label": "Updated At", "data_type": "Datetime", "is_required": False},
-        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": False, "options": [{"name": "ref_object", "label": "user"}]},
+        {"name": "uid", "label": "UID", "data_type": "Text", "is_required": True},
+        {"name": "created_at", "label": "Created At", "data_type": "Datetime", "is_required": True},
+        {"name": "updated_at", "label": "Updated At", "data_type": "Datetime", "is_required": True},
+        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "options": [{"name": "ref_object", "label": "user"}]},
     ]
 
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
