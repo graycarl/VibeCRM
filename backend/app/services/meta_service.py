@@ -26,8 +26,8 @@ class MetaService:
     # System fields definition template
     SYSTEM_FIELDS = [
         {"name": "uid", "label": "UID", "data_type": "Text", "is_required": True},
-        {"name": "created_at", "label": "Created At", "data_type": "Datetime", "is_required": True},
-        {"name": "updated_at", "label": "Updated At", "data_type": "Datetime", "is_required": True},
+        {"name": "created_on", "label": "Created On", "data_type": "Datetime", "is_required": True},
+        {"name": "modified_on", "label": "Modified On", "data_type": "Datetime", "is_required": True},
         {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "options": [{"name": "ref_object", "label": "user"}]},
     ]
 

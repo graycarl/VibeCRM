@@ -70,13 +70,13 @@ class MetaObjectRecordTypeUpdate(BaseModel):
 class MetaObjectRecordType(MetaObjectRecordTypeBase):
     id: str
     object_id: str
-    created_at: datetime
+    created_on: datetime
     
     model_config = ConfigDict(from_attributes=True)
 
 class MetaObject(MetaObjectBase):
     id: str
-    created_at: datetime
+    created_on: datetime
     fields: List[MetaField] = []
     record_types: List[MetaObjectRecordType] = []
 

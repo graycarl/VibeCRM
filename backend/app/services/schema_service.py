@@ -12,14 +12,14 @@ class SchemaService:
         metadata = MetaData()
         
         # Define standard columns
-        # id (PK), uid (UUID), created_at, updated_at, owner_id, record_type
+        # id (PK), uid (UUID), created_on, modified_on, owner_id, record_type
         table = Table(
             table_name,
             metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
             Column("uid", String(36), unique=True, nullable=False),
-            Column("created_at", String), # Storing as ISO string
-            Column("updated_at", String),
+            Column("created_on", String), # Storing as ISO string
+            Column("modified_on", String),
             Column("owner_id", Integer, nullable=True), # FK to User (data_user.id)
             Column("record_type", String, nullable=True) # Storing record type name
         )

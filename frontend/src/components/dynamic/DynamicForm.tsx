@@ -55,7 +55,7 @@ const DynamicForm: React.FC<Props> = ({
   }, [initialValues, reset]);
 
   const renderField = (field: MetaField) => {
-    const isSystemTimestamp = ['created_at', 'updated_at'].includes(field.name);
+    const isSystemTimestamp = ['created_on', 'modified_on'].includes(field.name);
     const isReadOnly = readOnlyFields.includes(field.name);
     const isDisabled = isSystemTimestamp || isReadOnly;
     
