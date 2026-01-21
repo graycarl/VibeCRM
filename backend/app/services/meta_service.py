@@ -23,6 +23,14 @@ def validate_custom_name(name: str, source: str, entity_type: str) -> None:
         )
 
 class MetaService:
+    # System fields definition template
+    SYSTEM_FIELDS = [
+        {"name": "uid", "label": "UID", "data_type": "Text", "is_required": True},
+        {"name": "created_at", "label": "Created At", "data_type": "Datetime", "is_required": True},
+        {"name": "updated_at", "label": "Updated At", "data_type": "Datetime", "is_required": True},
+        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "options": [{"name": "ref_object", "label": "user"}]},
+    ]
+
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
         # Validate custom prefix
         validate_custom_name(obj_in.name, obj_in.source, "Object")
@@ -49,6 +57,35 @@ class MetaService:
             # Ensure record type column if enabled
             if db_obj.has_record_type:
                  schema_service.ensure_record_type_column(db_obj.name)
+                 
+            # Create system fields metadata
+            # We skip schema_service.add_column because physical columns are already created by create_object_table
+            for field_def in self.SYSTEM_FIELDS:
+                sys_field = MetaField(
+                    object_id=db_obj.id,
+                    name=field_def["name"],
+                    label=field_def["label"],
+                    data_type=field_def["data_type"],
+                    is_required=field_def["is_required"],
+                    source="system",
+                    options=field_def.get("options")
+                )
+                db.add(sys_field)
+            
+            # Conditionally add record_type field metadata
+            if db_obj.has_record_type:
+                rt_field = MetaField(
+                    object_id=db_obj.id,
+                    name="record_type",
+                    label="Record Type",
+                    data_type="Text",
+                    is_required=False,
+                    source="system"
+                )
+                db.add(rt_field)
+
+            db.commit()
+            
         except Exception as e:
             # Rollback metadata if DDL fails
             db.delete(db_obj)
