@@ -38,14 +38,14 @@ def test_listview_lifecycle(client: TestClient):
     # 2. Create List View
     lv_data = {
         "name": "All Items",
-        "columns": ["name", "created_at"]
+        "columns": ["name", "created_on"]
     }
     lv_res = client.post(
         f"/api/v1/meta/objects/{obj_id}/list-views",
         json=lv_data
     )
     assert lv_res.status_code == 200
-    assert lv_res.json()["columns"] == ["name", "created_at"]
+    assert lv_res.json()["columns"] == ["name", "created_on"]
 
     # 3. Get List Views
     get_res = client.get(f"/api/v1/meta/objects/{obj_id}/list-views")
