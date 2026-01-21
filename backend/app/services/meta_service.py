@@ -62,8 +62,6 @@ class MetaService:
             # We skip schema_service.add_column because physical columns are already created by create_object_table
             system_fields = []
             for field_def in self.SYSTEM_FIELDS:
-                # For owner_id, we need to handle options format if it's special, 
-                # but here we just pass it as is matching the MetaField model expectations
                 sys_field = MetaField(
                     object_id=db_obj.id,
                     name=field_def["name"],
