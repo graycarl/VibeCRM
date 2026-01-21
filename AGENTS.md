@@ -35,7 +35,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 ### 3. 元数据核心概念
 
-- **Object (MetaObject)**：业务实体的元数据定义，包含 Label、API Name 等
+- **Object (MetaObject)**：对象（业务实体）的元数据定义，包含 Label、API Name 等
 - **Field (MetaField)**：对象属性的元数据定义，支持多种数据类型
 - **PageLayout**：定义对象详情页和编辑页的字段分组、顺序
 - **ListView**：定义对象列表页显示的列和筛选条件
@@ -54,7 +54,28 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 | `Picklist` | 单选列表 | TEXT (存储 name) |
 | `Lookup` | 查找关系 (1:N) | TEXT (存储目标 ID) |
 
-### 5. 元数据权限管理 (Metadata Permissions)
+### 5. 字段分类与系统字段 (Field Categories & System Fields)
+
+系统中的字段按照来源和用途分为三类：
+
+1.  **系统字段 (System Fields)**：由平台内核自动创建和维护的底层字段，存在于所有对象中（如 `id`, `created_at`）。用户无法删除或修改其核心属性。
+2.  **标准字段 (Standard Fields)**：系统预置对象（如 `User`）中包含的默认业务字段（如 `email`, `username`）。这些字段由系统预定义，但属于业务层。
+3.  **自定义字段 (Custom Fields)**：用户根据业务需求在标准对象或自定义对象上创建的字段。
+
+#### 核心系统字段列表
+
+每个对象在创建时，底层物理表均会自动包含以下**系统字段**：
+
+| 字段名 | 类型 | 说明 | 必须性 |
+| :--- | :--- | :--- | :--- |
+| `id` | Integer | 数据库主键，自增 | ✅ 必须 |
+| `uid` | String | 全局唯一标识符 (UUID) | ✅ 必须 |
+| `created_at` | Datetime | 创建时间 (UTC) | ✅ 必须 |
+| `updated_at` | Datetime | 最后更新时间 (UTC) | ✅ 必须 |
+| `owner_id` | Lookup | 所有者 (关联 User) | ✅ 必须 |
+| `record_type` | String | 记录类型 (用于业务分类) | ⚪️ 可选 |
+
+### 6. 元数据权限管理 (Metadata Permissions)
 
 为了保证系统的稳定性，同时提供足够的灵活性，我们对 System (系统预置) 和 Custom (用户自定义) 的元数据（包括对象、字段、角色等所有元数据实体）实施统一的修改权限控制。
 
