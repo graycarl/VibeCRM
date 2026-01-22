@@ -25,6 +25,8 @@ def create_dynamic_model(obj_meta):
             field_type = float
         elif field.data_type == 'Boolean':
             field_type = bool
+        elif field.data_type == 'Lookup':
+            field_type = int
         elif field.data_type == 'Date' or field.data_type == 'Datetime':
             field_type = Optional[str] # Simplified for now, can be datetime
             default = None

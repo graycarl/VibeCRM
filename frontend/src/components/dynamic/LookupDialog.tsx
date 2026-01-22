@@ -26,7 +26,7 @@ export const LookupDialog: React.FC<Props> = ({ open, onClose, objectName, onSel
   const loadRecords = async () => {
     setLoading(true);
     try {
-      const result = await dataApi.list(objectName, { limit: 100 });
+      const result = await dataApi.listRecords(objectName, 0, 100);
       setRecords(result.items);
     } catch (error) {
       console.error("Failed to load lookup records", error);
