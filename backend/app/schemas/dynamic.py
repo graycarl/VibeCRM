@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, List, Optional
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel, create_model, ConfigDict
 
 T = TypeVar("T")
 
@@ -41,10 +41,8 @@ def create_dynamic_model(obj_meta):
 
 class RecordCreate(BaseModel):
     # Base schema for creating a record, allowing extra fields dynamically
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
 
 class RecordUpdate(BaseModel):
     # Base schema for updating a record
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
