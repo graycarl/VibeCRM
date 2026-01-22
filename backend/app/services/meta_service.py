@@ -23,12 +23,12 @@ def validate_custom_name(name: str, source: str, entity_type: str) -> None:
         )
 
 class MetaService:
-    # System fields definition template
+        # System fields definition template
     SYSTEM_FIELDS = [
         {"name": "uid", "label": "UID", "data_type": "Text", "is_required": True},
         {"name": "created_on", "label": "Created On", "data_type": "Datetime", "is_required": True},
         {"name": "modified_on", "label": "Modified On", "data_type": "Datetime", "is_required": True},
-        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "options": [{"name": "ref_object", "label": "user"}]},
+        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "lookup_object": "user"},
     ]
 
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
@@ -40,12 +40,19 @@ class MetaService:
         if existing:
             raise ValueError(f"Object with name '{obj_in.name}' already exists.")
 
+        # If name_field is provided, it must be validated AFTER fields are created
+        # But fields are created LATER by the user (except system fields). 
+        # So during initial creation, name_field usually must be None or a system field (e.g. uid).
+        # We can relax validation here or restrict to system fields if provided.
+        # For simplicity, we allow it, but frontend should probably set it later or set to "uid".
+        
         db_obj = MetaObject(
             name=obj_in.name,
             label=obj_in.label,
             description=obj_in.description,
             source=obj_in.source,
-            has_record_type=obj_in.has_record_type
+            has_record_type=obj_in.has_record_type,
+            name_field=obj_in.name_field
         )
         db.add(db_obj)
         db.commit()
@@ -68,7 +75,8 @@ class MetaService:
                     data_type=field_def["data_type"],
                     is_required=field_def["is_required"],
                     source="system",
-                    options=field_def.get("options")
+                    options=field_def.get("options"),
+                    lookup_object=field_def.get("lookup_object")
                 )
                 db.add(sys_field)
             
@@ -98,6 +106,17 @@ class MetaService:
         obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
+
+        # Handle name_field update
+        if obj_in.name_field is not None:
+            # Verify field exists
+            field = db.query(MetaField).filter(
+                MetaField.object_id == object_id,
+                MetaField.name == obj_in.name_field
+            ).first()
+            if not field:
+                raise ValueError(f"Field '{obj_in.name_field}' does not exist on object '{obj.name}'")
+            obj.name_field = obj_in.name_field
 
         # Handle has_record_type change logic
         if obj_in.has_record_type is not None and obj_in.has_record_type != obj.has_record_type:
@@ -278,6 +297,17 @@ class MetaService:
                 if not re.match(r'^[a-z_][a-z0-9_]*$', opt['name']):
                     raise ValueError(f"Option name '{opt['name']}' must be lowercase letters, numbers, and underscores, and cannot start with a number.")
 
+        # Validate lookup_object
+        if field_in.data_type == "Lookup":
+            if not field_in.lookup_object:
+                raise ValueError("Lookup field must have a lookup_object specified.")
+            # Verify target object exists
+            target_obj = self.get_object_by_name(db, field_in.lookup_object)
+            if not target_obj:
+                raise ValueError(f"Lookup target object '{field_in.lookup_object}' not found.")
+        elif field_in.lookup_object:
+            raise ValueError("lookup_object can only be set for Lookup fields.")
+
         db_field = MetaField(
             object_id=object_id,
             name=field_in.name,
@@ -285,6 +315,7 @@ class MetaService:
             description=field_in.description,
             data_type=field_in.data_type,
             options=options,
+            lookup_object=field_in.lookup_object,
             is_required=field_in.is_required,
             source=field_in.source
         )

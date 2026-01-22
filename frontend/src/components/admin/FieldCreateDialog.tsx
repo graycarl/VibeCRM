@@ -4,7 +4,7 @@ import {
   FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox,
   Box, Divider, InputAdornment
 } from '@mui/material';
-import { metaApi, MetaField } from '../../services/metaApi';
+import { metaApi, MetaField, MetaObject } from '../../services/metaApi';
 import { PicklistOptionsEditor } from './PicklistOptionsEditor';
 
 const CUSTOM_PREFIX = 'cs_';
@@ -24,6 +24,8 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const [label, setLabel] = useState('');
   const [description, setDescription] = useState('');
   const [dataType, setDataType] = useState('Text');
+  const [lookupObject, setLookupObject] = useState('');
+  const [availableObjects, setAvailableObjects] = useState<MetaObject[]>([]);
   const [required, setRequired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createdField, setCreatedField] = useState<MetaField | null>(null);
@@ -32,11 +34,19 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const isSystem = fieldToEdit?.source === 'system';
 
   useEffect(() => {
+    // Load available objects for lookup
+    if (open) {
+      metaApi.getObjects().then(setAvailableObjects);
+    }
+  }, [open]);
+
+  useEffect(() => {
     if (fieldToEdit) {
       setName(fieldToEdit.name);
       setLabel(fieldToEdit.label);
       setDescription(fieldToEdit.description || '');
       setDataType(fieldToEdit.data_type);
+      setLookupObject(fieldToEdit.lookup_object || '');
       setRequired(fieldToEdit.is_required);
       setCreatedField(fieldToEdit);
     } else {
@@ -44,6 +54,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
       setLabel('');
       setDescription('');
       setDataType('Text');
+      setLookupObject('');
       setRequired(false);
       setCreatedField(null);
     }
@@ -74,6 +85,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         label, 
         description,
         data_type: dataType as any, 
+        lookup_object: dataType === 'Lookup' ? lookupObject : undefined,
         is_required: required,
         source: 'custom' 
       });
@@ -92,6 +104,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   };
 
   const isPicklist = dataType === 'Picklist';
+  const isLookup = dataType === 'Lookup';
   // True when a newly created Picklist field exists and we're now configuring its options;
   // in this state we treat the dialog as being in the post-creation options-editing phase.
   const isNewPicklistJustCreated = !isEditMode && !!createdField && isPicklist;
@@ -105,6 +118,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const isLabelDisabled = isFullyLocked;
   const isDescriptionDisabled = isFullyLocked || (isEditMode && isSystem);
   const isRequiredDisabled = isFullyLocked || (isEditMode && isSystem);
+  const isLookupObjectDisabled = isEditMode || isFullyLocked;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth={showOptionsEditor ? "sm" : "xs"}>
@@ -148,6 +162,22 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
               ))}
             </Select>
           </FormControl>
+
+          {isLookup && (
+            <FormControl fullWidth margin="dense">
+              <InputLabel>Referenced Object</InputLabel>
+              <Select
+                value={lookupObject}
+                label="Referenced Object"
+                onChange={(e) => setLookupObject(e.target.value)}
+                disabled={isLookupObjectDisabled}
+              >
+                {availableObjects.map(obj => (
+                  <MenuItem key={obj.id} value={obj.name}>{obj.label} ({obj.name})</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
 
           <TextField
             margin="dense"

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
-  InputAdornment, FormControlLabel, Switch, Box, Divider, Typography
+  InputAdornment, FormControlLabel, Switch, Box, Divider, Typography,
+  FormControl, InputLabel, Select, MenuItem
 } from '@mui/material';
-import { metaApi, MetaObject } from '../../services/metaApi';
+import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
 import { RecordTypeOptionsEditor } from './RecordTypeOptionsEditor';
 
 const CUSTOM_PREFIX = 'cs_';
@@ -20,6 +21,7 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
   const [label, setLabel] = useState('');
   const [description, setDescription] = useState('');
   const [hasRecordType, setHasRecordType] = useState(false);
+  const [nameField, setNameField] = useState('');
   const [loading, setLoading] = useState(false);
   
   // Need to reload full object to get record types if editing
@@ -37,6 +39,7 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
                 setLabel(data.label);
                 setDescription(data.description || '');
                 setHasRecordType(!!data.has_record_type);
+                setNameField(data.name_field || '');
             } catch (e) {
                 console.error("Failed to load object details", e);
             }
@@ -46,6 +49,7 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
             setLabel('');
             setDescription('');
             setHasRecordType(false);
+            setNameField('');
         }
     };
     load();
@@ -58,7 +62,8 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
         await metaApi.updateObject(objectToEdit.id, { 
             label, 
             description,
-            has_record_type: hasRecordType 
+            has_record_type: hasRecordType,
+            name_field: nameField || undefined
         });
       } else {
         const fullName = CUSTOM_PREFIX + name;
@@ -67,7 +72,8 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
             label, 
             description, 
             source: 'custom',
-            has_record_type: hasRecordType
+            has_record_type: hasRecordType,
+            name_field: nameField || undefined
         });
       }
       onSuccess();
@@ -126,6 +132,27 @@ const ObjectCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess, objectT
             helperText={isDescriptionDisabled ? "System object descriptions cannot be modified." : ""}
             />
             
+            {isEditMode && fullObject && (
+              <FormControl fullWidth>
+                <InputLabel>Name Field (Display Label)</InputLabel>
+                <Select
+                  value={nameField}
+                  label="Name Field (Display Label)"
+                  onChange={(e) => setNameField(e.target.value)}
+                >
+                  <MenuItem value=""><em>None (Use UID)</em></MenuItem>
+                  {fullObject.fields.map((field) => (
+                     <MenuItem key={field.id} value={field.name}>
+                        {field.label} ({field.name})
+                     </MenuItem>
+                  ))}
+                </Select>
+                <Typography variant="caption" color="textSecondary">
+                  The field value to display when this object is referenced by a Lookup field.
+                </Typography>
+              </FormControl>
+            )}
+
             <Divider />
             
             <Box>

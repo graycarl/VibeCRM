@@ -15,6 +15,7 @@ class MetaObject(Base):
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source: Mapped[str] = mapped_column(String, nullable=False, default="custom") # system or custom
     has_record_type: Mapped[bool] = mapped_column(Boolean, default=False)
+    name_field: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     created_on: Mapped[datetime] = mapped_column(DateTime, default=func.now())
     
     fields: Mapped[List["MetaField"]] = relationship("MetaField", back_populates="object", cascade="all, delete-orphan")
@@ -48,6 +49,7 @@ class MetaField(Base):
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     data_type: Mapped[str] = mapped_column(String, nullable=False)
     options: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
+    lookup_object: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     is_required: Mapped[bool] = mapped_column(Boolean, default=False)
     source: Mapped[str] = mapped_column(String, nullable=False, default="custom")
     

@@ -164,7 +164,16 @@ frontend/
 - 存储结构：`MetaField.options` 为 JSON 数组 `[{"name": "...", "label": "..."}]`
 - 显示逻辑：存储 `name`，显示 `label`
 
-### 3. 分页策略
+### 3. Lookup 字段处理
+
+- **配置**：`MetaField.lookup_object` 指定关联的目标对象 API Name。
+- **存储**：数据库中存储目标记录的物理主键 ID (Integer)。
+- **展示**：
+    - `MetaObject.name_field` 定义对象被引用时默认显示的字段（如 `name` 或 `title`）。
+    - 运行时读取记录时，后端会自动查询关联记录的 `name_field` 值，并以 `{field_name}__label` 形式注入响应数据中。
+    - 前端展示时优先使用该 Label，若未找到则回退显示 UID。
+
+### 4. 分页策略
 
 - 默认每页 50 条，支持 10/25/50 选项
 - 默认按 `created_on` 降序排列

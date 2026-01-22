@@ -26,7 +26,7 @@ export const metaApi = {
     return response.data;
   },
   
-  updateObject: async (id: string, data: { label?: string, description?: string, has_record_type?: boolean }) => {
+  updateObject: async (id: string, data: { label?: string, description?: string, has_record_type?: boolean, name_field?: string }) => {
     const response = await axios.patch<MetaObject>(`${API_URL}/meta/objects/${id}`, data, { headers: getAuthHeader() });
     return response.data;
   },
