@@ -82,6 +82,9 @@ const ObjectRecordDetail = () => {
       if (field.data_type === 'Picklist') {
           return getOptionLabel(field, value);
       }
+      if (field.data_type === 'Lookup') {
+          return record[`${field.name}__label`] || value || '-';
+      }
       if (field.data_type === 'Boolean' || typeof value === 'boolean') {
           return value ? '是' : '否';
       }

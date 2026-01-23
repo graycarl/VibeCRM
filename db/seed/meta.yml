@@ -11,6 +11,7 @@ objects:
     label: User
     description: System User
     source: system
+    name_field: name
     fields:
       - name: name
         label: Full Name
@@ -33,6 +34,7 @@ objects:
     label: Account
     description: Account Information
     source: system
+    name_field: name
     fields:
       - name: name
         label: Full Name

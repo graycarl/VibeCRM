@@ -1,10 +1,14 @@
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
 from app.db.session import engine
 from app.services.meta_service import meta_service
 from typing import Dict, Any, List, Optional
 import uuid
+import logging
 from datetime import datetime, timezone
+
+logger = logging.getLogger(__name__)
 
 class DataService:
     def _validate_data(self, db: Session, object_name: str, data: Dict[str, Any], is_create: bool = False):
@@ -37,6 +41,93 @@ class DataService:
                 valid_names = [opt['name'] for opt in options]
                 if val not in valid_names:
                     raise ValueError(f"Invalid value '{val}' for picklist field '{field.name}'. Valid options are: {', '.join(valid_names)}")
+            
+            # Validate Lookup
+            if field.data_type == 'Lookup' and field.name in data:
+                val = data[field.name]
+                if val is None or val == "":
+                    continue
+                
+                # Validate that val is an integer
+                if not isinstance(val, int):
+                    try:
+                        val = int(val)
+                        data[field.name] = val  # Update to integer
+                    except (ValueError, TypeError):
+                        raise ValueError(f"Lookup field '{field.name}' must be an integer ID. Got: {type(val).__name__}")
+                
+                # Check if target record exists
+                target_obj_name = field.lookup_object
+                if not target_obj_name:
+                    # Should not happen if created correctly
+                    continue
+
+                target_table = f"data_{target_obj_name}"
+                check_stmt = text(f"SELECT id FROM {target_table} WHERE id = :id")
+                exists = db.execute(check_stmt, {"id": val}).scalar()
+                if not exists:
+                     raise ValueError(f"Referenced record {val} not found in object '{target_obj_name}'")
+
+    def _enrich_lookup_fields(self, db: Session, object_name: str, records: List[Dict[str, Any]]):
+        if not records:
+            return
+        
+        obj = meta_service.get_object_by_name(db, object_name)
+        lookup_fields = [f for f in obj.fields if f.data_type == "Lookup" and f.lookup_object]
+        
+        if not lookup_fields:
+            return
+
+        # Prepare batch queries
+        for field in lookup_fields:
+            target_obj_name = field.lookup_object
+            target_obj = meta_service.get_object_by_name(db, target_obj_name)
+            if not target_obj:
+                continue
+
+            name_field = target_obj.name_field or "uid" # Fallback to uid
+            
+            # Collect IDs from records
+            ids = set()
+            for r in records:
+                val = r.get(field.name)
+                if val:
+                    ids.add(val)
+            
+            if not ids:
+                continue
+                
+            # Query target table
+            target_table = f"data_{target_obj_name}"
+            # Safety check column existence? name_field logic ensures valid field name or system field
+            # Assuming schema is sync.
+            
+            placeholders = ",".join([f":id_{i}" for i in range(len(ids))])
+            params = {f"id_{i}": id_val for i, id_val in enumerate(ids)}
+            
+            # Fetch id and display value
+            stmt = text(f"SELECT id, {name_field} as label FROM {target_table} WHERE id IN ({placeholders})")
+            
+            try:
+                rows = db.execute(stmt, params).mappings().all()
+                lookup_map = {row['id']: row['label'] for row in rows}
+                
+                # Update records
+                for r in records:
+                    val = r.get(field.name)
+                    if val in lookup_map:
+                        r[f"{field.name}__label"] = lookup_map[val]
+            except SQLAlchemyError as e:
+                # Log SQL-related errors with context
+                logger.error(
+                    f"Failed to enrich lookup field '{field.name}' on object '{object_name}': "
+                    f"target_object='{target_obj_name}', name_field='{name_field}', error={str(e)}"
+                )
+            except Exception as e:
+                # Log unexpected errors
+                logger.error(
+                    f"Unexpected error enriching lookup field '{field.name}' on object '{object_name}': {str(e)}"
+                )
 
     def create_record(self, db: Session, object_name: str, data: Dict[str, Any], user_id: int = None) -> Dict[str, Any]:
         # Unwrap Pydantic model if passed
@@ -86,7 +177,9 @@ class DataService:
             result = conn.execute(stmt, {"uid": record_uid}).mappings().fetchone()
             
         if result:
-            return dict(result)
+            record = dict(result)
+            self._enrich_lookup_fields(db, object_name, [record])
+            return record
         return None
 
     def list_records(self, db: Session, object_name: str, skip: int = 0, limit: int = 50, sort_field: str = None, sort_order: str = None) -> Dict[str, Any]:
@@ -127,8 +220,11 @@ class DataService:
             total = conn.execute(count_stmt).scalar()
             result = conn.execute(stmt, {"limit": limit, "skip": skip}).mappings().all()
             
+        items = [dict(row) for row in result]
+        self._enrich_lookup_fields(db, object_name, items)
+            
         return {
-            "items": [dict(row) for row in result],
+            "items": items,
             "total": total
         }
 
@@ -145,6 +241,10 @@ class DataService:
         data.pop("uid", None)
         data.pop("created_on", None)
         data.pop("modified_on", None)
+        # Remove any lookup label fields that might be passed back from frontend
+        keys_to_remove = [k for k in data.keys() if k.endswith("__label")]
+        for k in keys_to_remove:
+            del data[k]
         
         if not data:
             return self.get_record(db, object_name, record_uid)

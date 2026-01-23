@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, List, Optional
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel, create_model, ConfigDict
 
 T = TypeVar("T")
 
@@ -25,6 +25,8 @@ def create_dynamic_model(obj_meta):
             field_type = float
         elif field.data_type == 'Boolean':
             field_type = bool
+        elif field.data_type == 'Lookup':
+            field_type = int
         elif field.data_type == 'Date' or field.data_type == 'Datetime':
             field_type = Optional[str] # Simplified for now, can be datetime
             default = None
@@ -41,10 +43,8 @@ def create_dynamic_model(obj_meta):
 
 class RecordCreate(BaseModel):
     # Base schema for creating a record, allowing extra fields dynamically
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
 
 class RecordUpdate(BaseModel):
     # Base schema for updating a record
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")

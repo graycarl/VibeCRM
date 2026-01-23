@@ -22,30 +22,51 @@ def validate_custom_name(name: str, source: str, entity_type: str) -> None:
             f"Got: '{name}'"
         )
 
+def validate_identifier_format(name: str, entity_type: str) -> None:
+    """Validate that identifier follows safe SQL naming pattern to prevent injection."""
+    if not re.match(r'^[a-z_][a-z0-9_]*$', name):
+        raise ValueError(
+            f"{entity_type} name must contain only lowercase letters, numbers, and underscores, "
+            f"and cannot start with a number. Got: '{name}'"
+        )
+
 class MetaService:
-    # System fields definition template
+        # System fields definition template
     SYSTEM_FIELDS = [
         {"name": "uid", "label": "UID", "data_type": "Text", "is_required": True},
         {"name": "created_on", "label": "Created On", "data_type": "Datetime", "is_required": True},
         {"name": "modified_on", "label": "Modified On", "data_type": "Datetime", "is_required": True},
-        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "options": [{"name": "ref_object", "label": "user"}]},
+        {"name": "owner_id", "label": "Owner", "data_type": "Lookup", "is_required": True, "lookup_object": "user"},
     ]
 
     def create_object(self, db: Session, obj_in: MetaObjectCreate) -> MetaObject:
         # Validate custom prefix
         validate_custom_name(obj_in.name, obj_in.source, "Object")
         
+        # Validate identifier format for SQL safety
+        validate_identifier_format(obj_in.name, "Object")
+        
         # Check if name exists
         existing = db.query(MetaObject).filter(MetaObject.name == obj_in.name).first()
         if existing:
             raise ValueError(f"Object with name '{obj_in.name}' already exists.")
 
+        # If name_field is provided during creation, validate it's a system field
+        if obj_in.name_field:
+            system_field_names = {f["name"] for f in self.SYSTEM_FIELDS}
+            if obj_in.name_field not in system_field_names:
+                raise ValueError(
+                    f"During object creation, name_field can only be set to a system field. "
+                    f"Got: '{obj_in.name_field}'. Valid options: {', '.join(sorted(system_field_names))}"
+                )
+        
         db_obj = MetaObject(
             name=obj_in.name,
             label=obj_in.label,
             description=obj_in.description,
             source=obj_in.source,
-            has_record_type=obj_in.has_record_type
+            has_record_type=obj_in.has_record_type,
+            name_field=obj_in.name_field
         )
         db.add(db_obj)
         db.commit()
@@ -68,7 +89,8 @@ class MetaService:
                     data_type=field_def["data_type"],
                     is_required=field_def["is_required"],
                     source="system",
-                    options=field_def.get("options")
+                    options=field_def.get("options"),
+                    lookup_object=field_def.get("lookup_object")
                 )
                 db.add(sys_field)
             
@@ -98,6 +120,48 @@ class MetaService:
         obj = self.get_object(db, object_id)
         if not obj:
             raise ValueError("Object not found")
+
+        # Handle name_field update
+        if obj_in.name_field is not None:
+            # Verify field exists
+            field = db.query(MetaField).filter(
+                MetaField.object_id == object_id,
+                MetaField.name == obj_in.name_field
+            ).first()
+            if not field:
+                raise ValueError(f"Field '{obj_in.name_field}' does not exist on object '{obj.name}'")
+
+            # Additional validation to ensure the field is appropriate for use as a name/display field
+            # 1) Disallow system-managed fields (except uid which is safe)
+            system_field_names = {f["name"] for f in self.SYSTEM_FIELDS}
+            if field.name in system_field_names and field.name != "uid":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' is a system-managed field and cannot be used as the name field. "
+                    f"Only 'uid' is allowed among system fields."
+                )
+
+            # 2) Ensure the data_type is suitable for display
+            # Allow only simple display-friendly types (e.g., Text, Picklist)
+            allowed_name_field_types = {"Text", "Picklist"}
+            field_data_type = getattr(field, "data_type", None)
+            if field_data_type is None:
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' does not have a valid data_type and cannot be used as the name field."
+                )
+
+            # Disallow lookup fields explicitly to avoid circular dependencies in label resolution
+            if field_data_type == "Lookup":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' is a Lookup field and cannot be used as the name field."
+                )
+
+            if field_data_type not in allowed_name_field_types and field.name != "uid":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' has data_type '{field_data_type}' and cannot be used as the name field. "
+                    f"Allowed types: {', '.join(sorted(allowed_name_field_types))}."
+                )
+            
+            obj.name_field = obj_in.name_field
 
         # Handle has_record_type change logic
         if obj_in.has_record_type is not None and obj_in.has_record_type != obj.has_record_type:
@@ -269,6 +333,9 @@ class MetaService:
         
         # Validate custom prefix
         validate_custom_name(field_in.name, field_in.source, "Field")
+        
+        # Validate identifier format for SQL safety
+        validate_identifier_format(field_in.name, "Field")
             
         options = field_in.options
         if options:
@@ -278,6 +345,17 @@ class MetaService:
                 if not re.match(r'^[a-z_][a-z0-9_]*$', opt['name']):
                     raise ValueError(f"Option name '{opt['name']}' must be lowercase letters, numbers, and underscores, and cannot start with a number.")
 
+        # Validate lookup_object
+        if field_in.data_type == "Lookup":
+            if not field_in.lookup_object:
+                raise ValueError("Lookup field must have a lookup_object specified.")
+            # Verify target object exists
+            target_obj = self.get_object_by_name(db, field_in.lookup_object)
+            if not target_obj:
+                raise ValueError(f"Lookup target object '{field_in.lookup_object}' not found.")
+        elif field_in.lookup_object:
+            raise ValueError("lookup_object can only be set for Lookup fields.")
+
         db_field = MetaField(
             object_id=object_id,
             name=field_in.name,
@@ -285,6 +363,7 @@ class MetaService:
             description=field_in.description,
             data_type=field_in.data_type,
             options=options,
+            lookup_object=field_in.lookup_object,
             is_required=field_in.is_required,
             source=field_in.source
         )

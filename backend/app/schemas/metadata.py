@@ -21,6 +21,7 @@ class MetaFieldBase(BaseModel):
     description: Optional[str] = None
     data_type: str
     options: Optional[List[PicklistOption]] = None
+    lookup_object: Optional[str] = None
     is_required: bool = False
     source: str = "custom"
 
@@ -44,6 +45,7 @@ class MetaObjectBase(BaseModel):
     description: Optional[str] = None
     source: str = "custom"
     has_record_type: bool = False
+    name_field: Optional[str] = None
 
 class MetaObjectCreate(MetaObjectBase):
     pass
@@ -52,6 +54,7 @@ class MetaObjectUpdate(BaseModel):
     label: Optional[str] = None
     description: Optional[str] = None
     has_record_type: Optional[bool] = None
+    name_field: Optional[str] = None
 
 class MetaObjectRecordTypeBase(BaseModel):
     name: str

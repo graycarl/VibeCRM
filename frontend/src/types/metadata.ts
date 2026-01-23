@@ -21,6 +21,7 @@ export interface MetaField {
   description?: string | null;
   data_type: string;
   options?: PicklistOption[] | null;
+  lookup_object?: string | null;
   is_required: boolean;
   source: 'system' | 'custom';
 }
@@ -34,6 +35,7 @@ export interface MetaObject {
   created_on: string;
   fields: MetaField[];
   has_record_type?: boolean;
+  name_field?: string | null;
   record_types?: MetaObjectRecordType[];
 }
 
