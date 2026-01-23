@@ -40,7 +40,7 @@ const toUTCISO = (localString: string) => {
   return date.toISOString();
 };
 
-const HIDDEN_SYSTEM_FIELDS = ['created_on', 'modified_on'];
+const HIDDEN_SYSTEM_FIELDS = ['uid', 'created_on', 'modified_on'];
 
 const DynamicForm: React.FC<Props> = ({ 
     object, 
