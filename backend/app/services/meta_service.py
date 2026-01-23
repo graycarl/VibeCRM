@@ -51,13 +51,14 @@ class MetaService:
         if existing:
             raise ValueError(f"Object with name '{obj_in.name}' already exists.")
 
-        # If name_field is provided during creation, validate it's a system field
+        # If name_field is provided during creation, validate identifier and prevent restricted system fields
         if obj_in.name_field:
+            validate_identifier_format(obj_in.name_field, "name_field")
             system_field_names = {f["name"] for f in self.SYSTEM_FIELDS}
-            if obj_in.name_field not in system_field_names:
+            if obj_in.name_field in system_field_names and obj_in.name_field != "uid":
                 raise ValueError(
-                    f"During object creation, name_field can only be set to a system field. "
-                    f"Got: '{obj_in.name_field}'. Valid options: {', '.join(sorted(system_field_names))}"
+                    "System managed fields cannot be used as name_field during object creation. "
+                    "Only 'uid' is allowed among system fields."
                 )
         
         db_obj = MetaObject(
@@ -78,7 +79,7 @@ class MetaService:
             # Ensure record type column if enabled
             if db_obj.has_record_type:
                  schema_service.ensure_record_type_column(db_obj.name)
-                 
+
             # Create system fields metadata
             # We skip schema_service.add_column because physical columns are already created by create_object_table
             for field_def in self.SYSTEM_FIELDS:
@@ -123,6 +124,7 @@ class MetaService:
 
         # Handle name_field update
         if obj_in.name_field is not None:
+            validate_identifier_format(obj_in.name_field, "name_field")
             # Verify field exists
             field = db.query(MetaField).filter(
                 MetaField.object_id == object_id,
