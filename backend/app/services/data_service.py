@@ -1,10 +1,14 @@
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
 from app.db.session import engine
 from app.services.meta_service import meta_service
 from typing import Dict, Any, List, Optional
 import uuid
+import logging
 from datetime import datetime, timezone
+
+logger = logging.getLogger(__name__)
 
 class DataService:
     def _validate_data(self, db: Session, object_name: str, data: Dict[str, Any], is_create: bool = False):
@@ -44,8 +48,15 @@ class DataService:
                 if val is None or val == "":
                     continue
                 
+                # Validate that val is an integer
+                if not isinstance(val, int):
+                    try:
+                        val = int(val)
+                        data[field.name] = val  # Update to integer
+                    except (ValueError, TypeError):
+                        raise ValueError(f"Lookup field '{field.name}' must be an integer ID. Got: {type(val).__name__}")
+                
                 # Check if target record exists
-                # val should be an ID (Integer)
                 target_obj_name = field.lookup_object
                 if not target_obj_name:
                     # Should not happen if created correctly
@@ -106,10 +117,17 @@ class DataService:
                     val = r.get(field.name)
                     if val in lookup_map:
                         r[f"{field.name}__label"] = lookup_map[val]
+            except SQLAlchemyError as e:
+                # Log SQL-related errors with context
+                logger.error(
+                    f"Failed to enrich lookup field '{field.name}' on object '{object_name}': "
+                    f"target_object='{target_obj_name}', name_field='{name_field}', error={str(e)}"
+                )
             except Exception as e:
-                # If query fails (e.g. column missing), ignore enrichment
-                print(f"Failed to enrich lookup {field.name}: {e}")
-                pass
+                # Log unexpected errors
+                logger.error(
+                    f"Unexpected error enriching lookup field '{field.name}' on object '{object_name}': {str(e)}"
+                )
 
     def create_record(self, db: Session, object_name: str, data: Dict[str, Any], user_id: int = None) -> Dict[str, Any]:
         # Unwrap Pydantic model if passed

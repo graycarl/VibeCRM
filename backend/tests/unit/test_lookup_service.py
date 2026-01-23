@@ -13,7 +13,7 @@ def test_lookup_field_lifecycle(db):
     ))
     
     # Add a name field to Department (e.g., 'dept_name')
-    dept_name_field = meta_service.create_field(db_session, dept_obj.id, MetaFieldCreate(
+    meta_service.create_field(db_session, dept_obj.id, MetaFieldCreate(
         name="cs_dept_name",
         label="Department Name",
         data_type="Text",
@@ -114,7 +114,7 @@ def test_lookup_field_lifecycle(db):
     # So we can't easily unset it via current update_object logic unless we allow empty string or similar.
     # For test purpose, let's create a NEW object without name_field to test fallback.
     
-    no_name_obj = meta_service.create_object(db_session, MetaObjectCreate(
+    meta_service.create_object(db_session, MetaObjectCreate(
         name="cs_silent",
         label="Silent"
     ))

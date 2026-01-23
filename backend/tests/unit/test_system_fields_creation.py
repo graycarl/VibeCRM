@@ -95,7 +95,7 @@ class TestSystemFieldsAutoCreation:
         assert owner_id_field.data_type == "Lookup", "owner_id should have data_type='Lookup'"
         assert owner_id_field.is_required == True, "owner_id should be required"
         assert owner_id_field.label == "Owner", "owner_id should have correct label"
-        # Verify lookup config
+        # Verify that lookup configuration uses lookup_object field instead of options
         assert owner_id_field.lookup_object == "user", "owner_id should reference user object"
         assert owner_id_field.options is None, "owner_id should not have options"
         
