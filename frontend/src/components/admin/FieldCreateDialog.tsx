@@ -78,7 +78,13 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         return;
       }
 
-      // Create Mode
+      // Create Mode - Validate lookup_object is selected for Lookup fields
+      if (dataType === 'Lookup' && !lookupObject) {
+        alert('请为查找字段选择引用对象');
+        setLoading(false);
+        return;
+      }
+
       const fullName = CUSTOM_PREFIX + name;
       const field = await metaApi.createField(objectId, { 
         name: fullName, 

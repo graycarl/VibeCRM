@@ -22,6 +22,14 @@ def validate_custom_name(name: str, source: str, entity_type: str) -> None:
             f"Got: '{name}'"
         )
 
+def validate_identifier_format(name: str, entity_type: str) -> None:
+    """Validate that identifier follows safe SQL naming pattern to prevent injection."""
+    if not re.match(r'^[a-z_][a-z0-9_]*$', name):
+        raise ValueError(
+            f"{entity_type} name must contain only lowercase letters, numbers, and underscores, "
+            f"and cannot start with a number. Got: '{name}'"
+        )
+
 class MetaService:
         # System fields definition template
     SYSTEM_FIELDS = [
@@ -35,16 +43,22 @@ class MetaService:
         # Validate custom prefix
         validate_custom_name(obj_in.name, obj_in.source, "Object")
         
+        # Validate identifier format for SQL safety
+        validate_identifier_format(obj_in.name, "Object")
+        
         # Check if name exists
         existing = db.query(MetaObject).filter(MetaObject.name == obj_in.name).first()
         if existing:
             raise ValueError(f"Object with name '{obj_in.name}' already exists.")
 
-        # If name_field is provided, it must be validated AFTER fields are created
-        # But fields are created LATER by the user (except system fields). 
-        # So during initial creation, name_field usually must be None or a system field (e.g. uid).
-        # We can relax validation here or restrict to system fields if provided.
-        # For simplicity, we allow it, but frontend should probably set it later or set to "uid".
+        # If name_field is provided during creation, validate it's a system field
+        if obj_in.name_field:
+            system_field_names = {f["name"] for f in self.SYSTEM_FIELDS}
+            if obj_in.name_field not in system_field_names:
+                raise ValueError(
+                    f"During object creation, name_field can only be set to a system field. "
+                    f"Got: '{obj_in.name_field}'. Valid options: {', '.join(sorted(system_field_names))}"
+                )
         
         db_obj = MetaObject(
             name=obj_in.name,
@@ -116,6 +130,37 @@ class MetaService:
             ).first()
             if not field:
                 raise ValueError(f"Field '{obj_in.name_field}' does not exist on object '{obj.name}'")
+
+            # Additional validation to ensure the field is appropriate for use as a name/display field
+            # 1) Disallow system-managed fields (except uid which is safe)
+            system_field_names = {f["name"] for f in self.SYSTEM_FIELDS}
+            if field.name in system_field_names and field.name != "uid":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' is a system-managed field and cannot be used as the name field. "
+                    f"Only 'uid' is allowed among system fields."
+                )
+
+            # 2) Ensure the data_type is suitable for display
+            # Allow only simple display-friendly types (e.g., Text, Picklist)
+            allowed_name_field_types = {"Text", "Picklist"}
+            field_data_type = getattr(field, "data_type", None)
+            if field_data_type is None:
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' does not have a valid data_type and cannot be used as the name field."
+                )
+
+            # Disallow lookup fields explicitly to avoid circular dependencies in label resolution
+            if field_data_type == "Lookup":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' is a Lookup field and cannot be used as the name field."
+                )
+
+            if field_data_type not in allowed_name_field_types and field.name != "uid":
+                raise ValueError(
+                    f"Field '{obj_in.name_field}' has data_type '{field_data_type}' and cannot be used as the name field. "
+                    f"Allowed types: {', '.join(sorted(allowed_name_field_types))}."
+                )
+            
             obj.name_field = obj_in.name_field
 
         # Handle has_record_type change logic
@@ -288,6 +333,9 @@ class MetaService:
         
         # Validate custom prefix
         validate_custom_name(field_in.name, field_in.source, "Field")
+        
+        # Validate identifier format for SQL safety
+        validate_identifier_format(field_in.name, "Field")
             
         options = field_in.options
         if options:

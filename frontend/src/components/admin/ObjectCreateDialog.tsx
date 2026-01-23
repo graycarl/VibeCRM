@@ -4,7 +4,7 @@ import {
   InputAdornment, FormControlLabel, Switch, Box, Divider, Typography,
   FormControl, InputLabel, Select, MenuItem
 } from '@mui/material';
-import { metaApi, MetaObject, MetaField } from '../../services/metaApi';
+import { metaApi, MetaObject } from '../../services/metaApi';
 import { RecordTypeOptionsEditor } from './RecordTypeOptionsEditor';
 
 const CUSTOM_PREFIX = 'cs_';

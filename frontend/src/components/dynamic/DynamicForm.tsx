@@ -6,6 +6,7 @@ import { PicklistField } from './PicklistField';
 import { LookupDialog } from './LookupDialog';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { getDisplayLabel } from '../../utils/lookupUtils';
 
 interface Props {
   object: MetaObject;
@@ -90,25 +91,15 @@ const DynamicForm: React.FC<Props> = ({
         // Update form value (ID)
         setValue(activeLookupField.name, record.id, { shouldDirty: true });
         
-        // Update display label
-        // Try to guess display label again or just use what dialog logic did?
-        // Dialog logic logic isn't exposed here. 
-        // We do: try name, label, title, subject, etc. 
-        const candidates = ['name', 'title', 'subject', 'label', 'email', 'username', 'uid'];
-        let label = record.uid;
-        for (const key of candidates) {
-            if (record[key]) {
-                label = record[key];
-                break;
-            }
-        }
+        // Update display label using the shared utility
+        const label = getDisplayLabel(record);
         
         setLookupLabels(prev => ({ ...prev, [activeLookupField.name]: label }));
     }
   };
 
   const handleLookupClear = (fieldName: string) => {
-      setValue(fieldName, null, { shouldDirty: true });
+      setValue(fieldName, '', { shouldDirty: true });
       setLookupLabels(prev => {
           const next = { ...prev };
           delete next[fieldName];
@@ -275,24 +266,55 @@ const DynamicForm: React.FC<Props> = ({
                 value={lookupLabels[field.name] || value || ''}
                 disabled={isDisabled}
                 error={!!errors[field.name]}
-                helperText={errors[field.name] ? 'This field is required' : ''}
+                helperText={errors[field.name] ? '该字段必填' : ''}
+                FormHelperTextProps={{ id: `${field.name}-lookup-helper-text` }}
                 InputProps={{
                   readOnly: true,
                   endAdornment: !isDisabled && (
                     <InputAdornment position="end">
                        {value && (
-                           <IconButton onClick={() => handleLookupClear(field.name)} edge="end" sx={{ mr: 0.5 }}>
+                           <IconButton
+                             onClick={() => handleLookupClear(field.name)}
+                             edge="end"
+                             sx={{ mr: 0.5 }}
+                             aria-label={`清除${field.label}选择`}
+                           >
                                <ClearIcon />
                            </IconButton>
                        )}
-                       <IconButton onClick={() => handleLookupClick(field)} edge="end">
+                       <IconButton
+                         onClick={() => handleLookupClick(field)}
+                         edge="end"
+                         aria-label={`打开${field.label}选择对话框`}
+                       >
                            <SearchIcon />
                        </IconButton>
                     </InputAdornment>
                   )
                 }}
+                inputProps={{
+                  'aria-label': `${field.label}查找字段，按回车或空格键打开选择对话框`,
+                  'aria-describedby': `${field.name}-lookup-helper-text`,
+                }}
                 onClick={!isDisabled ? () => handleLookupClick(field) : undefined}
-                sx={{ cursor: !isDisabled ? 'pointer' : 'default', '& .MuiInputBase-input': { cursor: !isDisabled ? 'pointer' : 'default' } }}
+                onKeyDown={
+                  !isDisabled
+                    ? (event) => {
+                        if (
+                          event.key === 'Enter' ||
+                          event.key === ' ' ||
+                          event.key === 'Spacebar'
+                        ) {
+                          event.preventDefault();
+                          handleLookupClick(field);
+                        }
+                      }
+                    : undefined
+                }
+                sx={{
+                  cursor: !isDisabled ? 'pointer' : 'default',
+                  '& .MuiInputBase-input': { cursor: !isDisabled ? 'pointer' : 'default' }
+                }}
               />
             )}
           />
@@ -337,11 +359,11 @@ const DynamicForm: React.FC<Props> = ({
         </Box>
         </Box>
         
-        {activeLookupField && (
+        {activeLookupField && activeLookupField.lookup_object && (
             <LookupDialog
                 open={lookupOpen}
                 onClose={() => setLookupOpen(false)}
-                objectName={activeLookupField.lookup_object || ''}
+                objectName={activeLookupField.lookup_object}
                 onSelect={handleLookupSelect}
                 title={`Select ${activeLookupField.label}`}
             />
