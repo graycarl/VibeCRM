@@ -59,5 +59,3 @@
 | APP-CRUD-03 | 记录详情布局展示 | 布局已配置 | 打开记录详情 | 字段顺序与布局一致，Picklist/Lookup 显示 label |
 | APP-CRUD-04 | 删除记录 | - | 列表删除记录 | 记录被移除，刷新后仍不存在 |
 | APP-LOOKUP-01 | Lookup Dialog 交互 | 存在 Lookup 字段 | 编辑页点击 Lookup 字段 → 选择 → 清除 | Dialog 列出候选，选择后显示 label，可清除恢复为空 |
-
-> 可根据以上步骤编写 Playwright/Cypress 自动化脚本（无需登录流程），或手动执行以完成端到端验证。
