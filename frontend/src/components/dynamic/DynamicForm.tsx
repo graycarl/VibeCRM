@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper, InputAdornment, IconButton } from '@mui/material';
 import { MetaObject, MetaField } from '../../services/metaApi';
@@ -54,7 +54,10 @@ const DynamicForm: React.FC<Props> = ({
     defaultValues: initialValues
   });
   
-  const visibleFields = fields.filter(field => !HIDDEN_SYSTEM_FIELDS.includes(field.name));
+  const visibleFields = useMemo(
+    () => fields.filter(field => !HIDDEN_SYSTEM_FIELDS.includes(field.name)),
+    [fields]
+  );
 
   const [lookupOpen, setLookupOpen] = useState(false);
   const [activeLookupField, setActiveLookupField] = useState<MetaField | null>(null);
@@ -71,7 +74,7 @@ const DynamicForm: React.FC<Props> = ({
       
       // Extract initial labels
       const labels: Record<string, string> = {};
-      visibleFields.forEach(f => {
+      fields.forEach(f => {
          if (f.data_type === 'Lookup') {
              if (initialValues[f.name + '__label']) {
                  labels[f.name] = initialValues[f.name + '__label'];
@@ -82,7 +85,7 @@ const DynamicForm: React.FC<Props> = ({
       });
       setLookupLabels(labels);
     }
-  }, [initialValues, reset, visibleFields]);
+  }, [initialValues, reset, fields]);
 
   const handleLookupClick = (field: MetaField) => {
     setActiveLookupField(field);
