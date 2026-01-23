@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper, InputAdornment, IconButton } from '@mui/material';
 import { MetaObject, MetaField } from '../../services/metaApi';
@@ -40,6 +40,8 @@ const toUTCISO = (localString: string) => {
   return date.toISOString();
 };
 
+const HIDDEN_SYSTEM_FIELDS = ['uid', 'created_on', 'modified_on'];
+
 const DynamicForm: React.FC<Props> = ({ 
     object, 
     fields, 
@@ -52,6 +54,11 @@ const DynamicForm: React.FC<Props> = ({
     defaultValues: initialValues
   });
   
+  const visibleFields = useMemo(
+    () => fields.filter(field => !HIDDEN_SYSTEM_FIELDS.includes(field.name)),
+    [fields]
+  );
+
   const [lookupOpen, setLookupOpen] = useState(false);
   const [activeLookupField, setActiveLookupField] = useState<MetaField | null>(null);
 
@@ -61,7 +68,9 @@ const DynamicForm: React.FC<Props> = ({
 
   useEffect(() => {
     if (initialValues) {
-      reset(initialValues);
+      const cleanedValues = { ...initialValues };
+      HIDDEN_SYSTEM_FIELDS.forEach(fieldName => delete cleanedValues[fieldName]);
+      reset(cleanedValues);
       
       // Extract initial labels
       const labels: Record<string, string> = {};
@@ -70,10 +79,7 @@ const DynamicForm: React.FC<Props> = ({
              if (initialValues[f.name + '__label']) {
                  labels[f.name] = initialValues[f.name + '__label'];
              } else if (initialValues[f.name]) {
-                 // If we have value but no label, shows ID until loaded? 
-                 // Or maybe initialValues already came from list/get API which has enriched data.
-                 // If it's a create form, it's empty.
-                 labels[f.name] = initialValues[f.name]; 
+                 labels[f.name] = initialValues[f.name];
              }
          }
       });
@@ -346,7 +352,7 @@ const DynamicForm: React.FC<Props> = ({
     <Paper sx={{ p: 4, mt: 3, borderRadius: 2 }}>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-            {fields.map(field => (
+            {visibleFields.map(field => (
                 <Grid item xs={12} sm={field.data_type === 'Boolean' ? 12 : 6} key={field.id}>
                     {renderField(field)}
                 </Grid>

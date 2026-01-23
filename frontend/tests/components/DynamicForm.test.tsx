@@ -67,19 +67,15 @@ describe('DynamicForm', () => {
     expect(submittedDate.toISOString()).toBe(new Date('2023-12-25T15:30').toISOString());
   });
 
-  it('disables created_on and modified_on fields', () => {
-    // Add modified_on to fields for this test
+  it('hides created_on and modified_on fields', () => {
     const fieldsWithModifiedOn = [
         ...mockFields,
         { id: 'f4', object_id: '1', name: 'modified_on', label: 'Modified On', data_type: 'Datetime', is_required: false, source: 'system' }
     ];
     render(<DynamicForm object={mockObject} fields={fieldsWithModifiedOn} onSubmit={() => {}} />);
-    
-    const createdOnInput = screen.getByLabelText('Created On');
-    expect(createdOnInput).toBeDisabled();
 
-    const modifiedOnInput = screen.getByLabelText('Modified On');
-    expect(modifiedOnInput).toBeDisabled();
+    expect(screen.queryByLabelText('Created On')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Modified On')).not.toBeInTheDocument();
     
     const nameInput = screen.getByLabelText('Name');
     expect(nameInput).not.toBeDisabled();
