@@ -72,7 +72,7 @@ const DynamicForm: React.FC<Props> = ({
     // Fetch options for each metadata field
     const metadataFields = fields.filter(f => f.data_type === 'Metadata');
     metadataFields.forEach(f => {
-         metaApi.getMetadataOptions(f.metadata_name || undefined).then(opts => {
+         metaApi.getMetadataOptions(f.metadata_type || undefined).then(opts => {
              setMetadataOptionsMap(prev => ({...prev, [f.name]: opts}));
          });
     });

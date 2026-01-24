@@ -359,10 +359,10 @@ class MetaService:
         elif field_in.lookup_object:
             raise ValueError("lookup_object can only be set for Lookup fields.")
 
-        # Validate metadata_name
+        # Validate metadata_type
         if field_in.data_type == "Metadata":
-            if not field_in.metadata_name:
-                raise ValueError("Metadata field must have a metadata_name specified.")
+            if not field_in.metadata_type:
+                raise ValueError("Metadata field must have a metadata_type specified.")
             # We allow creating a metadata field even if the target metadata doesn't exist yet? 
             # Or should we validate it against the current available metadata?
             # The prompt implies a selector, so it should exist. 
@@ -370,8 +370,8 @@ class MetaService:
             # But strictly speaking, we should probably validate it.
             # For now, let's at least enforce the field presence.
             pass
-        elif field_in.metadata_name:
-            raise ValueError("metadata_name can only be set for Metadata fields.")
+        elif field_in.metadata_type:
+            raise ValueError("metadata_type can only be set for Metadata fields.")
 
         db_field = MetaField(
             object_id=object_id,
@@ -381,7 +381,7 @@ class MetaService:
             data_type=field_in.data_type,
             options=options,
             lookup_object=field_in.lookup_object,
-            metadata_name=field_in.metadata_name,
+            metadata_type=field_in.metadata_type,
             is_required=field_in.is_required,
             source=field_in.source
         )
@@ -595,14 +595,24 @@ class MetaService:
         db.commit()
         return True
 
-    def get_all_metadata_options(self, db: Session, metadata_name: Optional[str] = None) -> List[Dict[str, str]]:
+    def get_metadata_scopes(self) -> List[Dict[str, str]]:
+        return [
+            {"value": "object", "label": "Object"},
+            {"value": "field", "label": "Field"},
+            {"value": "role", "label": "Role"},
+            {"value": "record_type", "label": "Record Type"},
+            {"value": "layout", "label": "Layout"},
+            {"value": "list_view", "label": "List View"},
+        ]
+
+    def get_all_metadata_options(self, db: Session, metadata_type: Optional[str] = None) -> List[Dict[str, str]]:
         options = []
         
-        # Determine scope based on metadata_name
+        # Determine scope based on metadata_type
         # Supported scopes: 'object', 'field', 'role', 'layout', 'list_view', 'record_type'
         # Also supports 'role' directly to fetch roles
         
-        scope = metadata_name
+        scope = metadata_type
         
         # 1. Objects
         if not scope or scope == 'object':

@@ -29,7 +29,7 @@ objects:
       - name: role
         label: Role
         data_type: Metadata
-        metadata_name: role
+        metadata_type: role
         source: system
   - name: account
     label: Account

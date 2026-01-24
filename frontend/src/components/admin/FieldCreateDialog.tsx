@@ -19,15 +19,6 @@ interface Props {
 
 const FIELD_TYPES = ['Text', 'Number', 'Date', 'Datetime', 'Boolean', 'Picklist', 'Lookup', 'Metadata'];
 
-const METADATA_SCOPES = [
-    { value: 'object', label: 'Object' },
-    { value: 'field', label: 'Field' },
-    { value: 'role', label: 'Role' },
-    { value: 'record_type', label: 'Record Type' },
-    { value: 'layout', label: 'Layout' },
-    { value: 'list_view', label: 'List View' }
-];
-
 const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess, fieldToEdit }) => {
   const [name, setName] = useState('');
   const [label, setLabel] = useState('');
@@ -35,10 +26,11 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const [dataType, setDataType] = useState('Text');
   const [lookupObject, setLookupObject] = useState('');
   const [availableObjects, setAvailableObjects] = useState<MetaObject[]>([]);
-  const [metadataName, setMetadataName] = useState('');
+  const [metadataType, setMetadataType] = useState('');
   const [required, setRequired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createdField, setCreatedField] = useState<MetaField | null>(null);
+  const [metadataScopes, setMetadataScopes] = useState<{value: string, label: string}[]>([]);
 
   const isEditMode = !!fieldToEdit;
   const isSystem = fieldToEdit?.source === 'system';
@@ -47,6 +39,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
     // Load available objects for lookup
     if (open) {
       metaApi.getObjects().then(setAvailableObjects);
+      metaApi.getMetadataScopes().then(setMetadataScopes);
     }
   }, [open]);
 
@@ -59,7 +52,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
       setDescription(fieldToEdit.description || '');
       setDataType(fieldToEdit.data_type);
       setLookupObject(fieldToEdit.lookup_object || '');
-      setMetadataName(fieldToEdit.metadata_name || '');
+      setMetadataType(fieldToEdit.metadata_type || '');
       setRequired(fieldToEdit.is_required);
       setCreatedField(fieldToEdit);
     } else {
@@ -68,7 +61,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
       setDescription('');
       setDataType('Text');
       setLookupObject('');
-      setMetadataName('');
+      setMetadataType('');
       setRequired(false);
       setCreatedField(null);
     }
@@ -99,8 +92,8 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         return;
       }
 
-      // Validate metadata_name for Metadata fields
-      if (dataType === 'Metadata' && !metadataName) {
+      // Validate metadata_type for Metadata fields
+      if (dataType === 'Metadata' && !metadataType) {
         alert('请选择引用的元数据');
         setLoading(false);
         return;
@@ -113,7 +106,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
         description,
         data_type: dataType as any, 
         lookup_object: dataType === 'Lookup' ? lookupObject : undefined,
-        metadata_name: dataType === 'Metadata' ? metadataName : undefined,
+        metadata_type: dataType === 'Metadata' ? metadataType : undefined,
         is_required: required,
         source: 'custom' 
       });
@@ -210,10 +203,10 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
 
           {isMetadata && (
              <Autocomplete
-                options={METADATA_SCOPES}
+                options={metadataScopes}
                 getOptionLabel={(option) => option.label}
-                value={METADATA_SCOPES.find(opt => opt.value === metadataName) || null}
-                onChange={(_, newValue) => setMetadataName(newValue ? newValue.value : '')}
+                value={metadataScopes.find(opt => opt.value === metadataType) || null}
+                onChange={(_, newValue) => setMetadataType(newValue ? newValue.value : '')}
                 renderInput={(params) => <TextField {...params} label="Metadata Scope" margin="dense" />}
                 disabled={isLookupObjectDisabled}
                 fullWidth

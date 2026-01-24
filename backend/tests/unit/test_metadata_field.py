@@ -13,8 +13,8 @@ def test_metadata_field_lifecycle(db):
     ))
     
     # 2. Create Metadata Field
-    # Case 2a: Missing metadata_name
-    with pytest.raises(ValueError, match="metadata_name specified"):
+    # Case 2a: Missing metadata_type
+    with pytest.raises(ValueError, match="metadata_type specified"):
         meta_service.create_field(db_session, obj.id, MetaFieldCreate(
             name="cs_meta_ref",
             label="Meta Ref",
@@ -22,12 +22,12 @@ def test_metadata_field_lifecycle(db):
         ))
         
     # Case 2b: Success
-    # We use a dummy metadata_name for now as our validation is global
+    # We use a dummy metadata_type for now as our validation is global
     field = meta_service.create_field(db_session, obj.id, MetaFieldCreate(
         name="cs_meta_ref",
         label="Meta Ref",
         data_type="Metadata",
-        metadata_name="MetaObject" 
+        metadata_type="object" 
     ))
     
     # 3. Create Data Record referencing Metadata (Object)

@@ -120,11 +120,16 @@ export const metaApi = {
     return response.data;
   },
 
-  getMetadataOptions: async (metadataName?: string) => {
-    const url = metadataName 
-      ? `${API_URL}/meta/options?metadata_name=${metadataName}`
+  getMetadataOptions: async (metadataType?: string) => {
+    const url = metadataType 
+      ? `${API_URL}/meta/options?metadata_type=${metadataType}`
       : `${API_URL}/meta/options`;
     const response = await axios.get<{value: string, label: string}[]>(url, { headers: getAuthHeader() });
+    return response.data;
+  },
+
+  getMetadataScopes: async () => {
+    const response = await axios.get<{value: string, label: string}[]>(`${API_URL}/meta/scopes`, { headers: getAuthHeader() });
     return response.data;
   }
 };

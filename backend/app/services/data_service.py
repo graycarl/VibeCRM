@@ -149,7 +149,7 @@ class DataService:
             
         obj = meta_service.get_object_by_name(db, object_name)
         # Check if there are any Metadata fields
-        metadata_fields = [f for f in obj.fields if f.data_type == "Metadata" and f.metadata_name]
+        metadata_fields = [f for f in obj.fields if f.data_type == "Metadata" and f.metadata_type]
         
         if not metadata_fields:
             return
