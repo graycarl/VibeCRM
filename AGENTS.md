@@ -2,10 +2,12 @@
 
 VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Platform)**，类似于 Salesforce 的低代码开发能力。核心理念是通过配置元数据（对象、字段、页面布局等）来快速构建业务应用，系统在运行时根据元数据动态生成 UI 界面和数据库结构。
 
-## 需求分析
+## 需求分析模式
 
-当需求方案通过用户确认后，在 dev-logs 目录下创建对应的需求目录（如 req-002-some-feature-name），将方案写入目录下的 plan.md 文件；
+当需求方案通过用户确认后:
 
+1. 创建 feature 分支；
+2. 在 dev-logs 目录下创建对应的需求目录（如 req-002-some-feature-name），将方案写入目录下的 plan.md 文件；
 
 ## 核心技术栈
 
@@ -54,4 +56,5 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 ## 其他文档
 
-- docs/arch.md - 系统架构设计文档，包含技术栈、数据存储策略、元数据核心概念、字段类型等内容；
+- **[docs/arch.md](docs/arch.md)**: 系统架构设计文档。**阅读场景**：需要理解底层设计原理（如存储方案、DDL 机制）、核心业务规范（字段类型、权限逻辑）时查阅。
+- **[docs/code-structure.md](docs/code-structure.md)**: 代码结构指南。**阅读场景**：需要快速定位具体功能对应的源码文件位置、了解前后端目录索引时查阅。
