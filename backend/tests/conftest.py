@@ -23,7 +23,9 @@ from unittest.mock import patch
 @pytest.fixture(scope="module", autouse=True)
 def mock_engines():
     with patch("app.services.schema_service.engine", test_engine), \
-         patch("app.services.data_service.engine", test_engine):
+         patch("app.services.data_service.engine", test_engine), \
+         patch("app.db.seeds.engine", test_engine), \
+         patch("app.services.auth_service.engine", test_engine):
         yield
 
 from app.db.seeds import seed_db
