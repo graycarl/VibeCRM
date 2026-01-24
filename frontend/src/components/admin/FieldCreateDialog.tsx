@@ -19,6 +19,15 @@ interface Props {
 
 const FIELD_TYPES = ['Text', 'Number', 'Date', 'Datetime', 'Boolean', 'Picklist', 'Lookup', 'Metadata'];
 
+const METADATA_SCOPES = [
+    { value: 'object', label: 'Object' },
+    { value: 'field', label: 'Field' },
+    { value: 'role', label: 'Role' },
+    { value: 'record_type', label: 'Record Type' },
+    { value: 'layout', label: 'Layout' },
+    { value: 'list_view', label: 'List View' }
+];
+
 const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess, fieldToEdit }) => {
   const [name, setName] = useState('');
   const [label, setLabel] = useState('');
@@ -27,7 +36,6 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
   const [lookupObject, setLookupObject] = useState('');
   const [availableObjects, setAvailableObjects] = useState<MetaObject[]>([]);
   const [metadataName, setMetadataName] = useState('');
-  const [metadataOptions, setMetadataOptions] = useState<{value: string, label: string}[]>([]);
   const [required, setRequired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createdField, setCreatedField] = useState<MetaField | null>(null);
@@ -42,11 +50,7 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
     }
   }, [open]);
 
-  useEffect(() => {
-    if (open && dataType === 'Metadata') {
-       metaApi.getMetadataOptions().then(setMetadataOptions);
-    }
-  }, [open, dataType]);
+  // Removed useEffect for getMetadataOptions as we now use static scopes
 
   useEffect(() => {
     if (fieldToEdit) {
@@ -206,11 +210,11 @@ const FieldCreateDialog: React.FC<Props> = ({ open, onClose, objectId, onSuccess
 
           {isMetadata && (
              <Autocomplete
-                options={metadataOptions}
-                getOptionLabel={(option) => option.label || option.value}
-                value={metadataOptions.find(opt => opt.value === metadataName) || null}
+                options={METADATA_SCOPES}
+                getOptionLabel={(option) => option.label}
+                value={METADATA_SCOPES.find(opt => opt.value === metadataName) || null}
                 onChange={(_, newValue) => setMetadataName(newValue ? newValue.value : '')}
-                renderInput={(params) => <TextField {...params} label="Referenced Metadata Scope" margin="dense" />}
+                renderInput={(params) => <TextField {...params} label="Metadata Scope" margin="dense" />}
                 disabled={isLookupObjectDisabled}
                 fullWidth
              />
