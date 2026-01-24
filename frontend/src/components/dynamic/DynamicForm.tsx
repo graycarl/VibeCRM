@@ -43,7 +43,6 @@ const toUTCISO = (localString: string) => {
 const HIDDEN_SYSTEM_FIELDS = ['uid', 'created_on', 'modified_on'];
 
 const DynamicForm: React.FC<Props> = ({ 
-    object, 
     fields, 
     onSubmit, 
     initialValues = DEFAULT_INITIAL_VALUES,
@@ -337,7 +336,7 @@ const DynamicForm: React.FC<Props> = ({
             )}
           />
         );
-      case 'Metadata':
+      case 'Metadata': {
         const options = metadataOptionsMap[field.name] || [];
         return (
           <Controller
@@ -374,6 +373,7 @@ const DynamicForm: React.FC<Props> = ({
             )}
           />
         );
+      }
       default:
         return (
              <Controller

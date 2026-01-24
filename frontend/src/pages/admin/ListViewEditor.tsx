@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Container, Typography, Box, Paper, TextField, Button, 
-  List, ListItem, ListItemText, Checkbox, ListItemSecondaryAction 
+  List, ListItem, ListItemText, Checkbox 
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { metaApi, MetaObject, MetaField } from '../../services/metaApi';

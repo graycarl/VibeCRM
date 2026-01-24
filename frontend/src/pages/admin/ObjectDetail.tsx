@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
   Container, Typography, Box, Button 
@@ -16,7 +16,7 @@ const ObjectDetail = () => {
   const [openObjectDialog, setOpenObjectDialog] = useState(false);
   const [selectedField, setSelectedField] = useState<MetaField | null>(null);
 
-  const loadObject = async () => {
+  const loadObject = useCallback(async () => {
     if (!id) return;
     try {
       const data = await metaApi.getObject(id);
@@ -24,11 +24,11 @@ const ObjectDetail = () => {
     } catch (error) {
       console.error("Failed to load object", error);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     loadObject();
-  }, [id]);
+  }, [id, loadObject]);
 
   if (!object) return <LoadingOverlay />;
 

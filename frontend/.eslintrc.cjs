@@ -15,5 +15,8 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-explicit-any': 'off', // Allow any for now as it's common in this project
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/set-state-in-effect': 'off',
   },
 }

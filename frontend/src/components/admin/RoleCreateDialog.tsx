@@ -26,7 +26,7 @@ const RoleCreateDialog: React.FC<Props> = ({ open, onClose, onSuccess }) => {
       let parsedPermissions = {};
       try {
         parsedPermissions = JSON.parse(permissions);
-      } catch (e) {
+      } catch {
         alert("Invalid JSON for permissions");
         setLoading(false);
         return;

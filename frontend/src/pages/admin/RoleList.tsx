@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { 
   Container, Typography, Button, IconButton, Box 
 } from '@mui/material';
@@ -11,25 +11,25 @@ const RoleList = () => {
   const [roles, setRoles] = useState<MetaRole[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
 
-  const loadRoles = async () => {
+  const loadRoles = useCallback(async () => {
     try {
       const data = await metaApi.getRoles();
       setRoles(data);
     } catch (error) {
       console.error("Failed to load roles", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadRoles();
-  }, []);
+  }, [loadRoles]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this role?")) {
       try {
         await metaApi.deleteRole(id);
         loadRoles();
-      } catch (error) {
+      } catch {
         alert("Failed to delete role. System roles cannot be deleted.");
       }
     }

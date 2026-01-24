@@ -101,7 +101,7 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
                 return date.toLocaleDateString();
               }
               return date.toLocaleString();
-            } catch (e) {
+            } catch {
               return String(value);
             }
           };
