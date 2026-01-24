@@ -8,6 +8,7 @@ records:
     phone: (010) 8888-0001
     employees: 500
     annual_revenue: 120000000
+    owner: 管理员
 - object: account
   data:
     name: 环球健康系统
@@ -17,6 +18,7 @@ records:
     phone: (021) 6666-0002
     employees: 1200
     annual_revenue: 500000000
+    owner: 管理员
 - object: account
   data:
     name: 创新科技方案有限公司
@@ -26,6 +28,7 @@ records:
     phone: (0755) 3333-0003
     employees: 150
     annual_revenue: 25000000
+    owner: 管理员
 - object: account
   data:
     name: 顶峰医疗中心
@@ -35,6 +38,7 @@ records:
     phone: (020) 1234-5678
     employees: 300
     annual_revenue: 75000000
+    owner: 管理员
 - object: account
   data:
     name: 斯特拉托生物科技
@@ -44,6 +48,7 @@ records:
     phone: (028) 8765-4321
     employees: 80
     annual_revenue: 15000000
+    owner: 管理员
 - object: account
   data:
     name: 欧米伽护理诊所
@@ -53,6 +58,7 @@ records:
     phone: (025) 5555-1111
     employees: 450
     annual_revenue: 60000000
+    owner: 管理员
 - object: account
   data:
     name: 普诚金融控股
@@ -62,6 +68,7 @@ records:
     phone: (010) 6666-8888
     employees: 2000
     annual_revenue: 800000000
+    owner: 管理员
 - object: account
   data:
     name: 仁爱综合医院
@@ -71,6 +78,7 @@ records:
     phone: (021) 9999-0000
     employees: 5000
     annual_revenue: 1200000000
+    owner: 管理员
 - object: account
   data:
     name: 泽尼斯零售集团
@@ -80,6 +88,7 @@ records:
     phone: (0571) 2222-3333
     employees: 350
     annual_revenue: 45000000
+    owner: 管理员
 - object: account
   data:
     name: 佰欧实验室
@@ -89,6 +98,7 @@ records:
     phone: (029) 4444-5555
     employees: 200
     annual_revenue: 50000000
+    owner: 管理员
 - object: account
   data:
     name: 量子能源科技
@@ -98,6 +108,7 @@ records:
     phone: (022) 7777-8888
     employees: 800
     annual_revenue: 300000000
+    owner: 管理员
 - object: account
   data:
     name: 康佳连锁药房
@@ -107,6 +118,7 @@ records:
     phone: (023) 1111-2222
     employees: 1000
     annual_revenue: 200000000
+    owner: 管理员
 - object: account
   data:
     name: 银湖咨询顾问
@@ -116,6 +128,7 @@ records:
     phone: (0512) 6666-7777
     employees: 60
     annual_revenue: 12000000
+    owner: 管理员
 - object: account
   data:
     name: 北方制造工业
@@ -125,6 +138,7 @@ records:
     phone: (024) 8888-9999
     employees: 600
     annual_revenue: 150000000
+    owner: 管理员
 - object: account
   data:
     name: 市中心总医院
@@ -134,6 +148,7 @@ records:
     phone: (021) 1234-0000
     employees: 3500
     annual_revenue: 700000000
+    owner: 管理员
 - object: account
   data:
     name: 创新科技
@@ -143,6 +158,7 @@ records:
     phone: (0755) 2345-6789
     employees: 90
     annual_revenue: 18000000
+    owner: 管理员
 - object: account
   data:
     name: 康健保险有限公司
@@ -152,6 +168,7 @@ records:
     phone: (010) 9876-5432
     employees: 1500
     annual_revenue: 400000000
+    owner: 管理员
 - object: account
   data:
     name: 联合物流
@@ -161,6 +178,7 @@ records:
     phone: (020) 5555-6666
     employees: 400
     annual_revenue: 80000000
+    owner: 管理员
 - object: account
   data:
     name: 太平洋康养中心
@@ -170,6 +188,7 @@ records:
     phone: (0592) 2222-1111
     employees: 120
     annual_revenue: 22000000
+    owner: 管理员
 - object: account
   data:
     name: 亮星医疗器械
@@ -179,6 +198,7 @@ records:
     phone: (0510) 8888-2222
     employees: 250
     annual_revenue: 55000000
+    owner: 管理员
 - object: account
   data:
     name: 河谷健康中心
@@ -188,6 +208,7 @@ records:
     phone: (027) 6666-3333
     employees: 800
     annual_revenue: 160000000
+    owner: 管理员
 - object: account
   data:
     name: 飞鹰大药房
@@ -197,6 +218,7 @@ records:
     phone: (0371) 5555-8888
     employees: 40
     annual_revenue: 5000000
+    owner: 管理员
 - object: account
   data:
     name: 宏大治疗方案
@@ -206,6 +228,7 @@ records:
     phone: (0311) 2222-9999
     employees: 180
     annual_revenue: 40000000
+    owner: 管理员
 - object: account
   data:
     name: 峰顶数据系统
@@ -215,6 +238,7 @@ records:
     phone: (010) 3333-4444
     employees: 75
     annual_revenue: 14000000
+    owner: 管理员
 - object: account
   data:
     name: 宏景医疗中心
@@ -224,3 +248,4 @@ records:
     phone: (0532) 7777-1111
     employees: 2800
     annual_revenue: 600000000
+    owner: 管理员
