@@ -180,5 +180,5 @@ def reorder_record_types(object_id: str, reorder: RecordTypeReorder, db: Session
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/options", response_model=List[dict])
-def list_metadata_options(db: Session = Depends(get_db)):
-    return meta_service.get_all_metadata_options(db)
+def list_metadata_options(metadata_name: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    return meta_service.get_all_metadata_options(db, metadata_name)

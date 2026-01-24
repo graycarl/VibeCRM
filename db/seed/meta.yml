@@ -28,7 +28,8 @@ objects:
         source: system
       - name: role
         label: Role
-        data_type: Text
+        data_type: Metadata
+        metadata_name: role
         source: system
   - name: account
     label: Account

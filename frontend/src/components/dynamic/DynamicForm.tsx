@@ -65,12 +65,17 @@ const DynamicForm: React.FC<Props> = ({
   // Keep track of lookup labels manually or via form state if we want to show them
   // We can store label in a separate state map or rely on initialValues providing a __label field
   const [lookupLabels, setLookupLabels] = useState<Record<string, string>>({});
-  const [metadataOptions, setMetadataOptions] = useState<{value: string, label: string}[]>([]);
+  // Store metadata options per field name, as different metadata fields might have different scopes
+  const [metadataOptionsMap, setMetadataOptionsMap] = useState<Record<string, {value: string, label: string}[]>>({});
 
   useEffect(() => {
-    if (fields.some(f => f.data_type === 'Metadata')) {
-        metaApi.getMetadataOptions().then(setMetadataOptions);
-    }
+    // Fetch options for each metadata field
+    const metadataFields = fields.filter(f => f.data_type === 'Metadata');
+    metadataFields.forEach(f => {
+         metaApi.getMetadataOptions(f.metadata_name || undefined).then(opts => {
+             setMetadataOptionsMap(prev => ({...prev, [f.name]: opts}));
+         });
+    });
   }, [fields]);
 
   useEffect(() => {
@@ -333,6 +338,7 @@ const DynamicForm: React.FC<Props> = ({
           />
         );
       case 'Metadata':
+        const options = metadataOptionsMap[field.name] || [];
         return (
           <Controller
             name={field.name}
@@ -340,9 +346,9 @@ const DynamicForm: React.FC<Props> = ({
             rules={{ required: field.is_required }}
             render={({ field: { onChange, value } }) => (
                  <Autocomplete
-                    options={metadataOptions}
+                    options={options}
                     getOptionLabel={(option) => option.label || option.value}
-                    value={metadataOptions.find(opt => opt.value === value) || (value ? {value, label: lookupLabels[field.name] || value} : null)}
+                    value={options.find(opt => opt.value === value) || (value ? {value, label: lookupLabels[field.name] || value} : null)}
                     onChange={(_, newValue) => {
                         onChange(newValue ? newValue.value : '');
                         if (newValue) {

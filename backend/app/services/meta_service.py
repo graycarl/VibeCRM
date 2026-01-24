@@ -595,42 +595,108 @@ class MetaService:
         db.commit()
         return True
 
-    def get_all_metadata_options(self, db: Session) -> List[Dict[str, str]]:
+    def get_all_metadata_options(self, db: Session, metadata_name: Optional[str] = None) -> List[Dict[str, str]]:
         options = []
         
+        # Determine scope based on metadata_name
+        # Supported scopes: 'object', 'field', 'role', 'layout', 'list_view', 'record_type'
+        # Also supports 'role' directly to fetch roles
+        
+        scope = metadata_name
+        
         # 1. Objects
-        objects = db.query(MetaObject).all()
-        for obj in objects:
-            options.append({"value": obj.name, "label": obj.label})
-            
-            # 2. Fields
-            for field in obj.fields:
-                options.append({
-                    "value": f"{obj.name}.{field.name}",
-                    "label": f"{obj.label}.{field.label}"
-                })
-            
-            # 3. Record Types
-            for rt in obj.record_types:
-                options.append({
-                    "value": f"{obj.name}.{rt.name}",
-                    "label": f"{obj.label}.{rt.label}"
-                })
+        if not scope or scope == 'object':
+            objects = db.query(MetaObject).all()
+            for obj in objects:
+                options.append({"value": obj.name, "label": obj.label})
 
-        # 4. Roles
-        roles = db.query(MetaRole).all()
-        for role in roles:
-             options.append({"value": role.name, "label": role.label})
-             
-        # 5. Layouts
-        layouts = db.query(MetaPageLayout).filter(MetaPageLayout.name.isnot(None)).all()
-        for layout in layouts:
-             options.append({"value": layout.name, "label": layout.name}) 
-             
-        # 6. List Views
-        list_views = db.query(MetaListView).filter(MetaListView.name.isnot(None)).all()
-        for lv in list_views:
-             options.append({"value": lv.name, "label": lv.name}) 
+        # 2. Fields
+        if not scope or scope == 'field':
+            if scope == 'field': # Fetch only fields
+                 # This might be heavy if not filtered by object, but keeping it simple for now
+                 # Optimally we join
+                 fields = db.query(MetaField).join(MetaObject).all()
+                 for field in fields:
+                     options.append({
+                        "value": f"{field.object.name}.{field.name}",
+                        "label": f"{field.object.label}.{field.label}"
+                    })
+            elif not scope: # Fetch as part of all
+                # Reuse objects query if possible, but here we iterate objects
+                # We already fetched objects above if not scope... but let's be careful not to duplicate
+                # If scope is None, we iterate everything.
+                # To avoid re-querying objects, we can query objects with fields eagerly
+                pass # Logic below handles it if we restructure
+        
+        # To avoid complexity, let's keep it simple and explicit
+        
+        if not scope:
+             # Fetch everything logic (existing)
+            objects = db.query(MetaObject).all()
+            for obj in objects:
+                options.append({"value": obj.name, "label": obj.label})
+                for field in obj.fields:
+                    options.append({
+                        "value": f"{obj.name}.{field.name}",
+                        "label": f"{obj.label}.{field.label}"
+                    })
+                for rt in obj.record_types:
+                    options.append({
+                        "value": f"{obj.name}.{rt.name}",
+                        "label": f"{obj.label}.{rt.label}"
+                    })
+            
+            roles = db.query(MetaRole).all()
+            for role in roles:
+                 options.append({"value": role.name, "label": role.label})
+                 
+            layouts = db.query(MetaPageLayout).filter(MetaPageLayout.name.isnot(None)).all()
+            for layout in layouts:
+                 options.append({"value": layout.name, "label": layout.name}) 
+                 
+            list_views = db.query(MetaListView).filter(MetaListView.name.isnot(None)).all()
+            for lv in list_views:
+                 options.append({"value": lv.name, "label": lv.name}) 
+                 
+            return options
+
+        # Filtered logic
+        if scope == 'role':
+            roles = db.query(MetaRole).all()
+            for role in roles:
+                 options.append({"value": role.name, "label": role.label})
+        
+        elif scope == 'object':
+            # Already handled above partly, but let's be explicit
+            objects = db.query(MetaObject).all()
+            for obj in objects:
+                options.append({"value": obj.name, "label": obj.label})
+        
+        elif scope == 'field':
+             fields = db.query(MetaField).join(MetaObject).all()
+             for field in fields:
+                 options.append({
+                    "value": f"{field.object.name}.{field.name}",
+                    "label": f"{field.object.label}.{field.label}"
+                })
+        
+        elif scope == 'record_type':
+             rts = db.query(MetaObjectRecordType).join(MetaObject).all()
+             for rt in rts:
+                options.append({
+                    "value": f"{rt.object.name}.{rt.name}",
+                    "label": f"{rt.object.label}.{rt.label}"
+                })
+                
+        elif scope == 'layout':
+            layouts = db.query(MetaPageLayout).filter(MetaPageLayout.name.isnot(None)).all()
+            for layout in layouts:
+                 options.append({"value": layout.name, "label": layout.name})
+                 
+        elif scope == 'list_view':
+            list_views = db.query(MetaListView).filter(MetaListView.name.isnot(None)).all()
+            for lv in list_views:
+                 options.append({"value": lv.name, "label": lv.name}) 
              
         return options
 
