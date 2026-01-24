@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db.base import Base
-from app.models import metadata # Register models
 from app.main import app
 from app.api.deps import get_db
 

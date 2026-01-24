@@ -8,8 +8,6 @@ from app.schemas.metadata import (
     MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate
 )
 from app.services.schema_service import schema_service
-from app.db.session import engine
-import uuid
 import re
 
 # Custom metadata prefix constant

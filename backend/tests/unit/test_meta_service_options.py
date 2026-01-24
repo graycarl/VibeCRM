@@ -1,6 +1,5 @@
 import pytest
 from app.services.meta_service import meta_service
-from app.models.metadata import MetaObject
 from app.schemas.metadata import MetaFieldCreate
 
 def test_add_option(db):

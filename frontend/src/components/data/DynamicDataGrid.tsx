@@ -70,7 +70,7 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
 }) => {
   const columns: GridColDef[] = useMemo(() => {
     const generatedColumns: GridColDef[] = fields.map((field) => {
-      let colDef: GridColDef = {
+      const colDef: GridColDef = {
         field: field.name,
         headerName: field.label,
         flex: 1,

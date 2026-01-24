@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.layout import MetaPageLayout, MetaListView
-from typing import List, Optional
+from typing import List
 
 class LayoutService:
     def create_page_layout(self, db: Session, object_id: str, name: str, config: dict, source: str = "custom") -> MetaPageLayout:

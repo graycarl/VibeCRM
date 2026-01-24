@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-import pytest
 
 def test_full_platform_flow(client: TestClient):
     # 1. Create Custom Object 'Lead'

@@ -6,7 +6,6 @@ from sqlalchemy import text
 
 from app.api.deps import get_db
 from app.core.config import settings
-from app.core import security
 from app.db.session import engine
 
 reusable_oauth2 = OAuth2PasswordBearer(

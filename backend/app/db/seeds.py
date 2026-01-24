@@ -2,7 +2,6 @@ import yaml
 from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-import glob
 
 from app.services.meta_service import meta_service
 from app.services.data_service import data_service
