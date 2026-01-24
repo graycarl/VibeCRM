@@ -68,6 +68,20 @@ class DataService:
                 if not exists:
                      raise ValueError(f"Referenced record {val} not found in object '{target_obj_name}'")
 
+            # Validate Metadata
+            if field.data_type == 'Metadata' and field.name in data:
+                val = data[field.name]
+                if val is None or val == "":
+                    continue
+                
+                # Verify metadata exists
+                # We fetch all options to validate. 
+                # Optimization: In a real system, we might want a more targeted check or caching.
+                options = meta_service.get_all_metadata_options(db)
+                valid_values = {opt["value"] for opt in options}
+                if val not in valid_values:
+                     raise ValueError(f"Invalid metadata reference '{val}' for field '{field.name}'.")
+
     def _enrich_lookup_fields(self, db: Session, object_name: str, records: List[Dict[str, Any]]):
         if not records:
             return
@@ -129,6 +143,30 @@ class DataService:
                     f"Unexpected error enriching lookup field '{field.name}' on object '{object_name}': {str(e)}"
                 )
 
+    def _enrich_metadata_fields(self, db: Session, object_name: str, records: List[Dict[str, Any]]):
+        if not records:
+            return
+            
+        obj = meta_service.get_object_by_name(db, object_name)
+        # Check if there are any Metadata fields
+        metadata_fields = [f for f in obj.fields if f.data_type == "Metadata" and f.metadata_name]
+        
+        if not metadata_fields:
+            return
+
+        # Fetch metadata map
+        options = meta_service.get_all_metadata_options(db)
+        meta_map = {opt["value"]: opt["label"] for opt in options}
+        
+        for field in metadata_fields:
+            for r in records:
+                val = r.get(field.name)
+                if val:
+                    if val in meta_map:
+                         r[f"{field.name}__label"] = meta_map[val]
+                    else:
+                         r[f"{field.name}__label"] = "已删除"
+
     def create_record(self, db: Session, object_name: str, data: Dict[str, Any], user_id: int = None) -> Dict[str, Any]:
         # Unwrap Pydantic model if passed
         if hasattr(data, 'model_dump'):
@@ -179,6 +217,7 @@ class DataService:
         if result:
             record = dict(result)
             self._enrich_lookup_fields(db, object_name, [record])
+            self._enrich_metadata_fields(db, object_name, [record])
             return record
         return None
 
@@ -222,6 +261,7 @@ class DataService:
             
         items = [dict(row) for row in result]
         self._enrich_lookup_fields(db, object_name, items)
+        self._enrich_metadata_fields(db, object_name, items)
             
         return {
             "items": items,

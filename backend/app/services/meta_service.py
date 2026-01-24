@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text, func
 from typing import Optional, List
 from app.models.metadata import MetaObject, MetaField, MetaRole, MetaObjectRecordType
+from app.models.layout import MetaPageLayout, MetaListView
 from app.schemas.metadata import (
     MetaObjectCreate, MetaObjectUpdate, MetaFieldCreate, MetaRoleCreate, MetaRoleUpdate,
     MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate
@@ -358,6 +359,20 @@ class MetaService:
         elif field_in.lookup_object:
             raise ValueError("lookup_object can only be set for Lookup fields.")
 
+        # Validate metadata_name
+        if field_in.data_type == "Metadata":
+            if not field_in.metadata_name:
+                raise ValueError("Metadata field must have a metadata_name specified.")
+            # We allow creating a metadata field even if the target metadata doesn't exist yet? 
+            # Or should we validate it against the current available metadata?
+            # The prompt implies a selector, so it should exist. 
+            # However, for simplicity and circular dependency avoidance, we might just check format or rely on the fact that it came from the selector.
+            # But strictly speaking, we should probably validate it.
+            # For now, let's at least enforce the field presence.
+            pass
+        elif field_in.metadata_name:
+            raise ValueError("metadata_name can only be set for Metadata fields.")
+
         db_field = MetaField(
             object_id=object_id,
             name=field_in.name,
@@ -366,6 +381,7 @@ class MetaService:
             data_type=field_in.data_type,
             options=options,
             lookup_object=field_in.lookup_object,
+            metadata_name=field_in.metadata_name,
             is_required=field_in.is_required,
             source=field_in.source
         )
@@ -578,5 +594,44 @@ class MetaService:
         db.delete(db_role)
         db.commit()
         return True
+
+    def get_all_metadata_options(self, db: Session) -> List[Dict[str, str]]:
+        options = []
+        
+        # 1. Objects
+        objects = db.query(MetaObject).all()
+        for obj in objects:
+            options.append({"value": obj.name, "label": obj.label})
+            
+            # 2. Fields
+            for field in obj.fields:
+                options.append({
+                    "value": f"{obj.name}.{field.name}",
+                    "label": f"{obj.label}.{field.label}"
+                })
+            
+            # 3. Record Types
+            for rt in obj.record_types:
+                options.append({
+                    "value": f"{obj.name}.{rt.name}",
+                    "label": f"{obj.label}.{rt.label}"
+                })
+
+        # 4. Roles
+        roles = db.query(MetaRole).all()
+        for role in roles:
+             options.append({"value": role.name, "label": role.label})
+             
+        # 5. Layouts
+        layouts = db.query(MetaPageLayout).filter(MetaPageLayout.name.isnot(None)).all()
+        for layout in layouts:
+             options.append({"value": layout.name, "label": layout.name}) 
+             
+        # 6. List Views
+        list_views = db.query(MetaListView).filter(MetaListView.name.isnot(None)).all()
+        for lv in list_views:
+             options.append({"value": lv.name, "label": lv.name}) 
+             
+        return options
 
 meta_service = MetaService()

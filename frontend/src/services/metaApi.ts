@@ -118,5 +118,10 @@ export const metaApi = {
       { headers: getAuthHeader() }
     );
     return response.data;
+  },
+
+  getMetadataOptions: async () => {
+    const response = await axios.get<{value: string, label: string}[]>(`${API_URL}/meta/options`, { headers: getAuthHeader() });
+    return response.data;
   }
 };

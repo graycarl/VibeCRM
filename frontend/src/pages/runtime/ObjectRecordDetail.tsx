@@ -82,7 +82,7 @@ const ObjectRecordDetail = () => {
       if (field.data_type === 'Picklist') {
           return getOptionLabel(field, value);
       }
-      if (field.data_type === 'Lookup') {
+      if (field.data_type === 'Lookup' || field.data_type === 'Metadata') {
           return record[`${field.name}__label`] || value || '-';
       }
       if (field.data_type === 'Boolean' || typeof value === 'boolean') {

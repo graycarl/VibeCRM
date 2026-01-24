@@ -22,6 +22,7 @@ export interface MetaField {
   data_type: string;
   options?: PicklistOption[] | null;
   lookup_object?: string | null;
+  metadata_name?: string | null;
   is_required: boolean;
   source: 'system' | 'custom';
 }

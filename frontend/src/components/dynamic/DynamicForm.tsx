@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper, InputAdornment, IconButton } from '@mui/material';
-import { MetaObject, MetaField } from '../../services/metaApi';
+import { TextField, Button, Box, Checkbox, FormControlLabel, Grid, Paper, InputAdornment, IconButton, Autocomplete } from '@mui/material';
+import { MetaObject, MetaField, metaApi } from '../../services/metaApi';
 import { PicklistField } from './PicklistField';
 import { LookupDialog } from './LookupDialog';
 import SearchIcon from '@mui/icons-material/Search';
@@ -65,6 +65,13 @@ const DynamicForm: React.FC<Props> = ({
   // Keep track of lookup labels manually or via form state if we want to show them
   // We can store label in a separate state map or rely on initialValues providing a __label field
   const [lookupLabels, setLookupLabels] = useState<Record<string, string>>({});
+  const [metadataOptions, setMetadataOptions] = useState<{value: string, label: string}[]>([]);
+
+  useEffect(() => {
+    if (fields.some(f => f.data_type === 'Metadata')) {
+        metaApi.getMetadataOptions().then(setMetadataOptions);
+    }
+  }, [fields]);
 
   useEffect(() => {
     if (initialValues) {
@@ -75,7 +82,7 @@ const DynamicForm: React.FC<Props> = ({
       // Extract initial labels
       const labels: Record<string, string> = {};
       fields.forEach(f => {
-         if (f.data_type === 'Lookup') {
+         if (f.data_type === 'Lookup' || f.data_type === 'Metadata') {
              if (initialValues[f.name + '__label']) {
                  labels[f.name] = initialValues[f.name + '__label'];
              } else if (initialValues[f.name]) {
@@ -322,6 +329,42 @@ const DynamicForm: React.FC<Props> = ({
                   '& .MuiInputBase-input': { cursor: !isDisabled ? 'pointer' : 'default' }
                 }}
               />
+            )}
+          />
+        );
+      case 'Metadata':
+        return (
+          <Controller
+            name={field.name}
+            control={control}
+            rules={{ required: field.is_required }}
+            render={({ field: { onChange, value } }) => (
+                 <Autocomplete
+                    options={metadataOptions}
+                    getOptionLabel={(option) => option.label || option.value}
+                    value={metadataOptions.find(opt => opt.value === value) || (value ? {value, label: lookupLabels[field.name] || value} : null)}
+                    onChange={(_, newValue) => {
+                        onChange(newValue ? newValue.value : '');
+                        if (newValue) {
+                             setLookupLabels(prev => ({ ...prev, [field.name]: newValue.label }));
+                        } else {
+                             setLookupLabels(prev => {
+                                 const next = {...prev};
+                                 delete next[field.name];
+                                 return next;
+                             });
+                        }
+                    }}
+                    disabled={isDisabled}
+                    renderInput={(params) => (
+                        <TextField 
+                            {...params} 
+                            label={field.label} 
+                            error={!!errors[field.name]}
+                            helperText={errors[field.name] ? '该字段必填' : ''}
+                        />
+                    )}
+                 />
             )}
           />
         );

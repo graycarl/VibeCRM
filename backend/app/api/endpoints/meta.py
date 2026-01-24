@@ -178,3 +178,7 @@ def reorder_record_types(object_id: str, reorder: RecordTypeReorder, db: Session
         return meta_service.reorder_record_type_options(db, object_id, reorder.id_list)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/options", response_model=List[dict])
+def list_metadata_options(db: Session = Depends(get_db)):
+    return meta_service.get_all_metadata_options(db)

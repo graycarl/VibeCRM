@@ -22,6 +22,7 @@ class MetaFieldBase(BaseModel):
     data_type: str
     options: Optional[List[PicklistOption]] = None
     lookup_object: Optional[str] = None
+    metadata_name: Optional[str] = None
     is_required: bool = False
     source: str = "custom"
 

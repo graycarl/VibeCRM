@@ -114,6 +114,7 @@ const DynamicDataGrid: React.FC<DynamicDataGridProps> = ({
           colDef.valueFormatter = (value: any) => getOptionLabel(field, value);
           break;
         case 'Lookup':
+        case 'Metadata':
             colDef.type = 'string';
             // Use the enriched label field if available
             colDef.valueGetter = (value, row) => {

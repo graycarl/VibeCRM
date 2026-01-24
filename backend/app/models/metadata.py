@@ -50,6 +50,7 @@ class MetaField(Base):
     data_type: Mapped[str] = mapped_column(String, nullable=False)
     options: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
     lookup_object: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    metadata_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     is_required: Mapped[bool] = mapped_column(Boolean, default=False)
     source: Mapped[str] = mapped_column(String, nullable=False, default="custom")
     
