@@ -1,0 +1,739 @@
+records:
+- object: call
+  data:
+    subject: Meeting with Innovate Tech regarding Metformin
+    account_id: Innovate Tech
+    call_type: meeting
+    status: cancelled
+    call_date: '2026-01-01 21:07:48'
+    duration: 17
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Email with Northern Manufacturing
+    account_id: Northern Manufacturing
+    call_type: email
+    status: completed
+    call_date: '2025-11-22 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Email with BrightStar Devices
+    account_id: BrightStar Devices
+    call_type: email
+    status: planned
+    call_date: '2025-11-05 21:07:48'
+    duration: 47
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Email with TechNova Solutions regarding Atorvastatin
+    account_id: TechNova Solutions
+    call_type: email
+    status: planned
+    call_date: '2025-12-19 21:07:48'
+    duration: 47
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Other with Prime Finance Corp regarding Amoxicillin
+    account_id: Prime Finance Corp
+    call_type: other
+    status: cancelled
+    call_date: '2025-11-17 21:07:48'
+    duration: 60
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Call with BrightStar Devices
+    account_id: BrightStar Devices
+    call_type: call
+    status: cancelled
+    call_date: '2025-11-29 21:07:48'
+    duration: 31
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Email with BioGen Labs regarding Amoxicillin
+    account_id: BioGen Labs
+    call_type: email
+    status: completed
+    call_date: '2026-01-14 21:07:48'
+    duration: 52
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Meeting with BrightStar Devices regarding Amoxicillin
+    account_id: BrightStar Devices
+    call_type: meeting
+    status: completed
+    call_date: '2025-11-04 21:07:48'
+    duration: 15
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Meeting with Omega Care Clinics regarding Atorvastatin
+    account_id: Omega Care Clinics
+    call_type: meeting
+    status: completed
+    call_date: '2025-11-30 21:07:48'
+    duration: 26
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Email with CarePlus Pharmacy Chain regarding Lisinopril
+    account_id: CarePlus Pharmacy Chain
+    call_type: email
+    status: planned
+    call_date: '2025-12-24 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Other with Zenith Retail Group regarding Amoxicillin
+    account_id: Zenith Retail Group
+    call_type: other
+    status: completed
+    call_date: '2025-11-19 21:07:48'
+    duration: 15
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Email with TechNova Solutions regarding Amoxicillin
+    account_id: TechNova Solutions
+    call_type: email
+    status: cancelled
+    call_date: '2025-11-30 21:07:48'
+    duration: 45
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Meeting with Zenith Retail Group regarding Lisinopril
+    account_id: Zenith Retail Group
+    call_type: meeting
+    status: planned
+    call_date: '2025-11-14 21:07:48'
+    duration: 18
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Email with Northern Manufacturing regarding Ibuprofen
+    account_id: Northern Manufacturing
+    call_type: email
+    status: planned
+    call_date: '2025-12-19 21:07:48'
+    duration: 29
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Meeting with Eagle Pharmacy regarding Atorvastatin
+    account_id: Eagle Pharmacy
+    call_type: meeting
+    status: completed
+    call_date: '2025-12-07 21:07:48'
+    duration: 20
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with HealthFirst Insurers regarding Atorvastatin
+    account_id: HealthFirst Insurers
+    call_type: meeting
+    status: planned
+    call_date: '2026-01-08 21:07:48'
+    duration: 20
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Call with Eagle Pharmacy
+    account_id: Eagle Pharmacy
+    call_type: call
+    status: planned
+    call_date: '2026-01-20 21:07:48'
+    duration: 19
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Call with Quantum Energy regarding Metformin
+    account_id: Quantum Energy
+    call_type: call
+    status: completed
+    call_date: '2026-01-22 21:07:48'
+    duration: 48
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Other with Grandview Medical Center regarding Amoxicillin
+    account_id: Grandview Medical Center
+    call_type: other
+    status: planned
+    call_date: '2025-11-27 21:07:48'
+    duration: 24
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Email with Eagle Pharmacy
+    account_id: Eagle Pharmacy
+    call_type: email
+    status: completed
+    call_date: '2025-12-19 21:07:48'
+    duration: 57
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Call with Summit Data Systems regarding Atorvastatin
+    account_id: Summit Data Systems
+    call_type: call
+    status: completed
+    call_date: '2026-01-18 21:07:48'
+    duration: 59
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Call with Northern Manufacturing regarding Ibuprofen
+    account_id: Northern Manufacturing
+    call_type: call
+    status: planned
+    call_date: '2025-12-01 21:07:48'
+    duration: 47
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Meeting with Eagle Pharmacy
+    account_id: Eagle Pharmacy
+    call_type: meeting
+    status: planned
+    call_date: '2026-01-12 21:07:48'
+    duration: 39
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Other with Pacific Wellness Centers regarding Atorvastatin
+    account_id: Pacific Wellness Centers
+    call_type: other
+    status: planned
+    call_date: '2025-11-29 21:07:48'
+    duration: 26
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with CarePlus Pharmacy Chain regarding Ibuprofen
+    account_id: CarePlus Pharmacy Chain
+    call_type: meeting
+    status: cancelled
+    call_date: '2026-01-21 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Call with MediLife Hospitals regarding Lisinopril
+    account_id: MediLife Hospitals
+    call_type: call
+    status: cancelled
+    call_date: '2025-11-13 21:07:48'
+    duration: 20
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Email with Omega Care Clinics regarding Metformin
+    account_id: Omega Care Clinics
+    call_type: email
+    status: completed
+    call_date: '2025-11-19 21:07:48'
+    duration: 28
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Other with Global Health Systems regarding Metformin
+    account_id: Global Health Systems
+    call_type: other
+    status: completed
+    call_date: '2025-12-30 21:07:48'
+    duration: 17
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Email with Eagle Pharmacy regarding Atorvastatin
+    account_id: Eagle Pharmacy
+    call_type: email
+    status: completed
+    call_date: '2025-12-19 21:07:48'
+    duration: 41
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Other with Innovate Tech regarding Ibuprofen
+    account_id: Innovate Tech
+    call_type: other
+    status: completed
+    call_date: '2025-11-04 21:07:48'
+    duration: 27
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Email with SilverLake Consulting regarding Ibuprofen
+    account_id: SilverLake Consulting
+    call_type: email
+    status: cancelled
+    call_date: '2025-11-30 21:07:48'
+    duration: 29
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Other with Prime Finance Corp regarding Atorvastatin
+    account_id: Prime Finance Corp
+    call_type: other
+    status: cancelled
+    call_date: '2025-12-04 21:07:48'
+    duration: 44
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Other with Global Health Systems regarding Metformin
+    account_id: Global Health Systems
+    call_type: other
+    status: cancelled
+    call_date: '2025-12-08 21:07:48'
+    duration: 59
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Call with River Valley Health
+    account_id: River Valley Health
+    call_type: call
+    status: cancelled
+    call_date: '2025-12-29 21:07:48'
+    duration: 24
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Email with TechNova Solutions regarding Atorvastatin
+    account_id: TechNova Solutions
+    call_type: email
+    status: planned
+    call_date: '2025-12-26 21:07:48'
+    duration: 38
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Email with Horizon Therapeutics regarding Amoxicillin
+    account_id: Horizon Therapeutics
+    call_type: email
+    status: cancelled
+    call_date: '2025-11-05 21:07:48'
+    duration: 25
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Other with Acme Pharmaceuticals regarding Amoxicillin
+    account_id: Acme Pharmaceuticals
+    call_type: other
+    status: completed
+    call_date: '2026-01-14 21:07:48'
+    duration: 39
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Meeting with Quantum Energy regarding Atorvastatin
+    account_id: Quantum Energy
+    call_type: meeting
+    status: completed
+    call_date: '2026-01-17 21:07:48'
+    duration: 48
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with Quantum Energy regarding Amoxicillin
+    account_id: Quantum Energy
+    call_type: meeting
+    status: completed
+    call_date: '2025-12-28 21:07:48'
+    duration: 20
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Email with Acme Pharmaceuticals regarding Amoxicillin
+    account_id: Acme Pharmaceuticals
+    call_type: email
+    status: completed
+    call_date: '2025-12-03 21:07:48'
+    duration: 24
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Meeting with Acme Pharmaceuticals regarding Ibuprofen
+    account_id: Acme Pharmaceuticals
+    call_type: meeting
+    status: completed
+    call_date: '2025-12-10 21:07:48'
+    duration: 38
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Meeting with River Valley Health regarding Metformin
+    account_id: River Valley Health
+    call_type: meeting
+    status: planned
+    call_date: '2025-12-18 21:07:48'
+    duration: 43
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Meeting with BrightStar Devices
+    account_id: BrightStar Devices
+    call_type: meeting
+    status: planned
+    call_date: '2025-12-17 21:07:48'
+    duration: 38
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Meeting with Stratos BioTech regarding Metformin
+    account_id: Stratos BioTech
+    call_type: meeting
+    status: planned
+    call_date: '2025-12-21 21:07:48'
+    duration: 26
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Meeting with BrightStar Devices regarding Ibuprofen
+    account_id: BrightStar Devices
+    call_type: meeting
+    status: completed
+    call_date: '2025-12-12 21:07:48'
+    duration: 17
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Other with Omega Care Clinics
+    account_id: Omega Care Clinics
+    call_type: other
+    status: cancelled
+    call_date: '2026-01-21 21:07:48'
+    duration: 50
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Call with Quantum Energy
+    account_id: Quantum Energy
+    call_type: call
+    status: planned
+    call_date: '2025-12-15 21:07:48'
+    duration: 40
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Call with Prime Finance Corp regarding Amoxicillin
+    account_id: Prime Finance Corp
+    call_type: call
+    status: cancelled
+    call_date: '2025-10-26 21:07:48'
+    duration: 27
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Email with Innovate Tech regarding Ibuprofen
+    account_id: Innovate Tech
+    call_type: email
+    status: planned
+    call_date: '2026-01-10 21:07:48'
+    duration: 53
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Other with Eagle Pharmacy
+    account_id: Eagle Pharmacy
+    call_type: other
+    status: completed
+    call_date: '2025-12-23 21:07:48'
+    duration: 32
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Meeting with United Logistics regarding Ibuprofen
+    account_id: United Logistics
+    call_type: meeting
+    status: planned
+    call_date: '2025-12-14 21:07:48'
+    duration: 59
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Other with Stratos BioTech regarding Lisinopril
+    account_id: Stratos BioTech
+    call_type: other
+    status: completed
+    call_date: '2025-11-14 21:07:48'
+    duration: 22
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Email with River Valley Health regarding Metformin
+    account_id: River Valley Health
+    call_type: email
+    status: cancelled
+    call_date: '2025-11-17 21:07:48'
+    duration: 28
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Meeting with TechNova Solutions regarding Lisinopril
+    account_id: TechNova Solutions
+    call_type: meeting
+    status: cancelled
+    call_date: '2025-10-28 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Other with Prime Finance Corp regarding Atorvastatin
+    account_id: Prime Finance Corp
+    call_type: other
+    status: cancelled
+    call_date: '2025-10-30 21:07:48'
+    duration: 59
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Email with Innovate Tech regarding Atorvastatin
+    account_id: Innovate Tech
+    call_type: email
+    status: cancelled
+    call_date: '2025-11-14 21:07:48'
+    duration: 18
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with BrightStar Devices regarding Metformin
+    account_id: BrightStar Devices
+    call_type: meeting
+    status: cancelled
+    call_date: '2025-12-27 21:07:48'
+    duration: 19
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Meeting with Pacific Wellness Centers regarding Atorvastatin
+    account_id: Pacific Wellness Centers
+    call_type: meeting
+    status: completed
+    call_date: '2025-11-10 21:07:48'
+    duration: 26
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with Grandview Medical Center regarding Lisinopril
+    account_id: Grandview Medical Center
+    call_type: meeting
+    status: cancelled
+    call_date: '2026-01-07 21:07:48'
+    duration: 24
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Meeting with Northern Manufacturing
+    account_id: Northern Manufacturing
+    call_type: meeting
+    status: completed
+    call_date: '2026-01-23 21:07:48'
+    duration: 22
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Other with TechNova Solutions regarding Atorvastatin
+    account_id: TechNova Solutions
+    call_type: other
+    status: completed
+    call_date: '2025-11-03 21:07:48'
+    duration: 15
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Meeting with River Valley Health regarding Atorvastatin
+    account_id: River Valley Health
+    call_type: meeting
+    status: cancelled
+    call_date: '2025-11-27 21:07:48'
+    duration: 34
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Other with Horizon Therapeutics regarding Lisinopril
+    account_id: Horizon Therapeutics
+    call_type: other
+    status: planned
+    call_date: '2026-01-06 21:07:48'
+    duration: 18
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Call with SilverLake Consulting regarding Metformin
+    account_id: SilverLake Consulting
+    call_type: call
+    status: completed
+    call_date: '2025-12-27 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Other with River Valley Health regarding Atorvastatin
+    account_id: River Valley Health
+    call_type: other
+    status: planned
+    call_date: '2025-11-08 21:07:48'
+    duration: 54
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Atorvastatin
+- object: call
+  data:
+    subject: Email with CarePlus Pharmacy Chain regarding Ibuprofen
+    account_id: CarePlus Pharmacy Chain
+    call_type: email
+    status: cancelled
+    call_date: '2026-01-09 21:07:48'
+    duration: 48
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+- object: call
+  data:
+    subject: Call with Prime Finance Corp regarding Lisinopril
+    account_id: Prime Finance Corp
+    call_type: call
+    status: cancelled
+    call_date: '2025-11-08 21:07:48'
+    duration: 25
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Call with MediLife Hospitals regarding Metformin
+    account_id: MediLife Hospitals
+    call_type: call
+    status: completed
+    call_date: '2026-01-03 21:07:48'
+    duration: 30
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Call with Stratos BioTech regarding Amoxicillin
+    account_id: Stratos BioTech
+    call_type: call
+    status: planned
+    call_date: '2025-11-06 21:07:48'
+    duration: 31
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Call with Eagle Pharmacy regarding Lisinopril
+    account_id: Eagle Pharmacy
+    call_type: call
+    status: planned
+    call_date: '2025-11-14 21:07:48'
+    duration: 32
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Other with TechNova Solutions regarding Amoxicillin
+    account_id: TechNova Solutions
+    call_type: other
+    status: completed
+    call_date: '2025-12-19 21:07:48'
+    duration: 50
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Amoxicillin
+- object: call
+  data:
+    subject: Email with Quantum Energy
+    account_id: Quantum Energy
+    call_type: email
+    status: completed
+    call_date: '2026-01-21 21:07:48'
+    duration: 52
+    description: Discussed quarterly requirements and product feedback.
+- object: call
+  data:
+    subject: Other with Northern Manufacturing regarding Metformin
+    account_id: Northern Manufacturing
+    call_type: other
+    status: completed
+    call_date: '2025-10-29 21:07:48'
+    duration: 38
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Metformin
+- object: call
+  data:
+    subject: Other with Stratos BioTech regarding Lisinopril
+    account_id: Stratos BioTech
+    call_type: other
+    status: completed
+    call_date: '2025-12-17 21:07:48'
+    duration: 20
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Lisinopril
+- object: call
+  data:
+    subject: Meeting with BioGen Labs regarding Ibuprofen
+    account_id: BioGen Labs
+    call_type: meeting
+    status: planned
+    call_date: '2025-11-20 21:07:48'
+    duration: 35
+    description: Discussed quarterly requirements and product feedback.
+    product_id: Ibuprofen
+

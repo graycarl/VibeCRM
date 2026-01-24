@@ -1,0 +1,226 @@
+records:
+- object: account
+  data:
+    name: Acme Pharmaceuticals
+    industry: healthcare
+    type: partner
+    website: https://acme-pharma.com
+    phone: (555) 010-0001
+    employees: 500
+    annual_revenue: 120000000
+- object: account
+  data:
+    name: Global Health Systems
+    industry: healthcare
+    type: customer
+    website: https://globalhealth.org
+    phone: (555) 010-0002
+    employees: 1200
+    annual_revenue: 500000000
+- object: account
+  data:
+    name: TechNova Solutions
+    industry: technology
+    type: prospect
+    website: https://technova.io
+    phone: (555) 010-0003
+    employees: 150
+    annual_revenue: 25000000
+- object: account
+  data:
+    name: Apex Medical Group
+    industry: healthcare
+    type: customer
+    website: https://apexmedical.com
+    phone: (555) 010-0004
+    employees: 300
+    annual_revenue: 75000000
+- object: account
+  data:
+    name: Stratos BioTech
+    industry: healthcare
+    type: partner
+    website: https://stratosbio.com
+    phone: (555) 010-0005
+    employees: 80
+    annual_revenue: 15000000
+- object: account
+  data:
+    name: Omega Care Clinics
+    industry: healthcare
+    type: customer
+    website: https://omegacare.net
+    phone: (555) 010-0006
+    employees: 450
+    annual_revenue: 60000000
+- object: account
+  data:
+    name: Prime Finance Corp
+    industry: finance
+    type: prospect
+    website: https://primefinance.com
+    phone: (555) 010-0007
+    employees: 2000
+    annual_revenue: 800000000
+- object: account
+  data:
+    name: MediLife Hospitals
+    industry: healthcare
+    type: customer
+    website: https://medilife.org
+    phone: (555) 010-0008
+    employees: 5000
+    annual_revenue: 1200000000
+- object: account
+  data:
+    name: Zenith Retail Group
+    industry: retail
+    type: vendor
+    website: https://zenithretail.com
+    phone: (555) 010-0009
+    employees: 350
+    annual_revenue: 45000000
+- object: account
+  data:
+    name: BioGen Labs
+    industry: healthcare
+    type: partner
+    website: https://biogenlabs.com
+    phone: (555) 010-0010
+    employees: 200
+    annual_revenue: 50000000
+- object: account
+  data:
+    name: Quantum Energy
+    industry: energy
+    type: prospect
+    website: https://quantumenergy.com
+    phone: (555) 010-0011
+    employees: 800
+    annual_revenue: 300000000
+- object: account
+  data:
+    name: CarePlus Pharmacy Chain
+    industry: retail
+    type: customer
+    website: https://careplus.com
+    phone: (555) 010-0012
+    employees: 1000
+    annual_revenue: 200000000
+- object: account
+  data:
+    name: SilverLake Consulting
+    industry: consulting
+    type: vendor
+    website: https://silverlake.com
+    phone: (555) 010-0013
+    employees: 60
+    annual_revenue: 12000000
+- object: account
+  data:
+    name: Northern Manufacturing
+    industry: manufacturing
+    type: prospect
+    website: https://northernmfg.com
+    phone: (555) 010-0014
+    employees: 600
+    annual_revenue: 150000000
+- object: account
+  data:
+    name: City General Hospital
+    industry: healthcare
+    type: customer
+    website: https://citygeneral.org
+    phone: (555) 010-0015
+    employees: 3500
+    annual_revenue: 700000000
+- object: account
+  data:
+    name: Innovate Tech
+    industry: technology
+    type: prospect
+    website: https://innovate.tech
+    phone: (555) 010-0016
+    employees: 90
+    annual_revenue: 18000000
+- object: account
+  data:
+    name: HealthFirst Insurers
+    industry: finance
+    type: partner
+    website: https://healthfirst.com
+    phone: (555) 010-0017
+    employees: 1500
+    annual_revenue: 400000000
+- object: account
+  data:
+    name: United Logistics
+    industry: other
+    type: vendor
+    website: https://unitedlogistics.com
+    phone: (555) 010-0018
+    employees: 400
+    annual_revenue: 80000000
+- object: account
+  data:
+    name: Pacific Wellness Centers
+    industry: healthcare
+    type: customer
+    website: https://pacificwellness.com
+    phone: (555) 010-0019
+    employees: 120
+    annual_revenue: 22000000
+- object: account
+  data:
+    name: BrightStar Devices
+    industry: manufacturing
+    type: partner
+    website: https://brightstar.com
+    phone: (555) 010-0020
+    employees: 250
+    annual_revenue: 55000000
+- object: account
+  data:
+    name: River Valley Health
+    industry: healthcare
+    type: customer
+    website: https://rivervalley.org
+    phone: (555) 010-0021
+    employees: 800
+    annual_revenue: 160000000
+- object: account
+  data:
+    name: Eagle Pharmacy
+    industry: retail
+    type: customer
+    website: https://eaglepharma.com
+    phone: (555) 010-0022
+    employees: 40
+    annual_revenue: 5000000
+- object: account
+  data:
+    name: Horizon Therapeutics
+    industry: healthcare
+    type: prospect
+    website: https://horizontherapeutics.com
+    phone: (555) 010-0023
+    employees: 180
+    annual_revenue: 40000000
+- object: account
+  data:
+    name: Summit Data Systems
+    industry: technology
+    type: vendor
+    website: https://summitdata.com
+    phone: (555) 010-0024
+    employees: 75
+    annual_revenue: 14000000
+- object: account
+  data:
+    name: Grandview Medical Center
+    industry: healthcare
+    type: customer
+    website: https://grandview.org
+    phone: (555) 010-0025
+    employees: 2800
+    annual_revenue: 600000000

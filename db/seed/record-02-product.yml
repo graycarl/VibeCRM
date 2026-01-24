@@ -1,0 +1,36 @@
+records:
+  - object: product
+    data:
+      name: Amoxicillin
+      product_code: RX-001
+      category: prescription
+      price: 15.50
+      description: Antibiotic used to treat a number of bacterial infections.
+  - object: product
+    data:
+      name: Ibuprofen
+      product_code: OTC-001
+      category: otc
+      price: 8.99
+      description: Nonsteroidal anti-inflammatory drug (NSAID) used for treating pain, fever, and inflammation.
+  - object: product
+    data:
+      name: Lisinopril
+      product_code: RX-002
+      category: prescription
+      price: 12.00
+      description: Medication of the angiotensin-converting enzyme (ACE) inhibitor class used to treat high blood pressure.
+  - object: product
+    data:
+      name: Metformin
+      product_code: RX-003
+      category: prescription
+      price: 10.00
+      description: First-line medication for the treatment of type 2 diabetes.
+  - object: product
+    data:
+      name: Atorvastatin
+      product_code: RX-004
+      category: prescription
+      price: 25.00
+      description: Statin medication used to prevent cardiovascular disease.

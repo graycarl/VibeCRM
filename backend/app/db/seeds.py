@@ -33,6 +33,20 @@ def process_objects(db: Session, objects_data):
             for field_data in fields_data:
                 meta_service.create_field(db, obj.id, MetaFieldCreate(**field_data))
 
+def resolve_lookup(db: Session, target_obj_name: str, lookup_value: str):
+    target_obj = meta_service.get_object_by_name(db, target_obj_name)
+    if not target_obj:
+        return None
+    
+    # Determine name field - default to 'name' if not specified
+    name_field = target_obj.name_field or "name"
+    
+    table_name = f"data_{target_obj_name}"
+    # strict name check
+    stmt = text(f"SELECT id FROM {table_name} WHERE {name_field} = :val")
+    result = db.execute(stmt, {"val": lookup_value}).scalar()
+    return result
+
 def process_records(db: Session, records_data):
     initial_counts = {}
 
@@ -41,6 +55,19 @@ def process_records(db: Session, records_data):
         data = record_entry["data"].copy()
 
         try:
+            # Pre-process lookups to resolve names to IDs
+            obj_def = meta_service.get_object_by_name(db, obj_name)
+            if obj_def:
+                for field in obj_def.fields:
+                    if field.data_type == "Lookup" and field.name in data:
+                        val = data[field.name]
+                        if isinstance(val, str) and not val.isdigit():
+                            resolved_id = resolve_lookup(db, field.lookup_object, val)
+                            if resolved_id:
+                                data[field.name] = resolved_id
+                            else:
+                                print(f"Warning: Could not resolve lookup '{val}' for field '{field.name}' on object '{obj_name}'")
+
             with engine.connect() as conn:
                 table_name = f"data_{obj_name}"
 

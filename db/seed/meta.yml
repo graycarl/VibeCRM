@@ -31,34 +31,162 @@ objects:
         data_type: Metadata
         metadata_type: role
         source: system
+
   - name: account
     label: Account
-    description: Account Information
+    description: Business Accounts
     source: system
     name_field: name
     fields:
       - name: name
-        label: Full Name
+        label: Account Name
         data_type: Text
+        is_required: true
         source: system
-      - name: age
-        label: Age
-        data_type: Number
-        source: system
-      - name: is_happly
-        label: Is Happy
-        data_type: Boolean
-        source: system
-      - name: birth
-        label: Birth Date
-        data_type: Date
-        source: system
-      - name: sex
-        label: 性别
+      - name: industry
+        label: Industry
         data_type: Picklist
         source: system
         options:
-          - name: male
-            label: 男
-          - name: female
-            label: 女
+          - name: technology
+            label: Technology
+          - name: finance
+            label: Finance
+          - name: healthcare
+            label: Healthcare
+          - name: retail
+            label: Retail
+          - name: manufacturing
+            label: Manufacturing
+          - name: energy
+            label: Energy
+          - name: consulting
+            label: Consulting
+          - name: other
+            label: Other
+      - name: type
+        label: Type
+        data_type: Picklist
+        source: system
+        options:
+          - name: prospect
+            label: Prospect
+          - name: customer
+            label: Customer
+          - name: partner
+            label: Partner
+          - name: vendor
+            label: Vendor
+      - name: website
+        label: Website
+        data_type: Text
+        source: system
+      - name: phone
+        label: Phone
+        data_type: Text
+        source: system
+      - name: employees
+        label: Employees
+        data_type: Number
+        source: system
+      - name: annual_revenue
+        label: Annual Revenue
+        data_type: Number
+        source: system
+
+  - name: product
+    label: Product
+    description: Company Products (Pharmaceuticals)
+    source: system
+    name_field: name
+    fields:
+      - name: name
+        label: Product Name
+        data_type: Text
+        is_required: true
+        source: system
+      - name: product_code
+        label: Product Code
+        data_type: Text
+        source: system
+      - name: category
+        label: Category
+        data_type: Picklist
+        source: system
+        options:
+          - name: prescription
+            label: Prescription
+          - name: otc
+            label: OTC
+          - name: supplement
+            label: Supplement
+          - name: device
+            label: Device
+      - name: price
+        label: Price
+        data_type: Number
+        source: system
+      - name: description
+        label: Description
+        data_type: Text
+        source: system
+
+  - name: call
+    label: Call
+    description: Sales Activities and Visits
+    source: system
+    name_field: subject
+    fields:
+      - name: subject
+        label: Subject
+        data_type: Text
+        is_required: true
+        source: system
+      - name: account_id
+        label: Related Account
+        data_type: Lookup
+        lookup_object: account
+        is_required: true
+        source: system
+      - name: product_id
+        label: Related Product
+        data_type: Lookup
+        lookup_object: product
+        source: system
+      - name: call_type
+        label: Call Type
+        data_type: Picklist
+        source: system
+        options:
+          - name: call
+            label: Phone Call
+          - name: meeting
+            label: Meeting
+          - name: email
+            label: Email
+          - name: other
+            label: Other
+      - name: status
+        label: Status
+        data_type: Picklist
+        source: system
+        options:
+          - name: planned
+            label: Planned
+          - name: completed
+            label: Completed
+          - name: cancelled
+            label: Cancelled
+      - name: call_date
+        label: Call Date
+        data_type: Datetime
+        is_required: true
+        source: system
+      - name: duration
+        label: Duration (Mins)
+        data_type: Number
+        source: system
+      - name: description
+        label: Description
+        data_type: Text
+        source: system
