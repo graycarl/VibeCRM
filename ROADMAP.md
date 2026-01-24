@@ -9,5 +9,6 @@
 - [ ] 新增 State 概念
 - [x] 实现完整的 Lookup Field 功能
 - [x] 实现完整的 Metadata Field 功能
+- [ ] Github CI
 - [ ] 实现 Data Layer
 - [ ] 实现 Page Layout / Page List 的配置能力
