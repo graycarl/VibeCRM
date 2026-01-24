@@ -9,6 +9,7 @@ records:
     duration: 28
     description: 与 北方制造工业 进行了电话沟通。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
@@ -19,6 +20,7 @@ records:
     duration: 16
     description: 与 创新科技方案有限公司 进行了现场拜访。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 临床反馈收集
@@ -28,6 +30,7 @@ records:
     call_date: '2026-01-13 21:12:59'
     duration: 43
     description: 与 亮星医疗器械 进行了邮件跟进。主要讨论了临床反馈收集以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 斯特拉托生物科技 - Q1季度采购需求
@@ -37,6 +40,7 @@ records:
     call_date: '2026-01-14 21:12:59'
     duration: 59
     description: 与 斯特拉托生物科技 进行了电话沟通。主要讨论了Q1季度采购需求以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 普诚金融控股 - 临床反馈收集
@@ -46,6 +50,7 @@ records:
     call_date: '2025-11-23 21:12:59'
     duration: 56
     description: 与 普诚金融控股 进行了电话沟通。主要讨论了临床反馈收集以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 河谷健康中心 - 库存情况盘点 (二甲双胍)
@@ -56,6 +61,7 @@ records:
     duration: 40
     description: 与 河谷健康中心 进行了电话沟通。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 顶峰医疗中心 - 客户满意度回访 (赖诺普利)
@@ -66,6 +72,7 @@ records:
     duration: 53
     description: 与 顶峰医疗中心 进行了其他。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 太平洋康养中心 - Q1季度采购需求
@@ -75,6 +82,7 @@ records:
     call_date: '2025-12-01 21:12:59'
     duration: 57
     description: 与 太平洋康养中心 进行了电话沟通。主要讨论了Q1季度采购需求以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 斯特拉托生物科技 - 合同续签谈判 (阿托伐他汀)
@@ -85,6 +93,7 @@ records:
     duration: 27
     description: 与 斯特拉托生物科技 进行了邮件跟进。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 量子能源科技 - Q1季度采购需求 (阿托伐他汀)
@@ -95,6 +104,7 @@ records:
     duration: 60
     description: 与 量子能源科技 进行了邮件跟进。主要讨论了Q1季度采购需求以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 年度合作规划 (阿托伐他汀)
@@ -105,6 +115,7 @@ records:
     duration: 54
     description: 与 亮星医疗器械 进行了现场拜访。主要讨论了年度合作规划以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 太平洋康养中心 - 库存情况盘点 (二甲双胍)
@@ -115,6 +126,7 @@ records:
     duration: 40
     description: 与 太平洋康养中心 进行了电话沟通。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 宏大治疗方案 - 客户满意度回访
@@ -124,6 +136,7 @@ records:
     call_date: '2026-01-23 21:12:59'
     duration: 45
     description: 与 宏大治疗方案 进行了其他。主要讨论了客户满意度回访以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 仁爱综合医院 - 客户满意度回访 (阿托伐他汀)
@@ -134,6 +147,7 @@ records:
     duration: 31
     description: 与 仁爱综合医院 进行了邮件跟进。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 量子能源科技 - 库存情况盘点 (布洛芬)
@@ -144,6 +158,7 @@ records:
     duration: 17
     description: 与 量子能源科技 进行了其他。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 宏大治疗方案 - 临床反馈收集 (布洛芬)
@@ -154,6 +169,7 @@ records:
     duration: 55
     description: 与 宏大治疗方案 进行了现场拜访。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 环球健康系统 - 新产品介绍 (二甲双胍)
@@ -164,6 +180,7 @@ records:
     duration: 42
     description: 与 环球健康系统 进行了现场拜访。主要讨论了新产品介绍以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 佰欧实验室 - Q1季度采购需求 (赖诺普利)
@@ -174,6 +191,7 @@ records:
     duration: 39
     description: 与 佰欧实验室 进行了其他。主要讨论了Q1季度采购需求以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 市中心总医院 - 合同续签谈判 (二甲双胍)
@@ -184,6 +202,7 @@ records:
     duration: 35
     description: 与 市中心总医院 进行了其他。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 联合物流 - 新产品介绍 (赖诺普利)
@@ -194,6 +213,7 @@ records:
     duration: 38
     description: 与 联合物流 进行了其他。主要讨论了新产品介绍以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 量子能源科技 - 新产品介绍 (二甲双胍)
@@ -204,6 +224,7 @@ records:
     duration: 27
     description: 与 量子能源科技 进行了邮件跟进。主要讨论了新产品介绍以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 泽尼斯零售集团 - 价格政策调整
@@ -213,6 +234,7 @@ records:
     call_date: '2025-12-15 21:12:59'
     duration: 26
     description: 与 泽尼斯零售集团 进行了其他。主要讨论了价格政策调整以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 太平洋康养中心 - Q1季度采购需求 (二甲双胍)
@@ -223,6 +245,7 @@ records:
     duration: 37
     description: 与 太平洋康养中心 进行了现场拜访。主要讨论了Q1季度采购需求以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 年度合作规划
@@ -232,6 +255,7 @@ records:
     call_date: '2025-12-29 21:12:59'
     duration: 15
     description: 与 亮星医疗器械 进行了其他。主要讨论了年度合作规划以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 普诚金融控股 - 年度合作规划 (赖诺普利)
@@ -242,6 +266,7 @@ records:
     duration: 18
     description: 与 普诚金融控股 进行了其他。主要讨论了年度合作规划以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 市中心总医院 - 库存情况盘点 (布洛芬)
@@ -252,6 +277,7 @@ records:
     duration: 36
     description: 与 市中心总医院 进行了其他。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 峰顶数据系统 - 库存情况盘点 (阿托伐他汀)
@@ -262,6 +288,7 @@ records:
     duration: 48
     description: 与 峰顶数据系统 进行了现场拜访。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 飞鹰大药房 - 库存情况盘点 (阿莫西林)
@@ -272,6 +299,7 @@ records:
     duration: 26
     description: 与 飞鹰大药房 进行了其他。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 峰顶数据系统 - 年度合作规划
@@ -281,6 +309,7 @@ records:
     call_date: '2025-11-06 21:12:59'
     duration: 28
     description: 与 峰顶数据系统 进行了电话沟通。主要讨论了年度合作规划以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 市中心总医院 - Q1季度采购需求 (布洛芬)
@@ -291,6 +320,7 @@ records:
     duration: 35
     description: 与 市中心总医院 进行了其他。主要讨论了Q1季度采购需求以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 宏大治疗方案 - 临床反馈收集 (阿莫西林)
@@ -301,6 +331,7 @@ records:
     duration: 35
     description: 与 宏大治疗方案 进行了现场拜访。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 银湖咨询顾问 - 新产品介绍
@@ -310,6 +341,7 @@ records:
     call_date: '2025-12-09 21:12:59'
     duration: 32
     description: 与 银湖咨询顾问 进行了其他。主要讨论了新产品介绍以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 康佳连锁药房 - 临床反馈收集 (赖诺普利)
@@ -320,6 +352,7 @@ records:
     duration: 15
     description: 与 康佳连锁药房 进行了邮件跟进。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 泽尼斯零售集团 - 价格政策调整 (二甲双胍)
@@ -330,6 +363,7 @@ records:
     duration: 55
     description: 与 泽尼斯零售集团 进行了其他。主要讨论了价格政策调整以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 联合物流 - 库存情况盘点
@@ -339,6 +373,7 @@ records:
     call_date: '2025-11-08 21:12:59'
     duration: 60
     description: 与 联合物流 进行了邮件跟进。主要讨论了库存情况盘点以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 宏景医疗中心 - 年度合作规划 (布洛芬)
@@ -349,6 +384,7 @@ records:
     duration: 47
     description: 与 宏景医疗中心 进行了现场拜访。主要讨论了年度合作规划以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 临床反馈收集 (阿莫西林)
@@ -359,6 +395,7 @@ records:
     duration: 16
     description: 与 亮星医疗器械 进行了现场拜访。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 河谷健康中心 - 临床反馈收集 (阿托伐他汀)
@@ -369,6 +406,7 @@ records:
     duration: 50
     description: 与 河谷健康中心 进行了电话沟通。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 北方制造工业 - 合同续签谈判 (阿莫西林)
@@ -379,6 +417,7 @@ records:
     duration: 40
     description: 与 北方制造工业 进行了电话沟通。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 泽尼斯零售集团 - 库存情况盘点
@@ -388,6 +427,7 @@ records:
     call_date: '2025-11-12 21:12:59'
     duration: 54
     description: 与 泽尼斯零售集团 进行了其他。主要讨论了库存情况盘点以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 宏景医疗中心 - 价格政策调整 (赖诺普利)
@@ -398,6 +438,7 @@ records:
     duration: 46
     description: 与 宏景医疗中心 进行了其他。主要讨论了价格政策调整以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 峰顶数据系统 - 客户满意度回访
@@ -407,6 +448,7 @@ records:
     call_date: '2025-11-25 21:12:59'
     duration: 53
     description: 与 峰顶数据系统 进行了现场拜访。主要讨论了客户满意度回访以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 欧米伽护理诊所 - 临床反馈收集 (布洛芬)
@@ -417,6 +459,7 @@ records:
     duration: 16
     description: 与 欧米伽护理诊所 进行了电话沟通。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 宏大治疗方案 - 价格政策调整
@@ -426,6 +469,7 @@ records:
     call_date: '2025-11-10 21:12:59'
     duration: 57
     description: 与 宏大治疗方案 进行了其他。主要讨论了价格政策调整以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 康佳连锁药房 - 客户满意度回访 (布洛芬)
@@ -436,6 +480,7 @@ records:
     duration: 21
     description: 与 康佳连锁药房 进行了现场拜访。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 合同续签谈判 (阿托伐他汀)
@@ -446,6 +491,7 @@ records:
     duration: 29
     description: 与 亮星医疗器械 进行了电话沟通。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 康佳连锁药房 - 年度合作规划 (二甲双胍)
@@ -456,6 +502,7 @@ records:
     duration: 60
     description: 与 康佳连锁药房 进行了其他。主要讨论了年度合作规划以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 普诚金融控股 - 临床反馈收集 (赖诺普利)
@@ -466,6 +513,7 @@ records:
     duration: 37
     description: 与 普诚金融控股 进行了其他。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 环球健康系统 - 年度合作规划 (阿莫西林)
@@ -476,6 +524,7 @@ records:
     duration: 16
     description: 与 环球健康系统 进行了电话沟通。主要讨论了年度合作规划以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 泽尼斯零售集团 - 年度合作规划
@@ -485,6 +534,7 @@ records:
     call_date: '2025-11-30 21:12:59'
     duration: 41
     description: 与 泽尼斯零售集团 进行了电话沟通。主要讨论了年度合作规划以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 飞鹰大药房 - 库存情况盘点 (赖诺普利)
@@ -495,6 +545,7 @@ records:
     duration: 45
     description: 与 飞鹰大药房 进行了电话沟通。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 环球健康系统 - 价格政策调整 (二甲双胍)
@@ -505,6 +556,7 @@ records:
     duration: 50
     description: 与 环球健康系统 进行了电话沟通。主要讨论了价格政策调整以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 河谷健康中心 - Q1季度采购需求 (布洛芬)
@@ -515,6 +567,7 @@ records:
     duration: 16
     description: 与 河谷健康中心 进行了现场拜访。主要讨论了Q1季度采购需求以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 银湖咨询顾问 - 价格政策调整 (阿托伐他汀)
@@ -525,6 +578,7 @@ records:
     duration: 45
     description: 与 银湖咨询顾问 进行了电话沟通。主要讨论了价格政策调整以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 普诚金融控股 - 年度合作规划 (赖诺普利)
@@ -535,6 +589,7 @@ records:
     duration: 33
     description: 与 普诚金融控股 进行了其他。主要讨论了年度合作规划以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 年度合作规划 (赖诺普利)
@@ -545,6 +600,7 @@ records:
     duration: 17
     description: 与 亮星医疗器械 进行了现场拜访。主要讨论了年度合作规划以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 量子能源科技 - 价格政策调整 (赖诺普利)
@@ -555,6 +611,7 @@ records:
     duration: 44
     description: 与 量子能源科技 进行了现场拜访。主要讨论了价格政策调整以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 年度合作规划 (赖诺普利)
@@ -565,6 +622,7 @@ records:
     duration: 17
     description: 与 亮星医疗器械 进行了其他。主要讨论了年度合作规划以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 康健保险有限公司 - 库存情况盘点 (阿莫西林)
@@ -575,6 +633,7 @@ records:
     duration: 48
     description: 与 康健保险有限公司 进行了邮件跟进。主要讨论了库存情况盘点以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 太平洋康养中心 - 价格政策调整
@@ -584,6 +643,7 @@ records:
     call_date: '2025-12-13 21:12:59'
     duration: 24
     description: 与 太平洋康养中心 进行了邮件跟进。主要讨论了价格政策调整以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 欧米伽护理诊所 - 合同续签谈判 (二甲双胍)
@@ -594,6 +654,7 @@ records:
     duration: 33
     description: 与 欧米伽护理诊所 进行了电话沟通。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 欧米伽护理诊所 - 价格政策调整
@@ -603,6 +664,7 @@ records:
     call_date: '2026-01-17 21:12:59'
     duration: 33
     description: 与 欧米伽护理诊所 进行了现场拜访。主要讨论了价格政策调整以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 亮星医疗器械 - 临床反馈收集 (阿托伐他汀)
@@ -613,6 +675,7 @@ records:
     duration: 25
     description: 与 亮星医疗器械 进行了邮件跟进。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 仁爱综合医院 - 年度合作规划 (布洛芬)
@@ -623,6 +686,7 @@ records:
     duration: 41
     description: 与 仁爱综合医院 进行了邮件跟进。主要讨论了年度合作规划以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 联合物流 - 新产品介绍 (阿莫西林)
@@ -633,6 +697,7 @@ records:
     duration: 31
     description: 与 联合物流 进行了现场拜访。主要讨论了新产品介绍以及后续合作意向。 重点关注了 阿莫西林 的市场反馈。
     product_id: 阿莫西林
+    owner: 管理员
 - object: call
   data:
     subject: 斯特拉托生物科技 - 临床反馈收集 (阿托伐他汀)
@@ -643,6 +708,7 @@ records:
     duration: 33
     description: 与 斯特拉托生物科技 进行了其他。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 顶峰医疗中心 - 新产品介绍
@@ -652,6 +718,7 @@ records:
     call_date: '2025-11-26 21:12:59'
     duration: 22
     description: 与 顶峰医疗中心 进行了现场拜访。主要讨论了新产品介绍以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 太平洋康养中心 - 合同续签谈判 (二甲双胍)
@@ -662,6 +729,7 @@ records:
     duration: 48
     description: 与 太平洋康养中心 进行了其他。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 银湖咨询顾问 - 临床反馈收集 (阿托伐他汀)
@@ -672,6 +740,7 @@ records:
     duration: 54
     description: 与 银湖咨询顾问 进行了其他。主要讨论了临床反馈收集以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 斯特拉托生物科技 - 年度合作规划 (赖诺普利)
@@ -682,6 +751,7 @@ records:
     duration: 40
     description: 与 斯特拉托生物科技 进行了其他。主要讨论了年度合作规划以及后续合作意向。 重点关注了 赖诺普利 的市场反馈。
     product_id: 赖诺普利
+    owner: 管理员
 - object: call
   data:
     subject: 环球健康系统 - 合同续签谈判 (布洛芬)
@@ -692,6 +762,7 @@ records:
     duration: 34
     description: 与 环球健康系统 进行了邮件跟进。主要讨论了合同续签谈判以及后续合作意向。 重点关注了 布洛芬 的市场反馈。
     product_id: 布洛芬
+    owner: 管理员
 - object: call
   data:
     subject: 普诚金融控股 - 客户满意度回访 (阿托伐他汀)
@@ -702,6 +773,7 @@ records:
     duration: 46
     description: 与 普诚金融控股 进行了邮件跟进。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
+    owner: 管理员
 - object: call
   data:
     subject: 华康医药集团 - 合同续签谈判
@@ -711,6 +783,7 @@ records:
     call_date: '2025-11-13 21:12:59'
     duration: 46
     description: 与 华康医药集团 进行了其他。主要讨论了合同续签谈判以及后续合作意向。
+    owner: 管理员
 - object: call
   data:
     subject: 峰顶数据系统 - 客户满意度回访 (二甲双胍)
@@ -721,6 +794,7 @@ records:
     duration: 34
     description: 与 峰顶数据系统 进行了邮件跟进。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 二甲双胍 的市场反馈。
     product_id: 二甲双胍
+    owner: 管理员
 - object: call
   data:
     subject: 创新科技 - 客户满意度回访 (阿托伐他汀)
@@ -731,4 +805,4 @@ records:
     duration: 29
     description: 与 创新科技 进行了电话沟通。主要讨论了客户满意度回访以及后续合作意向。 重点关注了 阿托伐他汀 的市场反馈。
     product_id: 阿托伐他汀
-
+    owner: 管理员

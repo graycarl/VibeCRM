@@ -57,6 +57,15 @@ def process_records(db: Session, records_data):
         obj_name = record_entry["object"]
         data = record_entry["data"].copy()
 
+        # Resolve owner if provided in seed data
+        owner_id = None
+        if "owner" in data:
+            owner_name = data.pop("owner")
+            if owner_name:
+                owner_id = resolve_lookup(db, "user", owner_name)
+                if not owner_id:
+                    print(f"Warning: Could not resolve owner '{owner_name}' for object '{obj_name}'")
+
         try:
             # Pre-process lookups to resolve names to IDs
             obj_def = meta_service.get_object_by_name(db, obj_name)
@@ -84,7 +93,7 @@ def process_records(db: Session, records_data):
                     if obj_name == "user" and "password" in data:
                         data["password"] = security.get_password_hash(data["password"])
 
-                    data_service.create_record(db, obj_name, data)
+                    data_service.create_record(db, obj_name, data, user_id=owner_id)
         except Exception as e:
             print(f"Skipping record seed for {obj_name}: {e}")
 

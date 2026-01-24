@@ -1,29 +1,33 @@
 records:
-  - object: cs_expense
-    data:
-      cs_title: 出租车费 - 客户满意度回访
-      cs_amount: 50.00
-      cs_date: '2025-12-26'
-      cs_category: transport
-      cs_call_id: 北方制造工业 - 客户满意度回访 (二甲双胍)
-  - object: cs_expense
-    data:
-      cs_title: 客户午餐
-      cs_amount: 350.00
-      cs_date: '2026-01-16'
-      cs_category: dining
-      cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
-  - object: cs_expense
-    data:
-      cs_title: 高铁票 (北京-上海)
-      cs_amount: 553.00
-      cs_date: '2026-01-16'
-      cs_category: transport
-      cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
-  - object: cs_expense
-    data:
-      cs_title: 酒店住宿 (1晚)
-      cs_amount: 480.00
-      cs_date: '2026-01-16'
-      cs_category: accommodation
-      cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
+- object: cs_expense
+  data:
+    cs_title: 出租车费 - 客户满意度回访
+    cs_amount: 50.0
+    cs_date: '2025-12-26'
+    cs_category: transport
+    cs_call_id: 北方制造工业 - 客户满意度回访 (二甲双胍)
+    owner: 管理员
+- object: cs_expense
+  data:
+    cs_title: 客户午餐
+    cs_amount: 350.0
+    cs_date: '2026-01-16'
+    cs_category: dining
+    cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
+    owner: 管理员
+- object: cs_expense
+  data:
+    cs_title: 高铁票 (北京-上海)
+    cs_amount: 553.0
+    cs_date: '2026-01-16'
+    cs_category: transport
+    cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
+    owner: 管理员
+- object: cs_expense
+  data:
+    cs_title: 酒店住宿 (1晚)
+    cs_amount: 480.0
+    cs_date: '2026-01-16'
+    cs_category: accommodation
+    cs_call_id: 创新科技方案有限公司 - 合同续签谈判 (赖诺普利)
+    owner: 管理员
