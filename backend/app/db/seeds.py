@@ -44,7 +44,10 @@ def resolve_lookup(db: Session, target_obj_name: str, lookup_value: str):
     table_name = f"data_{target_obj_name}"
     # strict name check
     stmt = text(f"SELECT id FROM {table_name} WHERE {name_field} = :val")
-    result = db.execute(stmt, {"val": lookup_value}).scalar()
+    
+    # Use a fresh connection to ensure we see committed data from previous steps
+    with engine.connect() as conn:
+        result = conn.execute(stmt, {"val": lookup_value}).scalar()
     return result
 
 def process_records(db: Session, records_data):
