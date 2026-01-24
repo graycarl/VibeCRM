@@ -7,7 +7,7 @@ PROJECT_ROOT := $(shell pwd)
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
 
-.PHONY: help init backend-init frontend-init dev backend-dev frontend-dev reset clean-db seed-db test backend-test frontend-test
+.PHONY: help init backend-init frontend-init dev backend-dev frontend-dev reset clean-db seed-db test backend-test frontend-test lint backend-lint frontend-lint
 
 .DEFAULT_GOAL := help
 
@@ -17,6 +17,7 @@ help:
 	@echo "  make dev           Start development servers (backend & frontend)"
 	@echo "  make reset         Reset database (clean & seed)"
 	@echo "  make test          Run tests (backend & frontend)"
+	@echo "  make lint          Run lint checks (backend & frontend)"
 
 # Initialization
 init: backend-init frontend-init
@@ -63,3 +64,14 @@ backend-test:
 frontend-test:
 	@echo "Running Frontend Tests..."
 	cd $(FRONTEND_DIR) && npm run test -- --run
+
+# Linting
+lint: backend-lint frontend-lint
+
+backend-lint:
+	@echo "Running Backend Lint..."
+	cd $(BACKEND_DIR) && uv run ruff check .
+
+frontend-lint:
+	@echo "Running Frontend Lint..."
+	cd $(FRONTEND_DIR) && npm run lint

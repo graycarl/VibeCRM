@@ -30,4 +30,5 @@ python_files = "test_*.py"
 [dependency-groups]
 dev = [
     "faker>=40.1.0",
+    "ruff>=0.14.14",
 ]
