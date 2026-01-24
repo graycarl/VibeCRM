@@ -24,6 +24,7 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 - **自定义字段（Custom Fields）**：用户根据业务需求创建的字段 (Field.source == 'custom')。
 - **页面布局（PageLayout）**： 定义对象详情页和编辑页的字段分组与顺序。它可能表达在 Admin Console 中的布局配置，也可能体现在 Runtime App 中的页面渲染。
 - **列表视图（PageList）**：定义对象列表页显示的列和筛选条件。它可能表达在 Admin Console 中的列表配置，也可能体现在 Runtime App 中的页面渲染。
+- **Seed（种子数据/初始化）**：系统初始化的过程，用于向数据库注入必要的元数据（如系统对象、字段）和基础业务数据，通常在开发环境或系统重置时执行。
 
 ## Dev Tips
 
@@ -49,4 +50,4 @@ VibeCRM 是一个**元数据驱动的应用开发平台 (Metadata Driven App Pla
 
 ## 其他文档
 
-- docs/arch.md - 系统架构设计文档
+- docs/arch.md - 系统架构设计文档，包含技术栈、数据存储策略、元数据核心概念、字段类型等内容；
