@@ -22,6 +22,7 @@ dependencies = [
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+extend-exclude = ["tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -30,4 +31,5 @@ python_files = "test_*.py"
 [dependency-groups]
 dev = [
     "faker>=40.1.0",
+    "ruff>=0.14.14",
 ]

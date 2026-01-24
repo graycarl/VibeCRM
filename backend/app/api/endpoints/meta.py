@@ -7,8 +7,7 @@ from app.schemas.metadata import (
     MetaField, MetaFieldCreate, MetaFieldUpdate,
     MetaRole, MetaRoleCreate, MetaRoleUpdate,
     PicklistOption, PicklistOptionUpdate, PicklistReorder,
-    MetaObjectRecordType, MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate, MetaObjectRecordTypeBase,
-    RecordTypeReorder
+    MetaObjectRecordType, MetaObjectRecordTypeCreate, MetaObjectRecordTypeUpdate, RecordTypeReorder
 )
 from app.services.meta_service import meta_service
 from app.services.data_service import data_service

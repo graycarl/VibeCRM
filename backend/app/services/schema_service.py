@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, MetaData, Text, Float, Boolean, Date, ForeignKey, inspect, text
+from sqlalchemy import Table, Column, Integer, String, MetaData, text
 from sqlalchemy.schema import CreateTable
 from app.db.session import engine
 

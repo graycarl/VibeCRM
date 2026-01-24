@@ -61,7 +61,7 @@ const ObjectRecordDetail = () => {
                       // Fallback: if record_type enabled, put it first in default order if not there
                       // (already unshifted above)
                   }
-              } catch (e) {
+              } catch {
                   // Ignore layout error
               }
               setFields(orderedFields);

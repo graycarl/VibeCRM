@@ -6,7 +6,7 @@ from sqlalchemy import text
 from app.db.session import SessionLocal, engine
 from app.services.meta_service import meta_service
 from app.services.schema_service import schema_service
-from app.models.metadata import MetaObjectRecordType, MetaObject
+from app.models.metadata import MetaObjectRecordType
 from app.schemas.metadata import MetaObjectRecordTypeCreate
 
 def migrate():

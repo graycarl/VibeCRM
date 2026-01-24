@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { 
   Container, Typography, Button, IconButton, Box 
 } from '@mui/material';
@@ -14,18 +14,18 @@ const ObjectList = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const navigate = useNavigate();
 
-  const loadObjects = async () => {
+  const loadObjects = useCallback(async () => {
     try {
       const data = await metaApi.getObjects();
       setObjects(data);
     } catch (error) {
       console.error("Failed to load objects", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadObjects();
-  }, []);
+  }, [loadObjects]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure? This will delete the object and its data table.")) {

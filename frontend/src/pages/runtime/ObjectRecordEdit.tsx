@@ -60,7 +60,7 @@ const ObjectRecordEdit = () => {
                           }
                           orderedFields = layoutFields;
                       }
-                  } catch (e) {
+                  } catch {
                       // Fallback to default order
                   }
                   setFields(orderedFields);
@@ -116,7 +116,6 @@ const ObjectRecordEdit = () => {
             </Typography>
         </Box>
         <DynamicForm 
-            object={object} 
             fields={fields} 
             onSubmit={handleSubmit} 
             initialValues={initialValues}

@@ -31,7 +31,7 @@ const ObjectRecordList = () => {
   const navigate = useNavigate();
   const prevPageSize = useRef(50);
 
-  const loadMetadata = async () => {
+  const loadMetadata = useCallback(async () => {
       setError(null);
       try {
           const objects = await metaApi.getObjects();
@@ -52,7 +52,7 @@ const ObjectRecordList = () => {
           console.error("Failed to load metadata", err);
           setError("无法加载对象元数据，请检查网络或配置。");
       }
-  };
+  }, [objectName]);
 
   const loadRecords = useCallback(async () => {
       if (!objectName) return;
@@ -87,7 +87,7 @@ const ObjectRecordList = () => {
           setSortModel([]);
           prevPageSize.current = 50;
       }
-  }, [objectName]);
+  }, [objectName, loadMetadata]);
 
   useEffect(() => {
       loadRecords();

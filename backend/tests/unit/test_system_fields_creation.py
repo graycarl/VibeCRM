@@ -1,9 +1,8 @@
-import pytest
 import uuid
 from sqlalchemy.orm import Session
 from app.services.meta_service import MetaService
 from app.schemas.metadata import MetaObjectCreate
-from app.models.metadata import MetaObject, MetaField
+from app.models.metadata import MetaField
 from app.services.schema_service import schema_service
 
 meta_service = MetaService()
