@@ -1,0 +1,36 @@
+records:
+  - object: product
+    data:
+      name: 阿莫西林
+      product_code: RX-001
+      category: prescription
+      price: 15.50
+      description: 广谱抗生素，用于治疗细菌感染。
+  - object: product
+    data:
+      name: 布洛芬
+      product_code: OTC-001
+      category: otc
+      price: 8.99
+      description: 非甾体抗炎药 (NSAID)，用于止痛、退烧和消炎。
+  - object: product
+    data:
+      name: 赖诺普利
+      product_code: RX-002
+      category: prescription
+      price: 12.00
+      description: 血管紧张素转化酶 (ACE) 抑制剂，用于治疗高血压。
+  - object: product
+    data:
+      name: 二甲双胍
+      product_code: RX-003
+      category: prescription
+      price: 10.00
+      description: 治疗2型糖尿病的一线药物。
+  - object: product
+    data:
+      name: 阿托伐他汀
+      product_code: RX-004
+      category: prescription
+      price: 25.00
+      description: 他汀类药物，用于降低胆固醇和预防心血管疾病。

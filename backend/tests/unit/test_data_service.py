@@ -5,7 +5,7 @@ import time
 
 def test_create_record_timestamps(db: Session):
     # Test for 'account' object which is seeded
-    data = {"name": "Test Account", "age": 25}
+    data = {"name": "Test Account"}
     record = data_service.create_record(db, "account", data)
     
     assert "created_on" in record

@@ -1,37 +1,37 @@
 records:
 - object: user
   data:
-    name: Admin User
+    name: 管理员
     email: admin@vibecrm.com
     password: admin123
     role: admin
 - object: user
   data:
-    name: Tara Nelson
-    email: zoconnor@example.com
+    name: 张伟
+    email: zhangwei@example.com
     password: password123
     role: standard
 - object: user
   data:
-    name: Mark Carr
-    email: hmartin@example.com
+    name: 李娜
+    email: lina@example.com
     password: password123
     role: standard
 - object: user
   data:
-    name: Nancy Richards
-    email: michaelrubio@example.org
+    name: 王强
+    email: wangqiang@example.org
     password: password123
     role: standard
 - object: user
   data:
-    name: Erica Ellis
-    email: eddieball@example.org
+    name: 刘洋
+    email: liuyang@example.org
     password: password123
     role: standard
 - object: user
   data:
-    name: Aaron Beck
-    email: poncetiffany@example.net
+    name: 陈静
+    email: chenjing@example.net
     password: password123
     role: standard
