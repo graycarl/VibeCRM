@@ -190,3 +190,43 @@ objects:
         label: 详细描述
         data_type: Text
         source: system
+
+  - name: cs_expense
+    label: 费用记录
+    description: 销售过程中的费用报销记录
+    source: custom
+    name_field: cs_title
+    fields:
+      - name: cs_title
+        label: 费用摘要
+        data_type: Text
+        is_required: true
+        source: custom
+      - name: cs_amount
+        label: 金额
+        data_type: Number
+        is_required: true
+        source: custom
+      - name: cs_date
+        label: 发生日期
+        data_type: Date
+        is_required: true
+        source: custom
+      - name: cs_category
+        label: 费用类别
+        data_type: Picklist
+        source: custom
+        options:
+          - name: transport
+            label: 交通费
+          - name: dining
+            label: 餐饮费
+          - name: accommodation
+            label: 住宿费
+          - name: other
+            label: 其他
+      - name: cs_call_id
+        label: 关联拜访
+        data_type: Lookup
+        lookup_object: call
+        source: custom
