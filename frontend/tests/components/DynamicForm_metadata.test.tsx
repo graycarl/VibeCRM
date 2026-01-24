@@ -25,7 +25,7 @@ describe('DynamicForm Metadata', () => {
     
     it('fetches options and renders Metadata field', async () => {
         const fields: MetaField[] = [
-            { id: 'f1', object_id: '1', name: 'meta_ref', label: 'Ref', data_type: 'Metadata', is_required: false, source: 'custom' }
+            { id: 'f1', object_id: '1', name: 'meta_ref', label: 'Ref', data_type: 'Metadata', metadata_type: 'object', is_required: false, source: 'custom' }
         ];
         
         render(<DynamicForm object={mockObject} fields={fields} onSubmit={() => {}} />);
